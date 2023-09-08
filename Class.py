@@ -1,7 +1,3 @@
-from re import S
-import re
-
-
 class Base_Library():
     def __init__(self):
         self.author = None
@@ -46,7 +42,10 @@ class Scopus_Library(Base_Library):
         if self.author==other.author and \
            self.title==other.title and \
            self.article==other.article and \
-           self.year==other.year:
+           self.year==other.year and \
+           self.link==other.link and \
+           self.source_name==other.source_name and \
+           self.doi==other.doi:
               return True
         else:
             return False

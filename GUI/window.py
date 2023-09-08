@@ -7,6 +7,7 @@ import tkinter.filedialog
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
+from Сomparison.Scopus_eq import Eg_scopus
 
 win = Tk()
 
