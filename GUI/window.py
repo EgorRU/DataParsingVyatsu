@@ -31,13 +31,17 @@ def open_file_Scopus():
         #обработка файла, получение списка данных
         list_scopus=Scopus(filename)
         print("Scopus успешно загружен и обработан программой")
+
+        heads = ['author', 'title', 'year', 'link', 'citation']
+        table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+        table_left['columns'] = heads  # привязка столбцов к таблице
         for i in range(len(list_scopus)):
             lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
                         list_scopus[i].link, list_scopus[i].citation))
 
         for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table.insert('', tkinter.END,
-                         values=row)  # без неё слева будет большой пропуст т к предуматривается полноценная иерархия
+            table_left.insert('', tkinter.END,
+                         values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
 
 def open_file_WoS():
@@ -49,6 +53,19 @@ def open_file_WoS():
         #обработка файла, получение списка данных
         list_wos=Wos(filename)
         print("Wos успешно загружен и обработан программой")
+
+        heads = ['author', 'title', 'year', 'link', 'volume']
+        table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+        table_left['columns'] = heads  # привязка столбцов к таблице
+
+        for i in range(len(list_wos)):
+            lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
+                        list_wos[i].link, list_wos[i].volume))
+
+        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+            table_left.insert('', tkinter.END,
+                         values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
         
 
 def open_file_Elibrary():
@@ -127,17 +144,17 @@ mainmenu.add_cascade(label="Файл", menu=filemenu) #создание поля
 mainmenu.add_cascade(label="Справка", command = open_help_window) #создание поля справки
 
 
-heads = ['author', 'title', 'year', 'link', 'citation'] #столбики
-table = ttk.Treeview(frametableleft, show = 'headings') #инициализация таблицы
-table['columns'] = heads #привязка столбцов к таблице
+heads = ['', '', '', '', ''] #столбики
+table_left = ttk.Treeview(frametableleft, show = 'headings') #инициализация таблицы
+table_left['columns'] = heads #привязка столбцов к таблице
 
 
 for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-    table.heading(header, text=header, anchor='center')
-    table.column(header, anchor='center')
+    table_left.heading(header, text=header, anchor='center')
+    table_left.column(header, anchor='center')
 
 
-scroll_pane = ttk.Scrollbar(frametableleft, command=table.yview)
-table.configure(yscrollcommand=scroll_pane.set)
+scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
+table_left.configure(yscrollcommand=scroll_pane.set)
 scroll_pane.pack(side = tkinter.RIGHT,fill= tkinter.Y)
-table.pack(expand = tkinter.YES, fill = tkinter.BOTH) #штука которая увеличивает таблицу в зависимости от кол-ва строк
+table_left.pack(expand = tkinter.YES, fill = tkinter.BOTH) #штука которая увеличивает таблицу в зависимости от кол-ва строк
