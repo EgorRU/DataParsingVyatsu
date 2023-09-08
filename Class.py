@@ -1,3 +1,7 @@
+from re import S
+import re
+
+
 class Base_Library():
     def __init__(self):
         self.author = None
@@ -37,6 +41,15 @@ class Scopus_Library(Base_Library):
         str(self.doi)+ ", "+\
         str(self.link)+", "+\
         str(self.source)
+    
+    def __eq__(self, other):
+        if self.author==other.author and \
+           self.title==other.title and \
+           self.article==other.article and \
+           self.year==other.year:
+              return True
+        else:
+            return False
         
           
 class WOS_Library(Base_Library):
@@ -68,15 +81,18 @@ class WOS_Library(Base_Library):
 class IPublishing_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.id_author = None
-        self.source_name = None
-        self.volume = None
-        self.issue = None
-        self.start_page = None
-        self.end_page = None
-        self.number_of_pages = None
-        self.citation = None
+        self.description = None
         self.doi = None
         self.source = "iPublishing"
+
+    def Print(self):
+        return str(self.author)+ ", "+\
+        str(self.title)+ ", "+\
+        str(self.year)+ ", "+\
+        str(self.article)+ ", "+\
+        str(self.link)+", "+\
+        str(self.description)+ ", "+\
+        str(self.doi)+ ", "+\
+        str(self.source)
 
             
