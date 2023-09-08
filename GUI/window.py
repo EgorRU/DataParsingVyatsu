@@ -4,8 +4,8 @@ from tkinter.constants import DISABLED, NORMAL
 from tkinter import ttk
 from tkinter import messagebox
 import tkinter.filedialog
-from Replace.Scopus import Scopus
-from Replace.Wos import Wos
+from Parsing.Scopus import Scopus
+from Parsing.Wos import Wos
 
 win = Tk()
 
