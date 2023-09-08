@@ -6,6 +6,7 @@ from tkinter import messagebox
 import tkinter.filedialog
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
+from Parsing.iPublishing import IPublishing
 
 win = Tk()
 
@@ -82,7 +83,10 @@ def open_file_Ipublishing():
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
-
+        print("Пошла загрузка")
+        list_ipublishing=IPublishing(filename)
+        print("IPublishing успешно загружен и обработан программой")
+        
 
 #кнопка HELP
 def open_help_window():
