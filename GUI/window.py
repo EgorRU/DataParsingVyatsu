@@ -77,7 +77,6 @@ def open_help_window():
 win['bg'] = '#fafafa' #цвет
 win.title('Library') #название
 win.geometry('1500x700') #размер
-win.wm_attributes("-topmost", 1) #окно будет поверх всех окон
 win.protocol("WM_DELETE_WINDOW", on_closing) #событие при закрытии приложения
 win.resizable(False, False)
 
