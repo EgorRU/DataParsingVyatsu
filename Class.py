@@ -63,6 +63,20 @@ class WOS_Library(Base_Library):
         str(self.doi)+ ", "+\
         str(self.link)+", "+\
         str(self.source)
+    
 
+class IPublishing_Library(Base_Library):
+    def __init__(self):
+        Base_Library.__init__(self)
+        self.id_author = None
+        self.source_name = None
+        self.volume = None
+        self.issue = None
+        self.start_page = None
+        self.end_page = None
+        self.number_of_pages = None
+        self.citation = None
+        self.doi = None
+        self.source = "iPublishing"
 
             

@@ -2,16 +2,36 @@ from openpyxl import load_workbook
 from Class import WOS_Library
 
 def Wos(path):
-    #ÓÚÍ˚ÚËÂ ËÒıÓ‰ÌÓ„Ó Ù‡ÈÎ‡
+    #–æ—Ç–∫—Ä—ã—Ç–∏–µ –∏—Å—Ö–æ–¥–Ω–æ–≥–æ —Ñ–∞–π–ª–∞
     wb = load_workbook(path)
     ws = wb.active
     
-    #ÒÔËÒÓÍ ÒÚ‡ÚÂÈ SCOPUS
+    #—Å–ø–∏—Å–æ–∫ —Å—Ç–∞—Ç–µ–π SCOPUS
     all_wos_list_library = []
-
-    #ÍÓÎ-‚Ó ‘»Œ ‡‚ÚÓÓ‚
-    count_all_author = 0
     
-    #œ¿–—»Õ√  ¿∆ƒŒ… —“–Œ »
-    for row in ws.iter_rows(min_row=2, values_only=True):
-        pass
+    #–ü–ê–†–°–ò–ù–ì –ö–ê–ñ–î–û–ô –°–¢–†–û–ö–ò
+    for row_index in range(2, ws.max_row+1):
+        new_author = WOS_Library()
+        new_author.author = ws[f"F{row_index}"].value
+        new_author.title = ws[f"I{row_index}"].value
+        new_author.year = ws[f"AU{row_index}"].value
+        new_author.volume = ws[f"AV{row_index}"].value
+        new_author.issue = ws[f"AW{row_index}"].value
+        new_author.article = ws[f"BD{row_index}"].value
+        new_author.start_page = ws[f"BB{row_index}"].value
+        new_author.end_page = ws[f"BC{row_index}"].value
+        new_author.number_of_pages = ws[f"AX{row_index}"].value
+        new_author.doi = ws[f"BE{row_index}"].value
+        if ws[f"BF{row_index}"].value!=None:
+            new_author.link = ws[f"BF{row_index}"].value[10:]
+        all_wos_list_library.append(new_author)
+
+    #–≤—ã–≤–æ–¥ –≤ —Ñ–∞–π–ª
+    print("–ó–∞–ø–∏—Å—å –≤ —Ñ–∞–π–ª –Ω–∞—á–∞–ª–∞—Å—å")        
+    with open("Source/Wos/Result.txt", "w",encoding="utf-8") as file:
+        for index, val in enumerate(all_wos_list_library):
+            file.write("–ó–∞–ø–∏—Å—å ‚Ññ: "+str(index)+"\n")
+            file.write(val.Print())
+            file.write("\n\n\n")
+    print("–í—Å–µ–≥–æ —Å—Ç—Ä–æ–∫: " + str(ws.max_row))
+    return all_wos_list_library
