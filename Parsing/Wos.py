@@ -18,11 +18,15 @@ def Wos(path):
         for i in range (len(list_author)):
             new_author = WOS_Library()
             new_author.author = list_author[i].strip()
-            new_author.title = ws[f"I{row_index}"].value
+            if ws[f"I{row_index}"].value != None:
+                new_author.title = ws[f"I{row_index}"].value.lower()
+                new_author.title = new_author.title[0].upper() + new_author.title[1:]
             new_author.year = ws[f"AU{row_index}"].value
             new_author.volume = ws[f"AV{row_index}"].value
             new_author.issue = ws[f"AW{row_index}"].value
-            new_author.article = ws[f"BD{row_index}"].value
+            if ws[f"BD{row_index}"].value != None:
+                new_author.article = str(ws[f"BD{row_index}"].value).lower()
+                new_author.article = new_author.article[0].upper() + new_author.article[1:]
             new_author.start_page = ws[f"BB{row_index}"].value
             new_author.end_page = ws[f"BC{row_index}"].value
             new_author.number_of_pages = ws[f"AX{row_index}"].value

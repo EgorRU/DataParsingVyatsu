@@ -10,7 +10,7 @@ def IPublishing(path):
 
     # список статей IPublishing
     all_IPublishing_list_library = []
-    
+
     # ПАРСИНГ КАЖДОЙ СТРОКИ
     for row_index in range(5, ws.max_row + 1):
         str_author = ws[f"G{row_index}"].value #строка с авторами 

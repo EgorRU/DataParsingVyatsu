@@ -302,7 +302,7 @@ def Scopus(path):
                 for j in range(count_temp, count_temp + count_author_row):
                     all_scopus_list_library[j].link = link.strip()
         i += 1
-
+        
     # вывод в файл
     print("Запись в файл началась Scopus")
     print(f"Всего строк в таблице: {ws.max_row-1}")

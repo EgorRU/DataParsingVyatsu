@@ -1,20 +1,3 @@
-#(function) def Equals(
-# source1: list,
-# source2: list
-#) -> tuple(add: list, remove: list, identical: list)  
-
-#tuple - кортеж
-# add - лист, содержащий записи, которые были добалены
-# remove - лист, содержащий записи, которые были удалены
-# identical - лист, содержащий записи, которые есть в обоих листах
-
-#example:
-#add_list, remove_list, identical_list = Equals(list_scopus, list_wos)
-
-#примечание:
-#можно сравнивать листы из разных источников
-
-
 def Equals(source1, source2):
     #листы новых данных и лист удалённых данных
     add_new_list = []
@@ -83,7 +66,7 @@ def Equals(source1, source2):
     return add_new_list, remove_new_list, 
 
 
-def iEquals(source1, source2):
+def IPublishingEquals(source1, source2):
     #листы новых данных и лист удалённых данных
     add_new_list = []
     remove_new_list = []
@@ -98,8 +81,6 @@ def iEquals(source1, source2):
                 and source2[i].title == source1[j].title
                 and source2[i].year == source1[j].year
                 and source2[i].article == source1[j].article
-                #and source2[i].link == source1[j].link
-                #and source2[i].doi == source1[j].doi
             ):
                 copy = True
                 identical_new_list.append(source2[i])
@@ -116,8 +97,6 @@ def iEquals(source1, source2):
                 and source1[i].title == source2[j].title
                 and source1[i].year == source2[j].year
                 and source1[i].article == source2[j].article
-                #and source1[i].link == source2[j].link
-                #and source1[i].doi == source2[j].doi
             ):
                 copy = True
                 break
