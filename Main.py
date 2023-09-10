@@ -1,5 +1,10 @@
-from GUI.window import win
+from GUI.Window import win
 
-if __name__ == "__main__":
+
+def Main():
     win.mainloop()
     print("Завершение программы")
+    
+
+if __name__ == "__main__":
+    Main()

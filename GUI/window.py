@@ -1,13 +1,28 @@
 import tkinter, os
+import tkinter.filedialog
 from tkinter import *
-from tkinter.constants import DISABLED, NORMAL
+from tkinter.constants import NORMAL
 from tkinter import ttk
 from tkinter import messagebox
-import tkinter.filedialog
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
-from Сomparison.Scopus_eq import Eg_scopus
+from Parsing.Equals import Equals
+
+#(function) def Equals(
+# source1: list,
+# source2: list
+#) -> tuple(add: list, remove: list)  
+
+#tuple - кортеж
+# add - лист, содержащий записи, которые были добалены
+# remove - лист, содержащий записи, которые были удалены
+
+#example:
+#add_list, remove_list = Equals(list_scopus, list_wos)
+
+#примечание:
+#можно сравнивать листы из разных источников
 
 win = Tk()
 

@@ -5,6 +5,21 @@ class Base_Library:
         self.year = None
         self.article = None
         self.link = None
+        self.doi = None
+
+
+    def __eq__(self, other):
+        if (
+            self.author == other.author
+            and self.title == other.title
+            and self.year == other.article
+            and self.article == other.year
+            and self.link == other.link
+            and self.doi == other.doi
+        ):
+            return True
+        else:
+            return False
 
 
 class Scopus_Library(Base_Library):
@@ -18,8 +33,8 @@ class Scopus_Library(Base_Library):
         self.end_page = None
         self.number_of_pages = None
         self.citation = None
-        self.doi = None
         self.source = "Scopus"
+
 
     def Print(self):
         return (
@@ -54,19 +69,9 @@ class Scopus_Library(Base_Library):
             + str(self.source)
         )
 
+
     def __eq__(self, other):
-        if (
-            self.author == other.author
-            and self.title == other.title
-            and self.article == other.article
-            and self.year == other.year
-            and self.link == other.link
-            and self.source_name == other.source_name
-            and self.doi == other.doi
-        ):
-            return True
-        else:
-            return False
+        Base_Library.__eq__(self, other)
 
 
 class WOS_Library(Base_Library):
@@ -77,7 +82,6 @@ class WOS_Library(Base_Library):
         self.start_page = None
         self.end_page = None
         self.number_of_pages = None
-        self.doi = None
         self.source = "WOS"
 
     def Print(self):
@@ -106,13 +110,15 @@ class WOS_Library(Base_Library):
             + ", "
             + str(self.source)
         )
+    
+    def __eq__(self, other):
+        Base_Library.__eq__(self, other)
 
 
 class IPublishing_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
         self.description = None
-        self.doi = None
         self.source = "iPublishing"
 
     def Print(self):
