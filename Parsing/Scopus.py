@@ -304,11 +304,13 @@ def Scopus(path):
         i += 1
 
     # вывод в файл
-    print("Запись в файл началась")
+    print("Запись в файл началась Scopus")
+    print(f"Всего строк в таблице: {ws.max_row-1}")
+    print(f"Всего записей: {len(all_scopus_list_library)}")
+    print("---------------------------------------")
     with open("Source/Scopus/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_scopus_list_library):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
             file.write("\n\n\n")
-    print("Всего строк: " + str(ws.max_row))
     return all_scopus_list_library

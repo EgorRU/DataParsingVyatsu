@@ -12,14 +12,15 @@ from Parsing.Equals import Equals
 #(function) def Equals(
 # source1: list,
 # source2: list
-#) -> tuple(add: list, remove: list)  
+#) -> tuple(add: list, remove: list, identical: list)  
 
 #tuple - кортеж
 # add - лист, содержащий записи, которые были добалены
 # remove - лист, содержащий записи, которые были удалены
+# identical - лист, содержащий записи, которые есть в обоих листах
 
 #example:
-#add_list, remove_list = Equals(list_scopus, list_wos)
+#add_list, remove_list, identical_list = Equals(list_scopus, list_wos)
 
 #примечание:
 #можно сравнивать листы из разных источников

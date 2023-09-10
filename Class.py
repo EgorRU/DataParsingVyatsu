@@ -8,20 +8,6 @@ class Base_Library:
         self.doi = None
 
 
-    def __eq__(self, other):
-        if (
-            self.author == other.author
-            and self.title == other.title
-            and self.year == other.article
-            and self.article == other.year
-            and self.link == other.link
-            and self.doi == other.doi
-        ):
-            return True
-        else:
-            return False
-
-
 class Scopus_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
@@ -34,7 +20,6 @@ class Scopus_Library(Base_Library):
         self.number_of_pages = None
         self.citation = None
         self.source = "Scopus"
-
 
     def Print(self):
         return (
@@ -68,10 +53,6 @@ class Scopus_Library(Base_Library):
             + ", "
             + str(self.source)
         )
-
-
-    def __eq__(self, other):
-        Base_Library.__eq__(self, other)
 
 
 class WOS_Library(Base_Library):
@@ -111,9 +92,6 @@ class WOS_Library(Base_Library):
             + str(self.source)
         )
     
-    def __eq__(self, other):
-        Base_Library.__eq__(self, other)
-
 
 class IPublishing_Library(Base_Library):
     def __init__(self):
