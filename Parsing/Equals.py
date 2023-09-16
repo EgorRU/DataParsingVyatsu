@@ -9,8 +9,8 @@ def Equals(source1, source2):
         copy = False
         for j in range(len(source1)):
             if (
-                source2[i].author == source1[j].author
-                and source2[i].title == source1[j].title
+                source2[i].clear_author == source1[j].clear_author
+                and source2[i].clear_title == source1[j].clear_title
                 and source2[i].year == source1[j].year
                 and source2[i].article == source1[j].article
                 and source2[i].link == source1[j].link
@@ -27,8 +27,8 @@ def Equals(source1, source2):
         copy = False
         for j in range(len(source2)):
             if (
-                source1[i].author == source2[j].author
-                and source1[i].title == source2[j].title
+                source1[i].clear_author == source2[j].clear_author
+                and source1[i].clear_title == source2[j].clear_title
                 and source1[i].year == source2[j].year
                 and source1[i].article == source2[j].article
                 and source1[i].link == source2[j].link
@@ -67,6 +67,22 @@ def Equals(source1, source2):
 
 
 def IPublishingEquals(source1, source2):
+    print("Сравнение пошло")
+    def compare_fio(str_1:str, str_2:str):
+        if len(str_1) != len(str_2):
+            return False
+        list_str_1 = []
+        list_str_2 = []
+        for i in range(len(str_1)):
+            list_str_1.append(str_1[i])
+            list_str_2.append(str_2[i])
+        list_str_1.sort()
+        list_str_2.sort()
+        for i in range(len(str_1)):
+            if list_str_1[i]!=list_str_2[i]:
+                return False
+        return True
+    
     #листы новых данных и лист удалённых данных
     add_new_list = []
     remove_new_list = []
@@ -77,10 +93,8 @@ def IPublishingEquals(source1, source2):
         copy = False
         for j in range(len(source1)):
             if (
-                source2[i].author == source1[j].author
-                and source2[i].title == source1[j].title
-                and source2[i].year == source1[j].year
-                and source2[i].article == source1[j].article
+                #compare_fio(source2[i].clear_author, source1[j].clear_author)
+                source2[i].clear_title == source1[j].clear_title
             ):
                 copy = True
                 identical_new_list.append(source2[i])
@@ -93,10 +107,8 @@ def IPublishingEquals(source1, source2):
         copy = False
         for j in range(len(source2)):
             if (
-                source1[i].author == source2[j].author
-                and source1[i].title == source2[j].title
-                and source1[i].year == source2[j].year
-                and source1[i].article == source2[j].article
+                #compare_fio(source1[i].clear_author, source2[j].clear_author)
+                source1[i].clear_title == source2[j].clear_title
             ):
                 copy = True
                 break

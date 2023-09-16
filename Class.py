@@ -6,6 +6,8 @@ class Base_Library:
         self.article = None
         self.link = None
         self.doi = None
+        self.clear_author = None
+        self.clear_title = None
 
 
 class Scopus_Library(Base_Library):
@@ -97,6 +99,7 @@ class IPublishing_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
         self.description = None
+        self.author_rus = None
         self.source = "iPublishing"
 
     def Print(self):
@@ -117,3 +120,17 @@ class IPublishing_Library(Base_Library):
             + ", "
             + str(self.source)
         )
+
+
+class eLibrary(Base_Library):
+    def __init__(self):
+        Base_Library.__init__(self)
+        self.id = None
+        self.linkurl = None
+        self.genre = None
+        self.type = None
+        self.id = None
+        self.id = None
+        self.id = None
+        self.author_rus = None
+        self.source = "eLibrary"

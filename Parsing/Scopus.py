@@ -302,15 +302,25 @@ def Scopus(path):
                 for j in range(count_temp, count_temp + count_author_row):
                     all_scopus_list_library[j].link = link.strip()
         i += 1
+
+    for i in range(len(all_scopus_list_library)):
+        all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())
+        
+    for i in range(len(all_scopus_list_library)):
+        all_scopus_list_library[i].clear_author = "".join(e for e in all_scopus_list_library[i].author if e.isupper())
+        
         
     # вывод в файл
     print("Запись в файл началась Scopus")
     print(f"Всего строк в таблице: {ws.max_row-1}")
     print(f"Всего записей: {len(all_scopus_list_library)}")
     print("---------------------------------------")
-    with open("Source/Scopus/Result.txt", "w", encoding="utf-8") as file:
+    with open("Source/Scopus/Result2.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_scopus_list_library):
             file.write("Запись №: " + str(index) + "\n")
-            file.write(val.Print())
+            file.write(val.clear_author + ", ")
+            file.write(val.author + ", ")
+            file.write(val.clear_title + ", ")
+            file.write(val.title)
             file.write("\n\n\n")
     return all_scopus_list_library

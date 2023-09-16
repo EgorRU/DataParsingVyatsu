@@ -8,13 +8,11 @@ from Parsing.Equals import Equals, IPublishingEquals
 
 def Main():
     #Equals(Scopus("Source/Scopus/Scopus1.xlsx"), Scopus("Source/Scopus/Scopus2.xlsx"))
-    #print()
     #Equals(Wos("Source/Wos/Wos.xlsx"), Wos("Source/Wos/Wos2.xlsx"))
-    #print()
     #Equals(Wos("Source/Wos/Wos.xlsx"), Scopus("Source/Scopus/Scopus1.xlsx"))
-    #print()
-    #IPublishingEquals(Scopus("Source/Scopus/Scopus1.xlsx"), IPublishing("Source/IPublishing/IPublishing.xlsx"))
+    #IPublishingEquals(Scopus("Source/Scopus/Scopus1.xlsx"), Wos("Source/Wos/Wos.xlsx"))
     #IPublishingEquals(Wos("Source/Wos/Wos.xlsx"), IPublishing("Source/IPublishing/IPublishing.xlsx"))
+    #eLibrary()
 
     win.mainloop()
     print("Завершение программы")
@@ -22,3 +20,4 @@ def Main():
 
 if __name__ == "__main__":
     Main()
+

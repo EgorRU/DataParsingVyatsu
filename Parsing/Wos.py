@@ -35,14 +35,24 @@ def Wos(path):
                 new_author.link = ws[f"BF{row_index}"].value[10:].strip()
             all_wos_list_library.append(new_author)
 
+
+    for i in range(len(all_wos_list_library)):
+        all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())
+        
+    for i in range(len(all_wos_list_library)):
+        all_wos_list_library[i].clear_author = "".join(e for e in all_wos_list_library[i].author if e.isupper())
+        
     # вывод в файл
     print("Запись в файл началась Wos")
     print(f"Всего строк в таблице: {ws.max_row-1}")
     print(f"Всего записей: {len(all_wos_list_library)}")
     print("---------------------------------------")
-    with open("Source/Wos/Result.txt", "w", encoding="utf-8") as file:
+    with open("Source/Wos/Result2.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_wos_list_library):
             file.write("Запись №: " + str(index) + "\n")
-            file.write(val.Print())
+            file.write(val.clear_author + ", ")
+            file.write(val.author + ", ")
+            file.write(val.clear_title + ", ")
+            file.write(val.title)
             file.write("\n\n\n")
     return all_wos_list_library

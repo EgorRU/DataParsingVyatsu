@@ -222,7 +222,6 @@ def open_file_Ipublishing_left():
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
-        print("Пошла загрузка")
         list_ipublishing=IPublishing(filename)
         print("IPublishing успешно загружен и обработан программой")
 
@@ -260,7 +259,6 @@ def open_file_Ipublishing_right():
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
-        print("Пошла загрузка")
         list_ipublishing=IPublishing(filename)
         print("IPublishing успешно загружен и обработан программой")
 
@@ -349,7 +347,7 @@ filemenu_load.add_cascade(label="Загрузить Elibrary", menu = filemenu_l
 filemenu_load_Ipublishing = Menu(filemenu_load, tearoff=0)
 filemenu_load_Ipublishing.add_command(label="Загрузить в левую таблицу",command = open_file_Ipublishing_left)
 filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу",command = open_file_Ipublishing_right)
-filemenu_load.add_cascade(label="Загрузить Ipublishing", menu = filemenu_load_Scopus)
+filemenu_load.add_cascade(label="Загрузить Ipublishing", menu = filemenu_load_Ipublishing)
 
 filemenu.add_cascade(label="Загрузить файл", menu = filemenu_load)
 
