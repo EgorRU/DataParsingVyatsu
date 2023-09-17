@@ -31,8 +31,17 @@ def eLibrary(path):
     file.close()
     
     with open("Source/eLibrary/eLibrary.json", 'w', encoding="utf-8") as file:
-        json.dump(dict_data, file, ensure_ascii=False, indent=2)
+        json.dump(dict_data, file, ensure_ascii=False, indent=4)
      
+# .author = None
+# .title = None
+# .year = None
+# .article = None
+# .link = None
+# .doi = None
+# .clear_author = None
+# .clear_title = None
+
     #парсим json словарь
     count_author = 0
     list_library = dict_data["items"]["item"]
