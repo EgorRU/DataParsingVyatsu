@@ -3,13 +3,22 @@ from Class import Scopus_Library
 
 
 def Scopus(path):
+    # список статей SCOPUS
+    all_scopus_list_library = []
+
     # открытие исходного файла
     wb = load_workbook(path)
+    ws = wb.active
+
+    #проверка на то, что открыли
+    if ws.cell(row=1, column=1).value.strip()[:11] == "Publication":
+        return all_scopus_list_library, "Wos"
+
+    if ws.cell(row=1, column=1).value.strip()[:7] == "Таблица":
+        return all_scopus_list_library, "IPublishing"
 
     # создание нового файла
     wb_new = Workbook()
-
-    ws = wb.active
     ws_new = wb_new.active
 
     # конкатенация строк
@@ -27,9 +36,6 @@ def Scopus(path):
     # проходимся по новому файлу
     wb = wb_new
     ws = wb.active
-
-    # список статей SCOPUS
-    all_scopus_list_library = []
 
     # кол-во ФИО авторов
     count_all_author = 0
@@ -315,12 +321,9 @@ def Scopus(path):
     print(f"Всего строк в таблице: {ws.max_row-1}")
     print(f"Всего записей: {len(all_scopus_list_library)}")
     print("---------------------------------------")
-    with open("Source/Scopus/Result2.txt", "w", encoding="utf-8") as file:
+    with open("Source/Scopus/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_scopus_list_library):
             file.write("Запись №: " + str(index) + "\n")
-            file.write(val.clear_author + ", ")
-            file.write(val.author + ", ")
-            file.write(val.clear_title + ", ")
-            file.write(val.title)
+            file.write(val.Print())
             file.write("\n\n\n")
-    return all_scopus_list_library
+    return all_scopus_list_library, "Scopus"

@@ -1,16 +1,24 @@
 from openpyxl import load_workbook
 from Class import IPublishing_Library
-from translate import Translite
+from Parsing.Translate import Translite
 
 
 def IPublishing(path):
-    # открытие исходного файла
-    wb = load_workbook(path)
-    wb.active = wb["1. Статьи в журналах"]
-    ws = wb.active
-
     # список статей IPublishing
     all_IPublishing_list_library = []
+
+    # открытие исходного файла
+    wb = load_workbook(path)
+    #wb.active = wb["1. Статьи в журналах"]
+    ws = wb.active
+
+    #проверка на то, что открыли
+    if ws.cell(row=1, column=1).value.strip()[:6] == "Авторы":
+        return all_IPublishing_list_library, "Scopus"
+
+    #проверка на то, что открыли
+    if ws.cell(row=1, column=1).value.strip()[:11] == "Publication":
+        return all_IPublishing_list_library, "Wos"
 
     # ПАРСИНГ КАЖДОЙ СТРОКИ
     for row_index in range(5, ws.max_row + 1):
@@ -41,12 +49,9 @@ def IPublishing(path):
     print(f"Всего строк в таблице: {ws.max_row-4}")
     print(f"Всего записей: {len(all_IPublishing_list_library)}")
     print("---------------------------------------")
-    with open("Source/IPublishing/Result2.txt", "w", encoding="utf-8") as file:
+    with open("Source/IPublishing/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_IPublishing_list_library):
             file.write("Запись №: " + str(index) + "\n")
-            file.write(val.clear_author + ", ")
-            file.write(val.author + ", ")
-            file.write(val.clear_title + ", ")
-            file.write(val.title)
+            file.write(val.Print())
             file.write("\n\n\n")
-    return all_IPublishing_list_library
+    return all_IPublishing_list_library, "IPublishing"

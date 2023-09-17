@@ -3,12 +3,19 @@ from Class import WOS_Library
 
 
 def Wos(path):
+    # список статей Wos
+    all_wos_list_library = []
+
     # открытие исходного файла
     wb = load_workbook(path)
     ws = wb.active
 
-    # список статей Wos
-    all_wos_list_library = []
+    #проверка на то, что открыли
+    if ws.cell(row=1, column=1).value.strip()[:6] == "Авторы":
+        return all_wos_list_library, "Scopus"
+
+    if ws.cell(row=1, column=1).value.strip()[:7] == "Таблица":
+        return all_wos_list_library, "IPublishing"
 
     # ПАРСИНГ КАЖДОЙ СТРОКИ
     for row_index in range(2, ws.max_row + 1):
@@ -47,12 +54,9 @@ def Wos(path):
     print(f"Всего строк в таблице: {ws.max_row-1}")
     print(f"Всего записей: {len(all_wos_list_library)}")
     print("---------------------------------------")
-    with open("Source/Wos/Result2.txt", "w", encoding="utf-8") as file:
+    with open("Source/Wos/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_wos_list_library):
             file.write("Запись №: " + str(index) + "\n")
-            file.write(val.clear_author + ", ")
-            file.write(val.author + ", ")
-            file.write(val.clear_title + ", ")
-            file.write(val.title)
+            file.write(val.Print())
             file.write("\n\n\n")
-    return all_wos_list_library
+    return all_wos_list_library, "Wos"

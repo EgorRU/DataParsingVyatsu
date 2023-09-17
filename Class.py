@@ -27,33 +27,19 @@ class Scopus_Library(Base_Library):
         return (
             str(self.author)
             + ", "
-            + str(self.id_author)
-            + ", "
             + str(self.title)
             + ", "
             + str(self.year)
             + ", "
-            + str(self.source_name)
-            + ", "
-            + str(self.volume)
-            + ", "
-            + str(self.issue)
-            + ", "
-            + str(self.article)
-            + ", "
-            + str(self.start_page)
-            + ", "
-            + str(self.end_page)
-            + ", "
-            + str(self.number_of_pages)
+            + str(self.link)
             + ", "
             + str(self.citation)
             + ", "
             + str(self.doi)
             + ", "
-            + str(self.link)
+            + str(self.clear_author)
             + ", "
-            + str(self.source)
+            + str(self.clear_title)
         )
 
 
@@ -75,23 +61,13 @@ class WOS_Library(Base_Library):
             + ", "
             + str(self.year)
             + ", "
-            + str(self.volume)
-            + ", "
-            + str(self.issue)
-            + ", "
-            + str(self.article)
-            + ", "
-            + str(self.start_page)
-            + ", "
-            + str(self.end_page)
-            + ", "
-            + str(self.number_of_pages)
+            + str(self.link)
             + ", "
             + str(self.doi)
             + ", "
-            + str(self.link)
+            + str(self.clear_author)
             + ", "
-            + str(self.source)
+            + str(self.clear_title)
         )
     
 
@@ -110,27 +86,33 @@ class IPublishing_Library(Base_Library):
             + ", "
             + str(self.year)
             + ", "
-            + str(self.article)
-            + ", "
             + str(self.link)
-            + ", "
-            + str(self.description)
             + ", "
             + str(self.doi)
             + ", "
-            + str(self.source)
+            + str(self.clear_author)
+            + ", "
+            + str(self.clear_title)
         )
 
 
 class eLibrary(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.id = None
-        self.linkurl = None
-        self.genre = None
-        self.type = None
-        self.id = None
-        self.id = None
-        self.id = None
-        self.author_rus = None
-        self.source = "eLibrary"
+
+    def Print(self):
+        return (
+            str(self.author)
+            + ", "
+            + str(self.title)
+            + ", "
+            + str(self.year)
+            + ", "
+            + str(self.link)
+            + ", "
+            + str(self.doi)
+            + ", "
+            + str(self.clear_author)
+            + ", "
+            + str(self.clear_title)
+        )
