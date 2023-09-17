@@ -65,9 +65,6 @@ async def open_file_Scopus_left():
 
             global list1
             list1 = list_scopus
-            # for i in range(len(list_scopus)):
-            #     list1.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
-            #                 list_scopus[i].link))
             global left_table_create
             global table_left
             global scroll_pane
@@ -92,11 +89,11 @@ async def open_file_Scopus_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_left.column("author", minwidth=0, width=100, stretch=NO)
-            table_left.column("title", minwidth=0, width=330, stretch=YES)
-            table_left.column("year", minwidth=0, width=40, stretch=NO)
-            table_left.column("link", minwidth=0, width=180, stretch=NO)
-            table_left.column("citation", minwidth=0, width=60, stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=NO)
+            table_left.column("title", minwidth=330, width=330, stretch=YES)
+            table_left.column("year", minwidth=40, width=40, stretch=NO)
+            table_left.column("link", minwidth=180, width=180, stretch=NO)
+            table_left.column("citation", minwidth=60, width=60, stretch=NO)
 
 
 async def open_file_Scopus_right():
@@ -127,9 +124,6 @@ async def open_file_Scopus_right():
 
             global list2
             list2 = list_scopus
-            # for i in range(len(list_scopus)):
-            #     list2.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
-            #               list_scopus[i].link))
 
             global right_table_create
             global table_right
@@ -154,11 +148,11 @@ async def open_file_Scopus_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=0, width=100, stretch=NO)
-            table_right.column("title", minwidth=0, width=330, stretch=YES)
-            table_right.column("year", minwidth=0, width=40, stretch=NO)
-            table_right.column("link", minwidth=0, width=180, stretch=NO)
-            table_right.column("citation", minwidth=0, width=60, stretch=NO)
+            table_right.column("author", minwidth=100, width=100,  stretch=NO)
+            table_right.column("title", minwidth=330, width=330, stretch=YES)
+            table_right.column("year", minwidth=40, width=40,  stretch=NO)
+            table_right.column("link", minwidth=180, width=180,  stretch=NO)
+            table_right.column("citation", minwidth=60, width=60,  stretch=NO)
 
 
 async def open_file_WoS_left():
@@ -189,9 +183,7 @@ async def open_file_WoS_left():
                             list_wos[i].link, list_wos[i].volume))
 
             global list1
-            for i in range(len(list_wos)):
-                list1.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
-                            list_wos[i].link))
+            list1 = list_wos
 
             global left_table_create
             global table_left
@@ -216,11 +208,11 @@ async def open_file_WoS_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_left.column("author", minwidth=0, width=100, stretch=NO)
-            table_left.column("title", minwidth=0, width=330, stretch=YES)
-            table_left.column("year", minwidth=0, width=40, stretch=NO)
-            table_left.column("link", minwidth=0, width=180, stretch=NO)
-            table_left.column("volume", minwidth=0, width=60, stretch=NO)
+            table_left.column("author", minwidth=100, width=100,   stretch=NO)
+            table_left.column("title", minwidth=330, width=330, stretch=YES)
+            table_left.column("year", minwidth=40, width=40,stretch=NO)
+            table_left.column("link", minwidth=180, width=180,   stretch=NO)
+            table_left.column("volume", minwidth=60, width=60,  stretch=NO)
 
 
 async def open_file_WoS_right():
@@ -250,9 +242,7 @@ async def open_file_WoS_right():
                             list_wos[i].link, list_wos[i].volume))
 
             global list2
-            for i in range(len(list_wos)):
-                list2.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
-                              list_wos[i].link))
+            list2 = list_wos
 
             global right_table_create
             global table_right
@@ -277,11 +267,11 @@ async def open_file_WoS_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=0, width=100, stretch=NO)
-            table_right.column("title", minwidth=0, width=330, stretch=YES)
-            table_right.column("year", minwidth=0, width=40, stretch=NO)
-            table_right.column("link", minwidth=0, width=180, stretch=NO)
-            table_right.column("volume", minwidth=0, width=60, stretch=NO)
+            table_right.column("author", minwidth=100, width=100,  stretch=NO)
+            table_right.column("title", minwidth=330, width=330, stretch=YES)
+            table_right.column("year", minwidth=40, width=40,   stretch=NO)
+            table_right.column("link", minwidth=180, width=180, stretch=NO)
+            table_right.column("volume", minwidth=60, width=60,  stretch=NO)
 
 
 async def open_file_Elibrary_left():
@@ -312,9 +302,7 @@ async def open_file_Elibrary_left():
                             list_Elibrary[i].link, list_Elibrary[i].volume))
 
             global list1
-            for i in range(len(list_Elibrary)):
-                list1.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year,
-                              list_Elibrary[i].link))
+            list1 = list_Elibrary
 
             global left_table_create
             global table_left
@@ -340,10 +328,10 @@ async def open_file_Elibrary_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END,values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_left.column("author", minwidth=0, width=100, stretch=NO)
-            table_left.column("title", minwidth=0, width=370, stretch=YES)
-            table_left.column("year", minwidth=0, width=40, stretch=NO)
-            table_left.column("link", minwidth=0, width=210, stretch=NO)
+            table_left.column("author", minwidth=100, width=100,   stretch=NO)
+            table_left.column("title", minwidth=370, width=370, stretch=YES)
+            table_left.column("year", minwidth=40, width=40,   stretch=NO)
+            table_left.column("link", minwidth=210, width=210,   stretch=NO)
 
 
 
@@ -376,9 +364,7 @@ async def open_file_Elibrary_right():
                             list_Elibrary[i].link, list_Elibrary[i].volume))
 
             global list2
-            for i in range(len(list_Elibrary)):
-                list2.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year,
-                              list_Elibrary[i].link))
+            list2 = list_Elibrary
 
             global right_table_create
             global table_right
@@ -403,10 +389,10 @@ async def open_file_Elibrary_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END,values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=0, width=100, stretch=NO)
-            table_right.column("title", minwidth=0, width=370, stretch=YES)
-            table_right.column("year", minwidth=0, width=40, stretch=NO)
-            table_right.column("link", minwidth=0, width=210, stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=NO)
+            table_right.column("title", minwidth=370, width=370, stretch=YES)
+            table_right.column("year", minwidth=40, width=40,   stretch=NO)
+            table_right.column("link", minwidth=210, width=210,   stretch=NO)
 
 
 async def open_file_Ipublishing_left():
@@ -430,9 +416,7 @@ async def open_file_Ipublishing_left():
                             list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
 
             global list1
-            for i in range(len(list_ipublishing)):
-                list1.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year,
-                              list_ipublishing[i].link))
+            list1 = list_ipublishing
 
             global left_table_create
             global table_left
@@ -457,11 +441,11 @@ async def open_file_Ipublishing_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_left.column("author", minwidth=0, width=100, stretch=NO)
-            table_left.column("title", minwidth=0, width=250, stretch=YES)
-            table_left.column("year", minwidth=0, width=40, stretch=NO)
-            table_left.column("article", minwidth=0, width=160, stretch=NO)
-            table_left.column("link", minwidth=0, width=160, stretch=NO)
+            table_left.column("author", minwidth=100, width=100,  stretch=NO)
+            table_left.column("title", minwidth=250, width=250, stretch=YES)
+            table_left.column("year", minwidth=40, width=40,   stretch=NO)
+            table_left.column("article", minwidth=160, width=160,   stretch=NO)
+            table_left.column("link", minwidth=160, width=160,  stretch=NO)
 
 
 async def open_file_Ipublishing_right():
@@ -485,9 +469,7 @@ async def open_file_Ipublishing_right():
                             list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
 
             global list2
-            for i in range(len(list_ipublishing)):
-                list1.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year,
-                              list_ipublishing[i].link))
+            list2 = list_ipublishing
 
             global right_table_create
             global table_right
@@ -512,24 +494,24 @@ async def open_file_Ipublishing_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=0, width=100, stretch=NO)
-            table_right.column("title", minwidth=0, width=250, stretch=YES)
-            table_right.column("year", minwidth=0, width=40, stretch=NO)
-            table_right.column("article", minwidth=0, width=160, stretch=NO)
-            table_right.column("link", minwidth=0, width=160, stretch=NO)
+            table_right.column("author", minwidth=100, width=100,  stretch=NO)
+            table_right.column("title", minwidth=250, width=250, stretch=YES)
+            table_right.column("year", minwidth=40, width=40,  stretch=NO)
+            table_right.column("article", minwidth=160, width=160,  stretch=NO)
+            table_right.column("link", minwidth=160, width=160, stretch=NO)
 
 
 #кнопка Сравнение
 async def open_compare_window():
     comparewin = Toplevel(win) #инициализация
     comparewin.geometry('750x700')  #размер
+    comparewin.minsize(750, 700)
     comparewin.title("Результат сравнения") #название
     frame_compare_button = Frame(comparewin) #задаем поле
     frame_compare_table = Frame(comparewin)  #задаем поле
     frame_compare_button.place(relx=0, rely=0, relwidth=1, relheight=0.1)  #размещаем его на весь размер окна
     frame_compare_table.place(relx=0, rely=0.1, relwidth = 1, relheight = 0.9) #размещаем его на весь размер окна
-    unload_to_xlsx = Button(frame_compare_button, text = "Выгрузить в xlxs")
-    unload_to_xlsx.place(relx=0.4, rely = 0.25, relwidth = 0.2, relheight = 0.5)
+
 
     heads = ['author', 'title', 'year', 'link']  # столбики
     table_compare = ttk.Treeview(frame_compare_table, show='headings')  #инициализация таблицы
@@ -550,27 +532,32 @@ async def open_compare_window():
     else:
         add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
 
+    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в xlxs",
+                            command=Upload(add_new_list, identical_new_list, remove_new_list))
+    unload_to_xlsx.place(relx=0.4, rely=0.25, relwidth=0.2, relheight=0.5)
+
     for row in add_new_list:
         table_compare.insert('', tkinter.END, values=row, tags='new')
-    for row in remove_new_list:
-        table_compare.insert('', tkinter.END, values=row, tags='deleted')
     for row in identical_new_list:
         table_compare.insert('', tkinter.END, values=row, tags='edited')
+    for row in remove_new_list:
+        table_compare.insert('', tkinter.END, values=row, tags='deleted')
 
     table_compare.tag_configure('new', background='#7FFF00')
     table_compare.tag_configure('deleted', background='#F08080')
     table_compare.tag_configure('edited', background='white')
 
-    table_compare.column("author", minwidth=0, width=100, stretch=NO)
-    table_compare.column("title", minwidth=0, width=370, stretch=YES)
-    table_compare.column("year", minwidth=0, width=40, stretch=NO)
-    table_compare.column("link", minwidth=0, width=210, stretch=NO)
+    table_compare.column("author", minwidth=100, width=100, stretch=NO)
+    table_compare.column("title", minwidth=370, width=370, stretch=YES)
+    table_compare.column("year", minwidth=40, width=40, stretch=NO)
+    table_compare.column("link", minwidth=210, width=210, stretch=NO)
 
 
 #кнопка HELP
 async def open_help_window():
     helpwin = Toplevel(win) #инициализация
     helpwin.geometry('600x225')  #размер
+    helpwin.minsize(1500, 700)
     helpwin.title("Окно помощи") #название
     helpwin.resizable(False, False) #запрещаем менять размер
     framehelp = Frame(helpwin) #задаем поле
