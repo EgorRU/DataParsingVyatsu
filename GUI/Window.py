@@ -44,8 +44,6 @@ async def open_file_Scopus_left():
         global left_table_site
         global right_table_site
         left_table_site = 's'
-        if 'right_table_site' not in locals():
-            right_table_site = ''
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
                 (left_table_site == 's' and right_table_site == 'i')):
@@ -61,11 +59,14 @@ async def open_file_Scopus_left():
             lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
                         list_scopus[i].link, list_scopus[i].citation))
 
-        table_left_temp.destroy()
+        
         global left_table_create
         global table_left
+        global scroll_pane
         if left_table_create == True:
             table_left.destroy()
+            scroll_pane.pack_forget()
+
         heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
         table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
         table_left['columns'] = heads  # привязка столбцов к таблице
@@ -101,8 +102,6 @@ async def open_file_Scopus_right():
         global left_table_site
         global right_table_site
         right_table_site = 's'
-        if 'left_table_site' not in locals():
-            left_table_site = ''
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
                 (left_table_site == 's' and right_table_site == 'i')):
@@ -117,10 +116,13 @@ async def open_file_Scopus_right():
         for i in range(len(list_scopus)):
             lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year, list_scopus[i].link, list_scopus[i].citation))
 
-        table_right_temp.destroy()
+        
         global right_table_create
+        global table_right
+        global scroll_pane
         if right_table_create == True:
             table_right.destroy()
+            scroll_pane.pack_forget()
         heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
         table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
         table_right['columns'] = heads  # привязка столбцов к таблице
@@ -155,9 +157,6 @@ async def open_file_WoS_left():
         global left_table_site
         global right_table_site
         left_table_site = 'w'
-        if 'right_table_site' not in locals():
-            right_table_site = ''
-        print (left_table_site + " - " + right_table_site)
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
@@ -173,10 +172,13 @@ async def open_file_WoS_left():
         for i in range(len(list_wos)):
             lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link, list_wos[i].volume))
 
-        table_left_temp.destroy()
+        
         global left_table_create
+        global table_left
+        global scroll_pane
         if left_table_create == True:
             table_left.destroy()
+            scroll_pane.pack_forget()
         heads = ['author', 'title', 'year', 'link', 'volume']  # столбики
         table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
         table_left['columns'] = heads  # привязка столбцов к таблице
@@ -211,9 +213,6 @@ async def open_file_WoS_right():
         global left_table_site
         global right_table_site
         right_table_site = 'w'
-        if 'left_table_site' not in locals():
-            left_table_site = ''
-        print(left_table_site + " - " + right_table_site)
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
@@ -228,10 +227,13 @@ async def open_file_WoS_right():
         for i in range(len(list_wos)):
             lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link, list_wos[i].volume))
 
-        table_right_temp.destroy()
+        
         global right_table_create
+        global table_right
+        global scroll_pane
         if right_table_create == True:
             table_right.destroy()
+            scroll_pane.pack_forget()
         heads = ['author', 'title', 'year', 'link', 'volume']  # столбики
         table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
         table_right['columns'] = heads  # привязка столбцов к таблице
@@ -310,10 +312,13 @@ async def open_file_Ipublishing_left():
         for i in range(len(list_ipublishing)):
             lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
 
-        table_left_temp.destroy()
+        
         global left_table_create
+        global table_left
+        global scroll_pane
         if left_table_create == True:
             table_left.destroy()
+            scroll_pane.pack_forget()
         heads = ['author', 'title', 'year', 'article', 'link']  # столбики
         table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
         table_left['columns'] = heads  # привязка столбцов к таблице
@@ -356,10 +361,13 @@ async def open_file_Ipublishing_right():
         for i in range(len(list_ipublishing)):
             lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
 
-        table_right_temp.destroy()
+        
         global right_table_create
+        global table_right
+        global scroll_pane
         if right_table_create == True:
             table_right.destroy()
+            scroll_pane.pack_forget()
         heads = ['author', 'title', 'year', 'article', 'link']  # столбики
         table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
         table_right['columns'] = heads  # привязка столбцов к таблице
@@ -384,7 +392,7 @@ async def open_file_Ipublishing_right():
         table_right.column("link", minwidth=0, width=160, stretch=NO)
 
         list_Ipublishing = []
-        
+
 #кнопка Сравнение
 async def open_compare_window():
     comparewin = Toplevel(win) #инициализация
@@ -392,24 +400,43 @@ async def open_compare_window():
     comparewin.title("Результат сравнения") #название
     frame_compare_button = Frame(comparewin) #задаем поле
     frame_compare_table = Frame(comparewin)  #задаем поле
-    frame_compare_button.place(relx=0, rely=0, relwidth=1, relheight=0.05)  #размещаем его на весь размер окна
-    frame_compare_table.place(relx=0, rely=0.05, relwidth = 1, relheight = 0.95) #размещаем его на весь размер окна
-    unload_to_xlsx = Button(frame_compare_button)
-    unload_to_xlsx.place(relx=0.475, rely = 0, relwidth = 0.05, relheight = 0.05)
+    frame_compare_button.place(relx=0, rely=0, relwidth=1, relheight=0.1)  #размещаем его на весь размер окна
+    frame_compare_table.place(relx=0, rely=0.1, relwidth = 1, relheight = 0.9) #размещаем его на весь размер окна
+    unload_to_xlsx = Button(frame_compare_button, text = "Выгрузить в xlxs")
+    unload_to_xlsx.place(relx=0.4, rely = 0.25, relwidth = 0.2, relheight = 0.5)
 
-    # Затычки для таблиц
-    heads = [' ', ' ', ' ', ' ', ' ']  # столбики
-    table_temp = ttk.Treeview(frame_compare_table, show='headings')  # инициализация таблицы
-    table_temp['columns'] = heads  # привязка столбцов к таблице
+    heads = ['author', 'title', 'year', 'link']  # столбики
+    table_compare = ttk.Treeview(frame_compare_table, show='headings')  #инициализация таблицы
+    table_compare.place(relx=0, rely = 0, relwidth = 1, relheight = 1)
+    table_compare['columns'] = heads  #привязка столбцов к таблице
 
     for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-        table_temp.heading(header, text=header, anchor='center')
-        table_temp.column(header, anchor='center')
+        table_compare.heading(header, text=header, anchor='center')
+        table_compare.column(header, anchor='center')
 
-    scroll_pane = ttk.Scrollbar(frame_compare_table, command=async_handler(table_temp.yview))
-    table_temp.configure(yscrollcommand=scroll_pane.set)
+    scroll_pane = ttk.Scrollbar(frame_compare_table, command=async_handler(table_compare.yview))
+    table_compare.configure(yscrollcommand=scroll_pane.set)
     scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-    table_temp.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+    table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+
+    list_new = [("abs", "def", 2000, "http"),("ghi", "jkl", 2000, "http"),("mno", "pqr", 2000, "http")]
+    list_deleted = [("stu", "vwx", 2000, "http"), ("yz", "111", 2000, "http"),("lmn", "222", 2000, "http")]
+    list_edited = [("qwe", "rty", 2000, "http"), ("uio", "pas", 2000, "http"), ("dfg", "hjk", 2000, "http")]
+
+    for row in list_new:
+        table_compare.insert('', tkinter.END, values=row, tags='new')
+    for row in list_deleted:
+        table_compare.insert('', tkinter.END, values=row, tags='deleted')
+    for row in list_edited:
+        table_compare.insert('', tkinter.END, values=row, tags='edited')
+    table_compare.tag_configure('new', background='#7FFF00')
+    table_compare.tag_configure('deleted', background='#F08080')
+    table_compare.tag_configure('edited', background='white')
+
+    table_compare.column("author", minwidth=0, width=100, stretch=NO)
+    table_compare.column("title", minwidth=0, width=370, stretch=NO)
+    table_compare.column("year", minwidth=0, width=40, stretch=NO)
+    table_compare.column("link", minwidth=0, width=210, stretch=NO)
 
 
 #кнопка HELP
@@ -429,15 +456,15 @@ async def open_help_window():
 
 
 #создание окна
-win['bg'] = '#fafafa' #цвет
+win['bg'] = '#FFFFFF' #цвет
 win.title('Library') #название
 win.geometry('1500x700') #размер
 win.protocol("WM_DELETE_WINDOW", on_closing) #событие при закрытии приложения
 win.minsize(1500, 700)
 
 #блоки основного окна
-frametableleft = Frame(win, bg = '#ffb370')
-frametableright = Frame(win, bg = '#ffb370')
+frametableleft = Frame(win, bg = '#FFFFFF')
+frametableright = Frame(win, bg = '#FFFFFF')
 
 #расположение блоков, чтоб можно было менять размер окна
 frametableleft.place(relx=0, rely = 0, relwidth = 0.5, relheight = 1)
@@ -475,33 +502,6 @@ filemenu_load.add_cascade(label="Загрузить Ipublishing", menu = filemen
 
 #создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
-mainmenu.add_cascade(label="Справка", command = async_handler(open_help_window))
-mainmenu.add_cascade(label="Сравнить данные", command = async_handler(open_compare_window), state = DISABLED) #пока окошка хелпа выведет
+mainmenu.add_cascade(label="Справка", command=async_handler(open_help_window))
+mainmenu.add_cascade(label="Сравнить данные", command=async_handler(open_compare_window), state = DISABLED) #пока окошка хелпа выведет
 
-#Затычки для таблиц
-heads = [' ', ' ', ' ', ' ', ' ']  # столбики
-table_left_temp = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
-table_left_temp['columns'] = heads  # привязка столбцов к таблице
-
-for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-    table_left_temp.heading(header, text=header, anchor='center')
-    table_left_temp.column(header, anchor='center')
-
-scroll_pane = ttk.Scrollbar(frametableleft, command=table_left_temp.yview)
-table_left_temp.configure(yscrollcommand=scroll_pane.set)
-scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-table_left_temp.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
-
-
-heads = [' ', ' ', ' ', ' ', ' ']  # столбики
-table_right_temp = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
-table_right_temp['columns'] = heads  # привязка столбцов к таблице
-
-for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-    table_right_temp.heading(header, text=header, anchor='center')
-    table_right_temp.column(header, anchor='center')
-
-scroll_pane = ttk.Scrollbar(frametableright, command=table_right_temp.yview)
-table_right_temp.configure(yscrollcommand=scroll_pane.set)
-scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-table_right_temp.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
