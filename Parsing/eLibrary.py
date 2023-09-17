@@ -114,12 +114,16 @@ def eLibrary(path):
         
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_author = "".join(e for e in all_elibrary_list_library[i].author if e.isupper())
-
+    
+    print("---------------------------------------")
     print("Запись в файл началась eLibrary")
+    print(f"Всего строк в таблице: {len(list_library)}")
+    print(f"Всего записей: {len(all_elibrary_list_library)}")
     with open("Source/eLibrary/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_elibrary_list_library):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
             file.write("\n\n\n")
     print("Запись в файл закончилась eLibrary")
+    print("---------------------------------------")
     return all_elibrary_list_library, "eLibrary"

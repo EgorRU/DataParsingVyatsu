@@ -45,14 +45,15 @@ def IPublishing(path):
         all_IPublishing_list_library[i].clear_author = "".join(e for e in all_IPublishing_list_library[i].author if e.isupper())
         
     # вывод в файл
+    print("---------------------------------------")
     print("Запись в файл началась IPublishing")
     print(f"Всего строк в таблице: {ws.max_row-4}")
     print(f"Всего записей: {len(all_IPublishing_list_library)}")
-    print("---------------------------------------")
     with open("Source/IPublishing/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_IPublishing_list_library):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
             file.write("\n\n\n")
     print("Запись в файл закончилась IPublishing")
+    print("---------------------------------------")
     return all_IPublishing_list_library, "IPublishing"

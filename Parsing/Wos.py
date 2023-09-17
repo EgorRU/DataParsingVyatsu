@@ -50,14 +50,15 @@ def Wos(path):
         all_wos_list_library[i].clear_author = "".join(e for e in all_wos_list_library[i].author if e.isupper())
         
     # вывод в файл
+    print("---------------------------------------")
     print("Запись в файл началась Wos")
     print(f"Всего строк в таблице: {ws.max_row-1}")
     print(f"Всего записей: {len(all_wos_list_library)}")
-    print("---------------------------------------")
     with open("Source/Wos/Result.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_wos_list_library):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
             file.write("\n\n\n")
     print("Запись в файл закончилась Wos")
+    print("---------------------------------------")
     return all_wos_list_library, "Wos"

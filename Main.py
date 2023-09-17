@@ -4,24 +4,26 @@ from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
 from Parsing.eLibrary import eLibrary
-from Parsing.Equals import identical_sources_equals, different_source_equalss
+from Parsing.Equals import identical_sources_equals, different_source_equals
+from Upload import Upload
 
 
 def main():
     #scopus
-    #identical_sources_equals(Scopus("Source/Scopus/Scopus1.xlsx"), Scopus("Source/Scopus/Scopus2.xlsx"))
-
+    #list1, list2, list3 = identical_sources_equals(Scopus("Source/Scopus/Scopus1.xlsx")[0], Scopus("Source/Scopus/Scopus2.xlsx")[0])
+    #Upload(list1, list2, list3)
     #wos
-    #identical_sources_equals(Wos("Source/Wos/Wos1.xlsx"), Wos("Source/Wos/Wos2.xlsx"))
+    #list1, list2, list3 = identical_sources_equals(Wos("Source/Wos/Wos1.xlsx")[0], Wos("Source/Wos/Wos2.xlsx")[0])
 
     #ipublishing scopus
-    #different_source_equalss(Wos("Source/Wos/Wos1.xlsx"), IPublishing("Source/IPublishing/IPublishing.xlsx"))
+    #list1, list2, list3 = different_source_equals(Scopus("Source/Scopus/Scopus1.xlsx")[0], IPublishing("Source/IPublishing/IPublishing.xlsx")[0])
 
     #ipublishing wos
-    #different_source_equalss(Scopus("Source/Scopus/Scopus1.xlsx"), IPublishing("Source/IPublishing/IPublishing.xlsx"))
+    #list1, list2, list3 = different_source_equals(Wos("Source/Wos/Wos1.xlsx")[0], IPublishing("Source/IPublishing/IPublishing.xlsx")[0])
 
+    #не работает(ДОЛГО)
     #ipublishing eLibrary
-    #different_source_equalss(Wos("Source/Wos/Wos1.xlsx"), IPublishing("Source/IPublishing/IPublishing.xlsx"))
+    #list1, list2, list3 = different_source_equals(eLibrary("Source/eLibrary/Ipunisher.xml")[0], IPublishing("Source/IPublishing/IPublishing.xlsx")[0])
 
     async_mainloop(win)
     print("Завершение программы")
