@@ -63,7 +63,7 @@ def Equals(source1, source2):
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
-    return add_new_list, remove_new_list, 
+    return add_new_list, remove_new_list, identical_new_list
 
 
 def IPublishingEquals(source1, source2):
