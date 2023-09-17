@@ -326,4 +326,5 @@ def Scopus(path):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
             file.write("\n\n\n")
+    print("Запись в файл закончилась Scopus")
     return all_scopus_list_library, "Scopus"

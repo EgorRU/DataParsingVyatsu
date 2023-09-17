@@ -66,10 +66,11 @@ translate_dictionary = {
 }
 
 def Translite(s_input):
-    s_output = " "
-    for i in range(len(s_input)):
-        if s_input[i] in translate_dictionary:
-            s_output += translate_dictionary[s_input[i]]
-        else:
-            s_output += s_input[i]
+    s_output = ""
+    if s_input!=None and len(s_input)>0:
+        for i in range(len(s_input)):
+            if s_input[i] in translate_dictionary:
+                s_output += translate_dictionary[s_input[i]]
+            else:
+                s_output += s_input[i]
     return s_output

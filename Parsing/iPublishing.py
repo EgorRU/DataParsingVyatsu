@@ -54,4 +54,5 @@ def IPublishing(path):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
             file.write("\n\n\n")
+    print("Запись в файл закончилась IPublishing")
     return all_IPublishing_list_library, "IPublishing"

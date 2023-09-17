@@ -96,9 +96,10 @@ class IPublishing_Library(Base_Library):
         )
 
 
-class eLibrary(Base_Library):
+class eLibrary_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
+        self.source = "eLibrary"
 
     def Print(self):
         return (

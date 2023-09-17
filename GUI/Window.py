@@ -24,9 +24,6 @@ lst = []
 left_table_create = False
 right_table_create = False
 
-left_table_site = ''
-right_table_site = ''
-
 
 @async_handler
 async def on_closing():
@@ -157,7 +154,6 @@ async def open_file_WoS_left():
         left_table_site = 'w'
         if 'right_table_site' not in locals():
             right_table_site = ''
-        print (left_table_site + " - " + right_table_site)
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
@@ -213,7 +209,6 @@ async def open_file_WoS_right():
         right_table_site = 'w'
         if 'left_table_site' not in locals():
             left_table_site = ''
-        print(left_table_site + " - " + right_table_site)
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
@@ -473,8 +468,17 @@ filemenu_load_Ipublishing.add_command(label="Загрузить в левую т
 filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу",command = async_handler(open_file_Ipublishing_right))
 filemenu_load.add_cascade(label="Загрузить Ipublishing", menu = filemenu_load_Ipublishing)
 
+filemenu.add_cascade(label="Загрузить файл", menu = filemenu_load)
+
+
+#создание поля выгрузка файлов
+filemenu_unload = Menu(filemenu, tearoff=0)
+filemenu_unload.add_command(label="Выгрузить файл в xlsx")
+filemenu_unload.add_command(label="Выгрузить файл в xml")
+filemenu.add_cascade(label="Выгрузить файл", menu = filemenu_unload)
+
 #создание главных полей
-mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
+mainmenu.add_cascade(label="Файл", menu=filemenu)
 mainmenu.add_cascade(label="Справка", command = async_handler(open_help_window))
 mainmenu.add_cascade(label="Сравнить данные", command = async_handler(open_compare_window), state = DISABLED) #пока окошка хелпа выведет
 
