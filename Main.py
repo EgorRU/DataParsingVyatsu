@@ -22,8 +22,8 @@ def main():
     #Upload(list1, list2, list3)
 
     #ipublishing wos
-    list1, list2, list3 = different_source_equals(Wos("Source/Wos/Wos1.xlsx")[0], IPublishing("Source/IPublishing/IPublishing.xlsx")[0])
-    Upload(list1, list2, list3)
+    #list1, list2, list3 = different_source_equals(Wos("Source/Wos/Wos1.xlsx")[0], IPublishing("Source/IPublishing/IPublishing.xlsx")[0])
+    #Upload(list1, list2, list3)
 
     #ipublishing eLibrary
     #list1, list2, list3 = different_source_equals(eLibrary("Source/eLibrary/Ipunisher.xml")[0], IPublishing("Source/IPublishing/IPublishing.xlsx")[0])
