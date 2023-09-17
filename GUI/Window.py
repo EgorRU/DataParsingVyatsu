@@ -64,10 +64,10 @@ async def open_file_Scopus_left():
                             list_scopus[i].link, list_scopus[i].citation))
 
             global list1
-            for i in range(len(list_scopus)):
-                list1.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
-                            list_scopus[i].link))
-
+            list1 = list_scopus
+            # for i in range(len(list_scopus)):
+            #     list1.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
+            #                 list_scopus[i].link))
             global left_table_create
             global table_left
             global scroll_pane
@@ -126,9 +126,10 @@ async def open_file_Scopus_right():
                         list_scopus[i].link, list_scopus[i].citation))
 
             global list2
-            for i in range(len(list_scopus)):
-                list2.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
-                          list_scopus[i].link))
+            list2 = list_scopus
+            # for i in range(len(list_scopus)):
+            #     list2.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
+            #               list_scopus[i].link))
 
             global right_table_create
             global table_right
@@ -545,9 +546,9 @@ async def open_compare_window():
     table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
     if left_table_site == right_table_site:
-        add_new_list, remove_new_list, identical_new_list = Equals(list1, list2)
+        add_new_list, remove_new_list, identical_new_list = identical_sources_equals(list1, list2)
     else:
-        add_new_list, remove_new_list, identical_new_list = IPublishingEquals(list1, list2)
+        add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
 
     for row in add_new_list:
         table_compare.insert('', tkinter.END, values=row, tags='new')
