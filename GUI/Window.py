@@ -24,6 +24,7 @@ lst = []
 left_table_create = False
 right_table_create = False
 
+
 @async_handler
 async def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
