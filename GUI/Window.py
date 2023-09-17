@@ -21,6 +21,8 @@ list_elibrary = []
 list_ipublishing = []
 
 lst = []
+list1 = []
+list2 = []
 
 left_table_create = False
 right_table_create = False
@@ -55,42 +57,46 @@ async def open_file_Scopus_left():
         print("Scopus успешно загружен и обработан программой")
         list_scopus = list_scopus_tuple[0]
         scopus_source = list_scopus_tuple[1]
-        lst = []
-        for i in range(len(list_scopus)):
-            lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
-                        list_scopus[i].link, list_scopus[i].citation))
+        if scopus_source == "Scopus":
+            lst = []
+            for i in range(len(list_scopus)):
+                lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
+                            list_scopus[i].link, list_scopus[i].citation))
 
-        
-        global left_table_create
-        global table_left
-        global scroll_pane
-        if left_table_create == True:
-            table_left.destroy()
-            scroll_pane.pack_forget()
+            global list1
+            for i in range(len(list_scopus)):
+                list1.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
+                            list_scopus[i].link))
 
-        heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
-        table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
-        table_left['columns'] = heads  # привязка столбцов к таблице
-        left_table_create = True
+            global left_table_create
+            global table_left
+            global scroll_pane
+            if left_table_create == True:
+                table_left.destroy()
+                scroll_pane.pack_forget()
 
-        for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-            table_left.heading(header, text=header, anchor='center')
-            table_left.column(header, anchor='center')
+            heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
+            table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+            table_left['columns'] = heads  # привязка столбцов к таблице
+            left_table_create = True
 
-        scroll_pane = ttk.Scrollbar(frametableleft, command=async_handler(table_left.yview))
-        table_left.configure(yscrollcommand=scroll_pane.set)
-        scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-        table_left.pack(expand=tkinter.YES,
-                        fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_left.heading(header, text=header, anchor='center')
+                table_left.column(header, anchor='center')
 
-        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+            scroll_pane = ttk.Scrollbar(frametableleft, command=async_handler(table_left.yview))
+            table_left.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_left.pack(expand=tkinter.YES,fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-        table_left.column("author", minwidth=0, width=100, stretch=NO)
-        table_left.column("title", minwidth=0, width=330, stretch=YES)
-        table_left.column("year", minwidth=0, width=40, stretch=NO)
-        table_left.column("link", minwidth=0, width=180, stretch=NO)
-        table_left.column("citation", minwidth=0, width=60, stretch=NO)
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_left.column("author", minwidth=0, width=100, stretch=NO)
+            table_left.column("title", minwidth=0, width=330, stretch=YES)
+            table_left.column("year", minwidth=0, width=40, stretch=NO)
+            table_left.column("link", minwidth=0, width=180, stretch=NO)
+            table_left.column("citation", minwidth=0, width=60, stretch=NO)
 
 
 async def open_file_Scopus_right():
@@ -113,39 +119,45 @@ async def open_file_Scopus_right():
         print("Scopus успешно загружен и обработан программой")
         list_scopus = list_scopus_tuple[0]
         scopus_source = list_scopus_tuple[1]
-        lst = []
-        for i in range(len(list_scopus)):
-            lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year, list_scopus[i].link, list_scopus[i].citation))
+        if (scopus_source == "Scopus"):
+            lst = []
+            for i in range(len(list_scopus)):
+                lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
+                        list_scopus[i].link, list_scopus[i].citation))
 
-        
-        global right_table_create
-        global table_right
-        global scroll_pane
-        if right_table_create == True:
-            table_right.destroy()
-            scroll_pane.pack_forget()
-        heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
-        table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
-        table_right['columns'] = heads  # привязка столбцов к таблице
-        right_table_create = True
+            global list2
+            for i in range(len(list_scopus)):
+                list2.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year,
+                          list_scopus[i].link))
 
-        for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-            table_right.heading(header, text=header, anchor='center')
-            table_right.column(header, anchor='center')
+            global right_table_create
+            global table_right
+            global scroll_pane
+            if right_table_create == True:
+                table_right.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
+            table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
+            table_right['columns'] = heads  # привязка столбцов к таблице
+            right_table_create = True
 
-        scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-        table_right.configure(yscrollcommand=scroll_pane.set)
-        scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-        table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_right.heading(header, text=header, anchor='center')
+                table_right.column(header, anchor='center')
 
-        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-        table_right.column("author", minwidth=0, width=100, stretch=NO)
-        table_right.column("title", minwidth=0, width=330, stretch=YES)
-        table_right.column("year", minwidth=0, width=40, stretch=NO)
-        table_right.column("link", minwidth=0, width=180, stretch=NO)
-        table_right.column("citation", minwidth=0, width=60, stretch=NO)
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_right.column("author", minwidth=0, width=100, stretch=NO)
+            table_right.column("title", minwidth=0, width=330, stretch=YES)
+            table_right.column("year", minwidth=0, width=40, stretch=NO)
+            table_right.column("link", minwidth=0, width=180, stretch=NO)
+            table_right.column("citation", minwidth=0, width=60, stretch=NO)
 
 
 async def open_file_WoS_left():
@@ -168,40 +180,46 @@ async def open_file_WoS_left():
         print("Wos успешно загружен и обработан программой")
         list_wos = list_wos_tuple[0]
         wos_source = list_wos_tuple[1]
+        if (wos_source == "Wos"):
 
-        lst = []
-        for i in range(len(list_wos)):
-            lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link, list_wos[i].volume))
+            lst = []
+            for i in range(len(list_wos)):
+                lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
+                            list_wos[i].link, list_wos[i].volume))
 
-        
-        global left_table_create
-        global table_left
-        global scroll_pane
-        if left_table_create == True:
-            table_left.destroy()
-            scroll_pane.pack_forget()
-        heads = ['author', 'title', 'year', 'link', 'volume']  # столбики
-        table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
-        table_left['columns'] = heads  # привязка столбцов к таблице
-        left_table_create = True
+            global list1
+            for i in range(len(list_wos)):
+                list1.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
+                            list_wos[i].link))
 
-        for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-            table_left.heading(header, text=header, anchor='center')
-            table_left.column(header, anchor='center')
+            global left_table_create
+            global table_left
+            global scroll_pane
+            if left_table_create == True:
+                table_left.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'link', 'volume']  # столбики
+            table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+            table_left['columns'] = heads  # привязка столбцов к таблице
+            left_table_create = True
 
-        scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
-        table_left.configure(yscrollcommand=scroll_pane.set)
-        scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-        table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_left.heading(header, text=header, anchor='center')
+                table_left.column(header, anchor='center')
 
-        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+            scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
+            table_left.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-        table_left.column("author", minwidth=0, width=100, stretch=NO)
-        table_left.column("title", minwidth=0, width=330, stretch=YES)
-        table_left.column("year", minwidth=0, width=40, stretch=NO)
-        table_left.column("link", minwidth=0, width=180, stretch=NO)
-        table_left.column("volume", minwidth=0, width=60, stretch=NO)
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_left.column("author", minwidth=0, width=100, stretch=NO)
+            table_left.column("title", minwidth=0, width=330, stretch=YES)
+            table_left.column("year", minwidth=0, width=40, stretch=NO)
+            table_left.column("link", minwidth=0, width=180, stretch=NO)
+            table_left.column("volume", minwidth=0, width=60, stretch=NO)
 
 
 async def open_file_WoS_right():
@@ -224,39 +242,45 @@ async def open_file_WoS_right():
         print("Wos успешно загружен и обработан программой")
         list_wos = list_wos_tuple[0]
         wos_source = list_wos_tuple[1]
-        lst = []
-        for i in range(len(list_wos)):
-            lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link, list_wos[i].volume))
+        if (wos_source == "Wos"):
+            lst = []
+            for i in range(len(list_wos)):
+                lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
+                            list_wos[i].link, list_wos[i].volume))
 
-        
-        global right_table_create
-        global table_right
-        global scroll_pane
-        if right_table_create == True:
-            table_right.destroy()
-            scroll_pane.pack_forget()
-        heads = ['author', 'title', 'year', 'link', 'volume']  # столбики
-        table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
-        table_right['columns'] = heads  # привязка столбцов к таблице
-        right_table_create = True
+            global list2
+            for i in range(len(list_wos)):
+                list2.append((list_wos[i].author, list_wos[i].title, list_wos[i].year,
+                              list_wos[i].link))
 
-        for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-            table_right.heading(header, text=header, anchor='center')
-            table_right.column(header, anchor='center')
+            global right_table_create
+            global table_right
+            global scroll_pane
+            if right_table_create == True:
+                table_right.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'link', 'volume']  # столбики
+            table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
+            table_right['columns'] = heads  # привязка столбцов к таблице
+            right_table_create = True
 
-        scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-        table_right.configure(yscrollcommand=scroll_pane.set)
-        scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-        table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_right.heading(header, text=header, anchor='center')
+                table_right.column(header, anchor='center')
 
-        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-        table_right.column("author", minwidth=0, width=100, stretch=NO)
-        table_right.column("title", minwidth=0, width=330, stretch=YES)
-        table_right.column("year", minwidth=0, width=40, stretch=NO)
-        table_right.column("link", minwidth=0, width=180, stretch=NO)
-        table_right.column("volume", minwidth=0, width=60, stretch=NO)
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_right.column("author", minwidth=0, width=100, stretch=NO)
+            table_right.column("title", minwidth=0, width=330, stretch=YES)
+            table_right.column("year", minwidth=0, width=40, stretch=NO)
+            table_right.column("link", minwidth=0, width=180, stretch=NO)
+            table_right.column("volume", minwidth=0, width=60, stretch=NO)
 
 
 async def open_file_Elibrary_left():
@@ -265,16 +289,62 @@ async def open_file_Elibrary_left():
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
 
-        list_Elibrary_tuple = eLibrary(filename)
-        print("Elibrary успешно загружен и обработан программой")
-        list_Elibrary = list_Elibrary_tuple[0]
-        Elibrary_source = list_Elibrary_tuple[1]
-
+        # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
+        global left_table_site
+        global right_table_site
         left_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'e' and right_table_site == 'i')):
             mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+
+        # обработка файла, получение списка данных
+        list_Elibrary_tuple = eLibrary(filename)
+        print("Elibrary успешно загружен и обработан программой")
+        list_Elibrary = list_Elibrary_tuple[0]
+        Elibrary_source = list_Elibrary_tuple[1]
+        if (Elibrary_source == "Elibrary"):
+
+            lst = []
+            for i in range(len(list_Elibrary)):
+                lst.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year,
+                            list_Elibrary[i].link, list_Elibrary[i].volume))
+
+            global list1
+            for i in range(len(list_Elibrary)):
+                list1.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year,
+                              list_Elibrary[i].link))
+
+            global left_table_create
+            global table_left
+            global scroll_pane
+            if left_table_create == True:
+                table_left.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'link']  # столбики
+            table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+            table_left['columns'] = heads  # привязка столбцов к таблице
+            left_table_create = True
+
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_left.heading(header, text=header, anchor='center')
+                table_left.column(header, anchor='center')
+
+            scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
+            table_left.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_left.pack(expand=tkinter.YES,
+                            fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_left.insert('', tkinter.END,values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_left.column("author", minwidth=0, width=100, stretch=NO)
+            table_left.column("title", minwidth=0, width=370, stretch=YES)
+            table_left.column("year", minwidth=0, width=40, stretch=NO)
+            table_left.column("link", minwidth=0, width=210, stretch=NO)
+
+
 
 
 async def open_file_Elibrary_right():
@@ -283,16 +353,59 @@ async def open_file_Elibrary_right():
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
 
-        list_Elibrary_tuple = eLibrary(filename)
-        print("Elibrary успешно загружен и обработан программой")
-        list_Elibrary = list_Elibrary_tuple[0]
-        Elibrary_source = list_Elibrary_tuple[1]
-
+        # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
+        global left_table_site
+        global right_table_site
         right_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'e' and right_table_site == 'i')):
             mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+
+        # обработка файла, получение списка данных
+        list_Elibrary_tuple = eLibrary(filename)
+        print("Elibrary успешно загружен и обработан программой")
+        list_Elibrary = list_Elibrary_tuple[0]
+        Elibrary_source = list_Elibrary_tuple[1]
+        if (Elibrary_source == "Elibrary"):
+
+            lst = []
+            for i in range(len(list_Elibrary)):
+                lst.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year,
+                            list_Elibrary[i].link, list_Elibrary[i].volume))
+
+            global list2
+            for i in range(len(list_Elibrary)):
+                list2.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year,
+                              list_Elibrary[i].link))
+
+            global right_table_create
+            global table_right
+            global scroll_pane
+            if right_table_create == True:
+                table_right.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'link']  # столбики
+            table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
+            table_right['columns'] = heads  # привязка столбцов к таблице
+            right_table_create = True
+
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_right.heading(header, text=header, anchor='center')
+                table_right.column(header, anchor='center')
+
+            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_right.pack(expand=tkinter.YES,fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_right.insert('', tkinter.END,values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_right.column("author", minwidth=0, width=100, stretch=NO)
+            table_right.column("title", minwidth=0, width=370, stretch=YES)
+            table_right.column("year", minwidth=0, width=40, stretch=NO)
+            table_right.column("link", minwidth=0, width=210, stretch=NO)
 
 
 async def open_file_Ipublishing_left():
@@ -309,39 +422,45 @@ async def open_file_Ipublishing_left():
         print("IPublishing успешно загружен и обработан программой")
         list_ipublishing = list_ipublishing_tuple[0]
         ipublishing_source = list_ipublishing_tuple[1]
-        lst = []
-        for i in range(len(list_ipublishing)):
-            lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
+        if (ipublishing_source == "IPublishing"):
+            lst = []
+            for i in range(len(list_ipublishing)):
+                lst.append((list_ipublishing[i].author, list_ipublishing[i].title,
+                            list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
 
-        
-        global left_table_create
-        global table_left
-        global scroll_pane
-        if left_table_create == True:
-            table_left.destroy()
-            scroll_pane.pack_forget()
-        heads = ['author', 'title', 'year', 'article', 'link']  # столбики
-        table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
-        table_left['columns'] = heads  # привязка столбцов к таблице
-        left_table_create = True
+            global list1
+            for i in range(len(list_ipublishing)):
+                list1.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year,
+                              list_ipublishing[i].link))
 
-        for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-            table_left.heading(header, text=header, anchor='center')
-            table_left.column(header, anchor='center')
+            global left_table_create
+            global table_left
+            global scroll_pane
+            if left_table_create == True:
+                table_left.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'article', 'link']  # столбики
+            table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+            table_left['columns'] = heads  # привязка столбцов к таблице
+            left_table_create = True
 
-        scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
-        table_left.configure(yscrollcommand=scroll_pane.set)
-        scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-        table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_left.heading(header, text=header, anchor='center')
+                table_left.column(header, anchor='center')
 
-        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+            scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
+            table_left.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-        table_left.column("author", minwidth=0, width=100, stretch=NO)
-        table_left.column("title", minwidth=0, width=250, stretch=YES)
-        table_left.column("year", minwidth=0, width=40, stretch=NO)
-        table_left.column("article", minwidth=0, width=160, stretch=NO)
-        table_left.column("link", minwidth=0, width=160, stretch=NO)
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+
+            table_left.column("author", minwidth=0, width=100, stretch=NO)
+            table_left.column("title", minwidth=0, width=250, stretch=YES)
+            table_left.column("year", minwidth=0, width=40, stretch=NO)
+            table_left.column("article", minwidth=0, width=160, stretch=NO)
+            table_left.column("link", minwidth=0, width=160, stretch=NO)
 
 
 async def open_file_Ipublishing_right():
@@ -358,41 +477,46 @@ async def open_file_Ipublishing_right():
         print("IPublishing успешно загружен и обработан программой")
         list_ipublishing = list_ipublishing_tuple[0]
         ipublishing_source = list_ipublishing_tuple[1]
-        lst = []
-        for i in range(len(list_ipublishing)):
-            lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
+        if (ipublishing_source == "IPublishing"):
+            lst = []
+            for i in range(len(list_ipublishing)):
+                lst.append((list_ipublishing[i].author, list_ipublishing[i].title,
+                            list_ipublishing[i].year, list_ipublishing[i].article, list_ipublishing[i].link))
 
-        
-        global right_table_create
-        global table_right
-        global scroll_pane
-        if right_table_create == True:
-            table_right.destroy()
-            scroll_pane.pack_forget()
-        heads = ['author', 'title', 'year', 'article', 'link']  # столбики
-        table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
-        table_right['columns'] = heads  # привязка столбцов к таблице
-        right_table_create = True
+            global list2
+            for i in range(len(list_ipublishing)):
+                list1.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year,
+                              list_ipublishing[i].link))
 
-        for header in heads:  # для каждого столбика выравниваем по центру все ячейки
-            table_right.heading(header, text=header, anchor='center')
-            table_right.column(header, anchor='center')
+            global right_table_create
+            global table_right
+            global scroll_pane
+            if right_table_create == True:
+                table_right.destroy()
+                scroll_pane.pack_forget()
+            heads = ['author', 'title', 'year', 'article', 'link']  # столбики
+            table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
+            table_right['columns'] = heads  # привязка столбцов к таблице
+            right_table_create = True
 
-        scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-        table_right.configure(yscrollcommand=scroll_pane.set)
-        scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-        table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            for header in heads:  # для каждого столбика выравниваем по центру все ячейки
+                table_right.heading(header, text=header, anchor='center')
+                table_right.column(header, anchor='center')
 
-        for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-            table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane.set)
+            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-        table_right.column("author", minwidth=0, width=100, stretch=NO)
-        table_right.column("title", minwidth=0, width=250, stretch=YES)
-        table_right.column("year", minwidth=0, width=40, stretch=NO)
-        table_right.column("article", minwidth=0, width=160, stretch=NO)
-        table_right.column("link", minwidth=0, width=160, stretch=NO)
+            for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
+                table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-        list_Ipublishing = []
+            table_right.column("author", minwidth=0, width=100, stretch=NO)
+            table_right.column("title", minwidth=0, width=250, stretch=YES)
+            table_right.column("year", minwidth=0, width=40, stretch=NO)
+            table_right.column("article", minwidth=0, width=160, stretch=NO)
+            table_right.column("link", minwidth=0, width=160, stretch=NO)
+
 
 #кнопка Сравнение
 async def open_compare_window():
@@ -420,25 +544,24 @@ async def open_compare_window():
     scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
     table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
-    #add_new_list, remove_new_list, identical_new_list = Equals(Scopus("Source/Scopus/Scopus1.xlsx"), Scopus("Source/Scopus/Scopus2.xlsx"))
-    #add_new_list, remove_new_list, identical_new_list = IPublishingEquals(Scopus("Source/Scopus/Scopus1.xlsx"), Scopus("Source/Scopus/Scopus2.xlsx"))
-    #add_new_list, remove_new_list, identical_new_list = Equals(list1, list2)
-    list_new = [("abs", "def", 2000, "http"),("ghi", "jkl", 2000, "http"),("mno", "pqr", 2000, "http")]
-    list_deleted = [("stu", "vwx", 2000, "http"), ("yz", "111", 2000, "http"),("lmn", "222", 2000, "http")]
-    list_edited = [("qwe", "rty", 2000, "http"), ("uio", "pas", 2000, "http"), ("dfg", "hjk", 2000, "http")]
+    if left_table_site == right_table_site:
+        add_new_list, remove_new_list, identical_new_list = Equals(list1, list2)
+    else:
+        add_new_list, remove_new_list, identical_new_list = IPublishingEquals(list1, list2)
 
-    for row in list_new:
+    for row in add_new_list:
         table_compare.insert('', tkinter.END, values=row, tags='new')
-    for row in list_deleted:
+    for row in remove_new_list:
         table_compare.insert('', tkinter.END, values=row, tags='deleted')
-    for row in list_edited:
+    for row in identical_new_list:
         table_compare.insert('', tkinter.END, values=row, tags='edited')
+
     table_compare.tag_configure('new', background='#7FFF00')
     table_compare.tag_configure('deleted', background='#F08080')
     table_compare.tag_configure('edited', background='white')
 
     table_compare.column("author", minwidth=0, width=100, stretch=NO)
-    table_compare.column("title", minwidth=0, width=370, stretch=NO)
+    table_compare.column("title", minwidth=0, width=370, stretch=YES)
     table_compare.column("year", minwidth=0, width=40, stretch=NO)
     table_compare.column("link", minwidth=0, width=210, stretch=NO)
 
