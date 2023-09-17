@@ -9,7 +9,8 @@ from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
 from Parsing.eLibrary import eLibrary
-from Parsing.Equals import Equals, IPublishingEquals
+from Parsing.Equals import identical_sources_equals, different_source_equals
+from Upload import Upload
 
 win = Tk()
 

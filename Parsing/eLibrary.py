@@ -13,27 +13,27 @@ def eLibrary(path):
         return all_elibrary_list_library, ""
 
     #читаем исходный xml и убираем проблемный символ
-    # file = open(path, 'br')
-    # s = ""
-    # symbol = s.encode("utf-8")
-    # data = file.read()
-    # data = data.replace(symbol, b"")
-    # file.close()
+    file = open(path, 'br')
+    s = ""
+    symbol = s.encode("utf-8")
+    data = file.read()
+    data = data.replace(symbol, b"")
+    file.close()
     
-    # #перезаписываем xml файл
-    # file = open(path, 'bw')
-    # file.write(data)
-    # file.close()
+    #перезаписываем xml файл
+    file = open(path, 'bw')
+    file.write(data)
+    file.close()
 
-    # #читаем заново и делаем json словарь
-    # file = open(path, "r", encoding="utf-8")
-    # data = file.read()
-    # dict_data = xmltodict.parse(data)
-    # file.close()
+    #читаем заново и делаем json словарь
+    file = open(path, "r", encoding="utf-8")
+    data = file.read()
+    dict_data = xmltodict.parse(data)
+    file.close()
     
-    # #записываем словарь в файл
-    # with open("Source/eLibrary/eLibrary.json", 'w', encoding="utf-8") as file:
-    #     json.dump(dict_data, file, ensure_ascii=False, indent=4)
+    #записываем словарь в файл
+    with open("Source/eLibrary/eLibrary.json", 'w', encoding="utf-8") as file:
+        json.dump(dict_data, file, ensure_ascii=False, indent=4)
 
     #читаем словарь json
     file = open('Source/eLibrary/eLibrary.json', 'r', encoding="utf-8")
