@@ -54,7 +54,7 @@ def identical_sources_equals(source1, source2):
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
-    return list_new_tuple, list_ident_tuple, list_remove_tuple
+    return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list
 
 
 def different_source_equals(source1, source2):
@@ -110,4 +110,4 @@ def different_source_equals(source1, source2):
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
-    return list_new_tuple, list_ident_tuple, list_remove_tuple
+    return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list

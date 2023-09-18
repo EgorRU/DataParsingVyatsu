@@ -32,11 +32,11 @@ def eLibrary(path):
     file.close()
     
     #записываем словарь в файл
-    with open("Source/eLibrary/eLibrary.json", 'w', encoding="utf-8") as file:
+    with open("eLibrary.json", 'w', encoding="utf-8") as file:
         json.dump(dict_data, file, ensure_ascii=False, indent=4)
 
     #читаем словарь json
-    file = open('Source/eLibrary/eLibrary.json', 'r', encoding="utf-8")
+    file = open('eLibrary.json', 'r', encoding="utf-8")
     dict_data = json.load(file)
     file.close()
 
@@ -74,6 +74,7 @@ def eLibrary(path):
                     count_author_temp += 1
                     all_elibrary_list_library.append(new_article)
             
+
         #по всем новым авторам добавляем новые поля
         for i in range(count_all_author, count_all_author + count_author_temp):
             #название
@@ -90,6 +91,7 @@ def eLibrary(path):
                                 if t["@lang"]=="EN":
                                     all_elibrary_list_library[i].title = t["#text"]
                                     break
+                                
             #год
             if "source" in e:
                 if "issue" in e["source"]:
@@ -98,12 +100,72 @@ def eLibrary(path):
             if all_elibrary_list_library[i].year == None:
                 if "yearpubl" in e:
                     all_elibrary_list_library[i].year = e["yearpubl"]
+                    
             #ссылка
             if "linkurl" in e:
                 all_elibrary_list_library[i].link = e["linkurl"]
+                
             #doi
             if "doi" in e:
                 all_elibrary_list_library[i].doi = e["doi"]
+                    
+            #id
+            if "@id" in e:
+                all_elibrary_list_library[i].id = e["@id"]
+                
+            #type
+            if "type" in e:
+                all_elibrary_list_library[i].type = e["type"]
+                
+            #cited
+            if "cited" in e:
+                all_elibrary_list_library[i].cited = e["cited"]
+            
+            #pages
+            if "pages" in e:
+                all_elibrary_list_library[i].pages = e["pages"]
+                
+            #volume
+            if "source" in e:
+                if "issue" in e["source"]:
+                    if "volume" in e["source"]["issue"]:
+                        all_elibrary_list_library[i].volume = e["source"]["issue"]["volume"]
+                        
+            #issn
+            if "source" in e:
+                if "journal" in e["source"]:
+                    if "issn" in e["source"]["journal"]:
+                        all_elibrary_list_library[i].issn = e["source"]["journal"]["issn"]
+                        
+            #eissn
+            if "source" in e:
+                if "journal" in e["source"]:
+                    if "eissn" in e["source"]["journal"]:
+                        all_elibrary_list_library[i].eissn = e["source"]["journal"]["eissn"]
+                        
+            #tile_journal
+            if "source" in e:
+                if "journal" in e["source"]:
+                    if "title" in e["source"]["journal"]:
+                        all_elibrary_list_library[i].tile_journal = e["source"]["journal"]["title"]
+                        
+            #publisher
+            if "source" in e:
+                if "journal" in e["source"]:
+                    if "publisher" in e["source"]["journal"]:
+                        all_elibrary_list_library[i].publisher = e["source"]["journal"]["publisher"]
+                        
+            #country
+            if "source" in e:
+                if "journal" in e["source"]:
+                    if "country" in e["source"]["journal"]:
+                        all_elibrary_list_library[i].country = e["source"]["journal"]["country"]
+                        
+            #grnti
+            if "grnti" in e:
+                all_elibrary_list_library[i].grnti = e["grnti"]
+                
+                            
         count_all_author += count_author_temp
 
     for i in range(len(all_elibrary_list_library)):
@@ -119,7 +181,7 @@ def eLibrary(path):
     print("Запись в файл началась eLibrary")
     print(f"Всего строк в таблице: {len(list_library)}")
     print(f"Всего записей: {len(all_elibrary_list_library)}")
-    with open("Source/eLibrary/Result.txt", "w", encoding="utf-8") as file:
+    with open("Result_eLibrary.txt", "w", encoding="utf-8") as file:
         for index, val in enumerate(all_elibrary_list_library):
             file.write("Запись №: " + str(index) + "\n")
             file.write(val.Print())
