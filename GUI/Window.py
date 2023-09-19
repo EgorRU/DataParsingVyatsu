@@ -13,11 +13,14 @@ from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
 from Parsing.eLibrary import eLibrary
 from Parsing.Equals import identical_sources_equals, different_source_equals
+from tkinter.messagebox import showerror, showwarning, showinfo
 from Upload import Upload
+from tkinter import PhotoImage
+from PIL import Image, ImageTk
 
 win = Tk()
 
-#списки со статьями
+# списки со статьями
 list_scopus = []
 list_wos = []
 list_elibrary = []
@@ -41,28 +44,32 @@ async def on_closing():
 
 
 async def open_file_Scopus_left():
-    ftypes = [('All files','*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
-    filename = dlg.show()  #получение имени файла для дальнейшей работы
-    if len(filename) > 0:  #если не пустое имя файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    filename = dlg.show()  # получение имени файла для дальнейшей работы
+    if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         left_table_site = 's'
+
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
                 (left_table_site == 's' and right_table_site == 'i')):
-            mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
-        #обработка файла, получение списка данных
+        # обработка файла, получение списка данных
         list_scopus_tuple = Scopus(filename)
         print("Scopus успешно загружен и обработан программой")
         list_scopus = list_scopus_tuple[0]
         scopus_source = list_scopus_tuple[1]
         if scopus_source == "Scopus":
             lst = []
+            name_left.configure(text=nameleft())
             for i in range(len(list_scopus)):
-                lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year, list_scopus[i].link, list_scopus[i].citation))
+                lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year, list_scopus[i].link,
+                            list_scopus[i].citation))
 
             global list1
             list1 = list_scopus
@@ -85,10 +92,12 @@ async def open_file_Scopus_left():
             scroll_pane = ttk.Scrollbar(frametableleft, command=async_handler(table_left.yview))
             table_left.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES,fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_left.pack(expand=tkinter.YES,
+                            fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_left.insert('', tkinter.END,
+                                  values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
             table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=330, width=330, stretch=YES)
@@ -96,32 +105,36 @@ async def open_file_Scopus_left():
             table_left.column("link", minwidth=180, width=180, stretch=NO)
             table_left.column("citation", minwidth=60, width=60, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл Scopus")
 
 
 async def open_file_Scopus_right():
-    ftypes = [('All files','*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
-    filename = dlg.show()  #получение имени файла для дальнейшей работы
-    if len(filename) > 0:  #если не пустое имя файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    filename = dlg.show()  # получение имени файла для дальнейшей работы
+    if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         right_table_site = 's'
+
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
                 (left_table_site == 's' and right_table_site == 'i')):
-            mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
-        #обработка файла, получение списка данных
+        # обработка файла, получение списка данных
         list_scopus_tuple = Scopus(filename)
         print("Scopus успешно загружен и обработан программой")
         list_scopus = list_scopus_tuple[0]
         scopus_source = list_scopus_tuple[1]
         if (scopus_source == "Scopus"):
             lst = []
+            name_right.configure(text=nameright())
             for i in range(len(list_scopus)):
-                lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year, list_scopus[i].link, list_scopus[i].citation))
+                lst.append((list_scopus[i].author, list_scopus[i].title, list_scopus[i].year, list_scopus[i].link,
+                            list_scopus[i].citation))
 
             global list2
             list2 = list_scopus
@@ -143,35 +156,39 @@ async def open_file_Scopus_right():
             scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_right.pack(expand=tkinter.YES,
+                             fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_right.insert('', tkinter.END,
+                                   values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=100, width=100,  stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=330, width=330, stretch=YES)
-            table_right.column("year", minwidth=40, width=40,  stretch=NO)
-            table_right.column("link", minwidth=180, width=180,  stretch=NO)
-            table_right.column("citation", minwidth=60, width=60,  stretch=NO)
+            table_right.column("year", minwidth=40, width=40, stretch=NO)
+            table_right.column("link", minwidth=180, width=180, stretch=NO)
+            table_right.column("citation", minwidth=60, width=60, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
-        
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл Scopus")
+
 
 async def open_file_WoS_left():
-    ftypes = [('All files','*')] #допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) #окошко открытия файла
-    filename = dlg.show() #получение имени файла для дальнейшей работы
-    if len(filename)> 0: #если не пустое имя файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    filename = dlg.show()  # получение имени файла для дальнейшей работы
+    if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         left_table_site = 'w'
+
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
-            mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
-        #обработка файла, получение списка данных
+        # обработка файла, получение списка данных
         list_wos_tuple = Wos(filename)
         print("Wos успешно загружен и обработан программой")
         list_wos = list_wos_tuple[0]
@@ -179,6 +196,7 @@ async def open_file_WoS_left():
         if (wos_source == "Wos"):
 
             lst = []
+            name_left.configure(text=nameleft())
             for i in range(len(list_wos)):
                 lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link))
 
@@ -202,40 +220,45 @@ async def open_file_WoS_left():
             scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_left.pack(expand=tkinter.YES,
+                            fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_left.insert('', tkinter.END,
+                                  values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
             table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=330, width=330, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=180, width=180, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
-        
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл Web of Science")
+
 
 async def open_file_WoS_right():
-    ftypes = [('All files','*')] #допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) #окошко открытия файла
-    filename = dlg.show() #получение имени файла для дальнейшей работы
-    if len(filename)> 0: #если не пустое имя файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    filename = dlg.show()  # получение имени файла для дальнейшей работы
+    if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         right_table_site = 'w'
+
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
-            mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
-        #обработка файла, получение списка данных
+        # обработка файла, получение списка данных
         list_wos_tuple = Wos(filename)
         print("Wos успешно загружен и обработан программой")
         list_wos = list_wos_tuple[0]
         wos_source = list_wos_tuple[1]
         if (wos_source == "Wos"):
             lst = []
+            name_right.configure(text=nameright())
             for i in range(len(list_wos)):
                 lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link))
 
@@ -259,32 +282,36 @@ async def open_file_WoS_right():
             scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_right.pack(expand=tkinter.YES,
+                             fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_right.insert('', tkinter.END,
+                                   values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=100, width=100,  stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=330, width=330, stretch=YES)
-            table_right.column("year", minwidth=40, width=40,   stretch=NO)
+            table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=180, width=180, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
-        
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл Web of Science")
+
 
 async def open_file_Elibrary_left():
-    ftypes = [('All files','*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         left_table_site = 'e'
+
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'e' and right_table_site == 'i')):
-            mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
         # обработка файла, получение списка данных
         list_Elibrary_tuple = eLibrary(filename)
@@ -294,8 +321,10 @@ async def open_file_Elibrary_left():
         if (Elibrary_source == "eLibrary"):
 
             lst = []
+            name_left.configure(text=nameleft())
             for i in range(len(list_Elibrary)):
-                lst.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year, list_Elibrary[i].link))
+                lst.append(
+                    (list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year, list_Elibrary[i].link))
 
             global list1
             list1 = list_Elibrary
@@ -317,32 +346,36 @@ async def open_file_Elibrary_left():
             scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_left.pack(expand=tkinter.YES,
+                            fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END,values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_left.insert('', tkinter.END,
+                                  values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_left.column("author", minwidth=100, width=100,   stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=370, width=370, stretch=YES)
-            table_left.column("year", minwidth=40, width=40,   stretch=NO)
-            table_left.column("link", minwidth=210, width=210,   stretch=NO)
+            table_left.column("year", minwidth=40, width=40, stretch=NO)
+            table_left.column("link", minwidth=210, width=210, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
-        
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл Elibrary")
+
 
 async def open_file_Elibrary_right():
-    ftypes = [('All files','*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         right_table_site = 'e'
+
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'e' and right_table_site == 'i')):
-            mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
         # обработка файла, получение списка данных
         list_Elibrary_tuple = eLibrary(filename)
@@ -352,8 +385,10 @@ async def open_file_Elibrary_right():
         if (Elibrary_source == "eLibrary"):
 
             lst = []
+            name_right.configure(text=nameright())
             for i in range(len(list_Elibrary)):
-                lst.append((list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year, list_Elibrary[i].link))
+                lst.append(
+                    (list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year, list_Elibrary[i].link))
             global list2
             list2 = list_Elibrary
             global right_table_create
@@ -374,37 +409,43 @@ async def open_file_Elibrary_right():
             scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES,fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_right.pack(expand=tkinter.YES,
+                             fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END,values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_right.insert('', tkinter.END,
+                                   values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
             table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=370, width=370, stretch=YES)
-            table_right.column("year", minwidth=40, width=40,   stretch=NO)
-            table_right.column("link", minwidth=210, width=210,   stretch=NO)
+            table_right.column("year", minwidth=40, width=40, stretch=NO)
+            table_right.column("link", minwidth=210, width=210, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
-        
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл Elibrary")
+
 
 async def open_file_Ipublishing_left():
-    ftypes = [('All files','*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
         left_table_site = 'i'
-        mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+
+        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing_tuple = IPublishing(filename)
         print("IPublishing успешно загружен и обработан программой")
         list_ipublishing = list_ipublishing_tuple[0]
         ipublishing_source = list_ipublishing_tuple[1]
         if (ipublishing_source == "IPublishing"):
             lst = []
+            name_left.configure(text=nameleft())
             for i in range(len(list_ipublishing)):
-                lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year, list_ipublishing[i].link))
+                lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year,
+                            list_ipublishing[i].link))
 
             global list1
             list1 = list_ipublishing
@@ -426,37 +467,43 @@ async def open_file_Ipublishing_left():
             scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_left.pack(expand=tkinter.YES,
+                            fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_left.insert('', tkinter.END,
+                                  values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_left.column("author", minwidth=100, width=100,  stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=250, width=250, stretch=YES)
-            table_left.column("year", minwidth=40, width=40,   stretch=NO)
-            table_left.column("link", minwidth=160, width=160,  stretch=NO)
+            table_left.column("year", minwidth=40, width=40, stretch=NO)
+            table_left.column("link", minwidth=160, width=160, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл iPublishing")
 
 
 async def open_file_Ipublishing_right():
-    ftypes = [('All files','*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    ftypes = [('All files', '*')]  # допустимые типы
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site
         global right_table_site
-        right_table_site = 's'
-        mainmenu.entryconfigure(3, state=NORMAL)  # разблокирование кнопки сравнить данные
+        right_table_site = 'i'
+
+        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing_tuple = IPublishing(filename)
         print("IPublishing успешно загружен и обработан программой")
         list_ipublishing = list_ipublishing_tuple[0]
         ipublishing_source = list_ipublishing_tuple[1]
         if (ipublishing_source == "IPublishing"):
             lst = []
+            name_right.configure(text=nameright())
             for i in range(len(list_ipublishing)):
-                lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year, list_ipublishing[i].link))
+                lst.append((list_ipublishing[i].author, list_ipublishing[i].title, list_ipublishing[i].year,
+                            list_ipublishing[i].link))
 
             global list2
             list2 = list_ipublishing
@@ -478,42 +525,44 @@ async def open_file_Ipublishing_right():
             scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_right.pack(expand=tkinter.YES,
+                             fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
+                table_right.insert('', tkinter.END,
+                                   values=row)  # без неё слева будет большой пропуск т к предуматривается полноценная иерархия
 
-            table_right.column("author", minwidth=100, width=100,  stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=250, width=250, stretch=YES)
-            table_right.column("year", minwidth=40, width=40,  stretch=NO)
+            table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=160, width=160, stretch=NO)
         else:
-            pass #сообщение о том, что не грузим не то
-        
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл iPublishing")
+
 
 add_new_list = None
 remove_new_list = None
 identical_new_list = None
 
 
-#кнопка сравнения
+# кнопка сравнения
 async def open_compare_window():
     global add_new_list
     global remove_new_list
     global identical_new_list
-    comparewin = Toplevel(win) #инициализация
-    comparewin.geometry('750x700')  #размер
+    comparewin = Toplevel(win)  # инициализация
+    comparewin.geometry('750x700')  # размер
     comparewin.minsize(750, 700)
-    comparewin.title("Результат сравнения") #название
-    frame_compare_button = Frame(comparewin) #задаем поле
-    frame_compare_table = Frame(comparewin)  #задаем поле
-    frame_compare_button.place(relx=0, rely=0, relwidth=1, relheight=0.1)  #размещаем его на весь размер окна
-    frame_compare_table.place(relx=0, rely=0.1, relwidth = 1, relheight = 0.9) #размещаем его на весь размер окна
+    comparewin.title("Результат сравнения")  # название
+    frame_compare_button = Frame(comparewin)  # задаем поле
+    frame_compare_table = Frame(comparewin)  # задаем поле
+    frame_compare_button.place(relx=0, rely=0, relwidth=1, relheight=0.1)  # размещаем его на весь размер окна
+    frame_compare_table.place(relx=0, rely=0.1, relwidth=1, relheight=0.9)  # размещаем его на весь размер окна
 
     heads = ['author', 'title', 'year', 'link']  # столбики
-    table_compare = ttk.Treeview(frame_compare_table, show='headings')  #инициализация таблицы
-    table_compare.place(relx=0, rely = 0, relwidth = 1, relheight = 1)
-    table_compare['columns'] = heads  #привязка столбцов к таблице
+    table_compare = ttk.Treeview(frame_compare_table, show='headings')  # инициализация таблицы
+    table_compare.place(relx=0, rely=0, relwidth=1, relheight=1)
+    table_compare['columns'] = heads  # привязка столбцов к таблице
 
     for header in heads:  # для каждого столбика выравниваем по центру все ячейки
         table_compare.heading(header, text=header, anchor='center')
@@ -522,12 +571,15 @@ async def open_compare_window():
     scroll_pane = ttk.Scrollbar(frame_compare_table, command=async_handler(table_compare.yview))
     table_compare.configure(yscrollcommand=scroll_pane.set)
     scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-    table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+    table_compare.pack(expand=tkinter.YES,
+                       fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
     if left_table_site == right_table_site:
-        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = identical_sources_equals(list1, list2)
+        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = identical_sources_equals(
+            list1, list2)
     else:
-        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
+        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(
+            list1, list2)
 
     unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в xlxs", command=upload)
     unload_to_xlsx.place(relx=0.4, rely=0.25, relwidth=0.2, relheight=0.5)
@@ -548,69 +600,121 @@ async def open_compare_window():
     table_compare.column("year", minwidth=40, width=40, stretch=NO)
     table_compare.column("link", minwidth=210, width=210, stretch=NO)
 
-async def help_guide():
-    pass
 
-def upload():
+async def help_guide():
+    helpwin = Toplevel(win)  # инициализация
+    helpwin.geometry('800x800')  # размер
+    helpwin.resizable(False, False)
+    helpwin.title("Окно помощи")  # название
+    frame_help = Frame(helpwin)  # задаем поле
+    frame_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
+    image_path = "help.jpg"
+    image = Image.open(image_path)
+    photo = ImageTk.PhotoImage(image)
+    label_help = tkinter.Label(frame_help, image=photo, text="12`12")  # задаем поле
+    label_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
+
+
+async def upload():
     global add_new_list
     global remove_new_list
     global identical_new_list
-    
-    #запрос пути для сохранения
-    ftypes = [('All files','*')]  # допустимые типы
+
+    # запрос пути для сохранения
+    ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Save(filetypes=ftypes, title='Выберите файл',
                                   initialdir=os.path.abspath(__file__))  # окошко открытия файла
     path = dlg.show()  # получение имени файла для дальнейшей работы
     Upload(path, add_new_list, remove_new_list, identical_new_list)
-    
 
-#создание окна
-win['bg'] = '#FFFFFF' #цвет
-win.title('Library') #название
-win.geometry('1500x700') #размер
-win.protocol("WM_DELETE_WINDOW", on_closing) #событие при закрытии приложения
+
+# создание окна
+win['bg'] = '#FFFFFF'  # цвет
+win.title('Library')  # название
+win.geometry('1500x700')  # размер
+win.protocol("WM_DELETE_WINDOW", on_closing)  # событие при закрытии приложения
 win.minsize(1500, 700)
 
-#блоки основного окна
-frametableleft = Frame(win, bg = '#FFFFFF')
-frametableright = Frame(win, bg = '#FFFFFF')
+# блоки основного окна
+framenameleft = Frame(win, bg='#FFFFFF')
+framenameright = Frame(win, bg='#FFFFFF')
 
-#расположение блоков, чтоб можно было менять размер окна
-frametableleft.place(relx=0, rely = 0, relwidth = 0.5, relheight = 1)
-frametableright.place(relx=0.5, rely = 0, relwidth = 0.5, relheight = 1)
+frametableleft = Frame(win, bg='#FFFFFF')
+frametableright = Frame(win, bg='#FFFFFF')
 
-#меню
+# расположение блоков, чтоб можно было менять размер окна
+framenameleft.place(relx=0, rely=0, relwidth=0.5, relheight=0.04)
+framenameright.place(relx=0.5, rely=0, relwidth=0.5, relheight=0.04)
+
+frametableleft.place(relx=0, rely=0.04, relwidth=0.5, relheight=1)
+frametableright.place(relx=0.5, rely=0.04, relwidth=0.5, relheight=1)
+
+def nameleft():
+    global left_table_site
+    if left_table_site == '':
+        return ""
+    if left_table_site == 's':
+        return "Scopus"
+    if left_table_site == 'w':
+        return "Web Of Science"
+    if left_table_site == 'e':
+        return "Elibrary"
+    if left_table_site == 'i':
+        return "iPublishing"
+def nameright():
+    global right_table_site
+    if right_table_site == '':
+        return ""
+    if right_table_site == 's':
+        return "Scopus"
+    if right_table_site == 'w':
+        return "Web Of Science"
+    if right_table_site == 'e':
+        return "Elibrary"
+    if right_table_site == 'i':
+        return "iPublishing"
+
+
+name_left = tkinter.Label(framenameleft, text=nameleft(), background='#FFFFFF')
+name_right = tkinter.Label(framenameright, text=nameright(), background='#FFFFFF')
+
+name_left.place(relx=0.25, rely=0, relwidth=0.5, relheight=1)
+name_right.place(relx=0.25, rely=0, relwidth=0.5, relheight=1)
+
+# меню
 mainmenu = Menu(win)
 win.config(menu=mainmenu)
 
-#создание самого меню
+# создание самого меню
 filemenu = Menu(mainmenu, tearoff=0)
 
-#создание поля загрузка файлов
+# создание поля загрузка файлов
 filemenu_load = Menu(filemenu, tearoff=0)
 
 filemenu_load_WoF = Menu(filemenu_load, tearoff=0)
-filemenu_load_WoF.add_command(label="Загрузить в левую таблицу",command = async_handler(open_file_WoS_left))
-filemenu_load_WoF.add_command(label="Загрузить в правую таблицу",command = async_handler(open_file_WoS_right))
-filemenu_load.add_cascade(label="Загрузить Web of Science", menu = filemenu_load_WoF)
+filemenu_load_WoF.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_WoS_left))
+filemenu_load_WoF.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_WoS_right))
+filemenu_load.add_cascade(label="Загрузить Web of Science", menu=filemenu_load_WoF)
 
 filemenu_load_Scopus = Menu(filemenu_load, tearoff=0)
-filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу",command = async_handler(open_file_Scopus_left))
-filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу",command = async_handler(open_file_Scopus_right))
-filemenu_load.add_cascade(label="Загрузить Scopus", menu = filemenu_load_Scopus)
+filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_Scopus_left))
+filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_Scopus_right))
+filemenu_load.add_cascade(label="Загрузить Scopus", menu=filemenu_load_Scopus)
 
 filemenu_load_Elibrary = Menu(filemenu_load, tearoff=0)
-filemenu_load_Elibrary.add_command(label="Загрузить в левую таблицу",command = async_handler(open_file_Elibrary_left))
-filemenu_load_Elibrary.add_command(label="Загрузить в правую таблицу",command = async_handler(open_file_Elibrary_right))
-filemenu_load.add_cascade(label="Загрузить Elibrary", menu = filemenu_load_Elibrary)
+filemenu_load_Elibrary.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_Elibrary_left))
+filemenu_load_Elibrary.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_Elibrary_right))
+filemenu_load.add_cascade(label="Загрузить Elibrary", menu=filemenu_load_Elibrary)
 
 filemenu_load_Ipublishing = Menu(filemenu_load, tearoff=0)
-filemenu_load_Ipublishing.add_command(label="Загрузить в левую таблицу",command = async_handler(open_file_Ipublishing_left))
-filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу",command = async_handler(open_file_Ipublishing_right))
-filemenu_load.add_cascade(label="Загрузить Ipublishing", menu = filemenu_load_Ipublishing)
+filemenu_load_Ipublishing.add_command(label="Загрузить в левую таблицу",
+                                      command=async_handler(open_file_Ipublishing_left))
+filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу",
+                                      command=async_handler(open_file_Ipublishing_right))
+filemenu_load.add_cascade(label="Загрузить Ipublishing", menu=filemenu_load_Ipublishing)
 
-#создание главных полей
+# создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
-mainmenu.add_cascade(label="Сравнить данные", command=async_handler(open_compare_window), state = DISABLED)
-mainmenu.add_cascade(label="Помощь", command=help_guide)
+mainmenu.add_cascade(label="Сравнить данные", command=async_handler(open_compare_window), state=DISABLED)
+mainmenu.add_cascade(label="Помощь", command=async_handler(help_guide))
 
