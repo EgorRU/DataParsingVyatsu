@@ -41,7 +41,7 @@ async def on_closing():
 
 
 async def open_file_Scopus_left():
-    ftypes = [('xls', 'xlsx')]  # допустимые типы
+    ftypes = [('All files','*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  #получение имени файла для дальнейшей работы
     if len(filename) > 0:  #если не пустое имя файла
@@ -100,7 +100,7 @@ async def open_file_Scopus_left():
 
 
 async def open_file_Scopus_right():
-    ftypes = [('xls', 'xlsx')]  # допустимые типы
+    ftypes = [('All files','*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  #получение имени файла для дальнейшей работы
     if len(filename) > 0:  #если не пустое имя файла
@@ -158,7 +158,7 @@ async def open_file_Scopus_right():
         
 
 async def open_file_WoS_left():
-    ftypes = [('xls', 'xlsx')] #допустимые типы
+    ftypes = [('All files','*')] #допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) #окошко открытия файла
     filename = dlg.show() #получение имени файла для дальнейшей работы
     if len(filename)> 0: #если не пустое имя файла
@@ -216,7 +216,7 @@ async def open_file_WoS_left():
         
 
 async def open_file_WoS_right():
-    ftypes = [('xls', 'xlsx')] #допустимые типы
+    ftypes = [('All files','*')] #допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) #окошко открытия файла
     filename = dlg.show() #получение имени файла для дальнейшей работы
     if len(filename)> 0: #если не пустое имя файла
@@ -388,7 +388,7 @@ async def open_file_Elibrary_right():
         
 
 async def open_file_Ipublishing_left():
-    ftypes = [('xls', 'xlsx')]  # допустимые типы
+    ftypes = [('All files','*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -440,7 +440,7 @@ async def open_file_Ipublishing_left():
 
 
 async def open_file_Ipublishing_right():
-    ftypes = [('xls', 'xlsx')]  # допустимые типы
+    ftypes = [('All files','*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  # окошко открытия файла
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -557,7 +557,10 @@ def upload():
     global identical_new_list
     
     #запрос пути для сохранения
-    path = ""
+    ftypes = [('All files','*')]  # допустимые типы
+    dlg = tkinter.filedialog.Save(filetypes=ftypes, title='Выберите файл',
+                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    path = dlg.show()  # получение имени файла для дальнейшей работы
     Upload(path, add_new_list, remove_new_list, identical_new_list)
     
 
