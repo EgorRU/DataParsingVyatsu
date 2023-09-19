@@ -1,3 +1,4 @@
+from modulefinder import packagePathMap
 from async_tkinter_loop import async_handler
 from tkinter import *
 from tkinter.constants import NORMAL
@@ -5,6 +6,8 @@ from tkinter import ttk
 from tkinter import messagebox
 import tkinter, os
 import tkinter.filedialog
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Font
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
@@ -488,8 +491,16 @@ async def open_file_Ipublishing_right():
             pass #сообщение о том, что не грузим не то
         
 
+add_new_list = None
+remove_new_list = None
+identical_new_list = None
+
+
 #кнопка сравнения
 async def open_compare_window():
+    global add_new_list
+    global remove_new_list
+    global identical_new_list
     comparewin = Toplevel(win) #инициализация
     comparewin.geometry('750x700')  #размер
     comparewin.minsize(750, 700)
@@ -518,7 +529,7 @@ async def open_compare_window():
     else:
         list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
 
-    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в xlxs", command=Upload(add_new_list, identical_new_list, remove_new_list))
+    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в xlxs", command=upload)
     unload_to_xlsx.place(relx=0.4, rely=0.25, relwidth=0.2, relheight=0.5)
 
     for row in list_new_tuple:
@@ -539,6 +550,16 @@ async def open_compare_window():
 
 async def help_guide():
     pass
+
+def upload():
+    global add_new_list
+    global remove_new_list
+    global identical_new_list
+    
+    #запрос пути для сохранения
+    path = ""
+    Upload(path, add_new_list, remove_new_list, identical_new_list)
+    
 
 #создание окна
 win['bg'] = '#FFFFFF' #цвет
