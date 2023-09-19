@@ -48,13 +48,13 @@ def identical_sources_equals(source1, source2):
     for i in range(len(remove_new_list)):
         list_remove_tuple.append((remove_new_list[i].author, remove_new_list[i].title, remove_new_list[i].year, remove_new_list[i].link ))
 
-    print(f"Удалено записей(один автор): {len(remove_new_list)}")
     print(f"Добавлено записей(один автор): {len(add_new_list)}")
     print(f"Одинаковых записей(один автор): {len(identical_new_list)}")
+    print(f"Удалено записей(один автор): {len(remove_new_list)}")
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
-    return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list
+    return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list
 
 
 def different_source_equals(source1, source2):
@@ -104,10 +104,10 @@ def different_source_equals(source1, source2):
         list_remove_tuple.append((remove_new_list[i].author, remove_new_list[i].title, remove_new_list[i].year, remove_new_list[i].link ))
         
 
-    print(f"Удалено записей(один автор): {len(remove_new_list)}")
     print(f"Добавлено записей(один автор): {len(add_new_list)}")
     print(f"Одинаковых записей(один автор): {len(identical_new_list)}")
+    print(f"Удалено записей(один автор): {len(remove_new_list)}")
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
-    return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list
+    return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list

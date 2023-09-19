@@ -491,9 +491,9 @@ async def open_file_Ipublishing_right():
             pass #сообщение о том, что не грузим не то
         
 
-add_new_list = None
-remove_new_list = None
-identical_new_list = None
+add_new_list = []
+remove_new_list = []
+identical_new_list = []
 
 
 #кнопка сравнения
@@ -548,10 +548,12 @@ async def open_compare_window():
     table_compare.column("year", minwidth=40, width=40, stretch=NO)
     table_compare.column("link", minwidth=210, width=210, stretch=NO)
 
+
 async def help_guide():
     pass
 
-def upload():
+
+async def upload():
     global add_new_list
     global remove_new_list
     global identical_new_list

@@ -51,6 +51,8 @@ class WOS_Library(Base_Library):
         self.article = None
         self.start_page = None
         self.end_page = None
+        self.doi = None
+        self.link = None
         self.number_of_pages = None
         self.source_title = None
         self.conference_title = None
