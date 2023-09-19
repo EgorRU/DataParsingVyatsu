@@ -2,7 +2,7 @@ from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font
 
 
-def Upload(list_new, list_ident = None, list_remove = None):
+def Upload(path, list_new, list_ident = None, list_remove = None):
     # создание нового файла
     wb = Workbook()
     ws = wb.active
@@ -30,35 +30,32 @@ def Upload(list_new, list_ident = None, list_remove = None):
     #добавляем новые элементы
     temp_row = 2
     for i in range(len(list_new)):
-        ws[f"A{temp_row}"].value = list_new[i][0]
-        ws[f"B{temp_row}"].value = list_new[i][1]
-        ws[f"C{temp_row}"].value = list_new[i][2]
-        ws[f"D{temp_row}"].value = list_new[i][3]
-        ws[f"A{temp_row}"].fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
-        ws[f"B{temp_row}"].fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
-        ws[f"C{temp_row}"].fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
-        ws[f"D{temp_row}"].fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
-        temp_row += 1
-    
+        for j in range(1, len(list_members)+1):
+            x = getattr(list_new[i], list_members[j])
+            ws.cell(row=i+temp_row, column=j).value = x
+            if list_ident == None:
+                ws.cell(row=i+temp_row, column=j).fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
+    temp_row += len(list_new)
+
+    #добавляем поля из других, если они существуют
     if list_ident != None:
         #добавляем одинаковые элементы
-        for i in range(len(list_ident)):
-            ws[f"A{temp_row}"].value = list_ident[i][0]
-            ws[f"B{temp_row}"].value = list_ident[i][1]
-            ws[f"C{temp_row}"].value = list_ident[i][2]
-            ws[f"D{temp_row}"].value = list_ident[i][3]
-            temp_row += 1
+        for i in range(len(list_new)):
+            for j in range(1, len(list_members)+1):
+                x = getattr(list_new[i], list_members[j])
+                ws.cell(row=i+temp_row, column=j).value = x
+                if list_ident == None:
+                    ws.cell(row=i+temp_row, column=j).fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
+        temp_row += len(list_new)
         
         #добавляем удалённые элементы
-        for i in range(len(list_remove)):
-            ws[f"A{temp_row}"].value = list_remove[i][0]
-            ws[f"B{temp_row}"].value = list_remove[i][1]
-            ws[f"C{temp_row}"].value = list_remove[i][2]
-            ws[f"D{temp_row}"].value = list_remove[i][3]
-            ws[f"A{temp_row}"].fill = PatternFill(fill_type='solid', start_color='FF0000', end_color='FF0000')
-            ws[f"B{temp_row}"].fill = PatternFill(fill_type='solid', start_color='FF0000', end_color='FF0000')
-            ws[f"C{temp_row}"].fill = PatternFill(fill_type='solid', start_color='FF0000', end_color='FF0000')
-            ws[f"D{temp_row}"].fill = PatternFill(fill_type='solid', start_color='FF0000', end_color='FF0000')
-            temp_row += 1
+        for i in range(len(list_new)):
+            for j in range(1, len(list_members)+1):
+                x = getattr(list_new[i], list_members[j])
+                ws.cell(row=i+temp_row, column=j).value = x
+                if list_ident == None:
+                    ws.cell(row=i+temp_row, column=j).fill = PatternFill(fill_type='solid', start_color='00FF00', end_color='00FF00')
+        temp_row += len(list_new)
 
     wb.save('Compare.xlsx')
+    #wb.save(path)
