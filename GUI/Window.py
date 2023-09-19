@@ -537,6 +537,8 @@ async def open_compare_window():
     table_compare.column("year", minwidth=40, width=40, stretch=NO)
     table_compare.column("link", minwidth=210, width=210, stretch=NO)
 
+async def help_guide():
+    pass
 
 #создание окна
 win['bg'] = '#FFFFFF' #цвет
@@ -585,5 +587,6 @@ filemenu_load.add_cascade(label="Загрузить Ipublishing", menu = filemen
 
 #создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
-mainmenu.add_cascade(label="Сравнить данные", command=async_handler(open_compare_window), state = DISABLED) #пока окошка хелпа выведет
+mainmenu.add_cascade(label="Сравнить данные", command=async_handler(open_compare_window), state = DISABLED)
+mainmenu.add_cascade(label="Помощь", command=help_guide)
 
