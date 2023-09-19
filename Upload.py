@@ -1,13 +1,16 @@
 from openpyxl import Workbook
-from openpyxl.styles import PatternFill, Font
+from openpyxl.styles import PatternFill, Font, Border, Side
 
 
-async def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=True):
+def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=True):
     # создание нового файла
     wb = Workbook()
     ws = wb.active
     
-    #название листа
+    #границы ячейки
+    border=Border(top=Side(border_style='thick',color="A52A2A"))
+
+    #название листа 
     ws.title = "Сравнение"
         
     #получаем заголовки столбиков в список
@@ -40,10 +43,6 @@ async def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=Tr
     for i in range(len(new_list_members)):
         list_members.append(new_list_members[i])
     
-    #вывод
-    for i in range(len(list_members)):
-       print(list_members[i])
-
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
         ws.cell(row=1, column=index+1).value = val
@@ -59,38 +58,74 @@ async def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=Tr
     if flag:
         #добавляем новые элементы
         if list_new != None:
+            title = ""
             for i in range(len(list_new)):
-                for j in range(len(list_members)):
-                    x = getattr(list_new[i], list_members[j])
-                    ws.cell(row=i+temp_row, column=j+1).value = x
-                    ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
+                title_temp = getattr(list_new[i], "title")
+                if title_temp!= title:
+                    for j in range(len(list_members)):
+                        x = getattr(list_new[i], list_members[j])
+                        ws.cell(row=i+temp_row, column=j+1).value = x
+                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
+                        ws.cell(row=i+temp_row, column=j+1).border  = border
+                else:
+                    for j in range(len(list_members)):
+                        x = getattr(list_new[i], list_members[j])
+                        ws.cell(row=i+temp_row, column=j+1).value = x
+                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
+                title = title_temp
             temp_row += len(list_new)
 
         #добавляем поля из других, если они существуют
         if list_ident != None:
+            title = ""
             #добавляем одинаковые элементы
             for i in range(len(list_ident)):
-                for j in range(len(list_members)):
-                    x = getattr(list_ident[i], list_members[j])            
-                    ws.cell(row=i+temp_row, column=j+1).value = x
+                title_temp = getattr(list_ident[i], "title")
+                if title_temp!= title:
+                    for j in range(len(list_members)):
+                        x = getattr(list_ident[i], list_members[j])            
+                        ws.cell(row=i+temp_row, column=j+1).value = x
+                        ws.cell(row=i+temp_row, column=j+1).border  = border
+                else:
+                    for j in range(len(list_members)):
+                        x = getattr(list_ident[i], list_members[j])            
+                        ws.cell(row=i+temp_row, column=j+1).value = x
+                title = title_temp
             temp_row += len(list_ident)
         
         #добавляем удалённые элементы
         if list_remove != None:
+            title = ""
             for i in range(len(list_remove)):
-                for j in range(len(list_members)):
-                    x = getattr(list_remove[i], list_members[j])
-                    ws.cell(row=i+temp_row, column=j+1).value = x
-                    ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
+                title_temp = getattr(list_remove[i], "title")
+                if title_temp!= title:
+                    for j in range(len(list_members)):
+                        x = getattr(list_remove[i], list_members[j])
+                        ws.cell(row=i+temp_row, column=j+1).value = x
+                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
+                        ws.cell(row=i+temp_row, column=j+1).border  = border
+                else:
+                    for j in range(len(list_members)):
+                        x = getattr(list_remove[i], list_members[j])
+                        ws.cell(row=i+temp_row, column=j+1).value = x
+                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
+                title = title_temp
             temp_row += len(list_remove)
     else:
+        title = ""
         for i in range(len(list_new)):
-            for j in range(len(list_members)):
-                x = getattr(list_new[i], list_members[j])
-                ws.cell(row=i+temp_row, column=j+1).value = x
+             title_temp = getattr(list_new[i], "title")
+             if title_temp!= title:
+                for j in range(len(list_members)):
+                    x = getattr(list_new[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+1).value = x
+                    ws.cell(row=i+temp_row, column=j+1).border  = border
+             else:
+                 for j in range(len(list_members)):
+                    x = getattr(list_new[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+1).value = x
+             title = title_temp
+             
 
     print(f"Для проверки: {len(list_new)+len(list_ident)+len(list_remove)} = {ws.max_row-1}")
-    print(f"Новых: {len(list_new)}")
-    print(f"Одинаковых: {len(list_ident)}")
-    print(f"Удалённых: {len(list_remove)}")
     wb.save(path)

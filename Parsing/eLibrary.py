@@ -10,7 +10,7 @@ def eLibrary(path):
 
     #проверка на то, что открыли
     if path[-3:]!="xml":
-        return all_elibrary_list_library, ""
+        return None
 
     #читаем исходный xml и убираем проблемный символ
     file = open(path, 'br')
@@ -44,129 +44,131 @@ def eLibrary(path):
     count_all_author = 0
     list_library = dict_data["items"]["item"]
     
-    #по каждой записи
-    for e in list_library:
-        count_author_temp = 0
-        #список авторов
-        list_author = e["authors"]["author"]
+    try:
+        #по каждой записи
+        for e in list_library:
+            count_author_temp = 0
+            #список авторов
+            list_author = e["authors"]["author"]
         
-        #если автор один
-        if type(list_author)==dict:
-            new_article = eLibrary_Library()
-            if "lastname" in list_author:
-                #print(str(auth["lastname"]))
-                new_article.author = str(list_author["lastname"])
-            if "initials" in list_author:
-                    new_article.author = new_article.author + " " + str(list_author["initials"])
-            count_author_temp += 1
-            all_elibrary_list_library.append(new_article)
-        #если авторов много
-        else:
-            if type(list_author)==list:
-                #создаём экземпляры
-                for auth in list_author:
-                    new_article = eLibrary_Library()
-                    if "lastname" in auth:
-                        #print(str(auth["lastname"]))
-                        new_article.author = str(auth["lastname"])
-                    if "initials" in auth:
-                            new_article.author = new_article.author + " " + str(auth["initials"])
-                    count_author_temp += 1
-                    all_elibrary_list_library.append(new_article)
+            #если автор один
+            if type(list_author)==dict:
+                new_article = eLibrary_Library()
+                if "lastname" in list_author:
+                    #print(str(auth["lastname"]))
+                    new_article.author = str(list_author["lastname"])
+                if "initials" in list_author:
+                        new_article.author = new_article.author + " " + str(list_author["initials"])
+                count_author_temp += 1
+                all_elibrary_list_library.append(new_article)
+            #если авторов много
+            else:
+                if type(list_author)==list:
+                    #создаём экземпляры
+                    for auth in list_author:
+                        new_article = eLibrary_Library()
+                        if "lastname" in auth:
+                            #print(str(auth["lastname"]))
+                            new_article.author = str(auth["lastname"])
+                        if "initials" in auth:
+                                new_article.author = new_article.author + " " + str(auth["initials"])
+                        count_author_temp += 1
+                        all_elibrary_list_library.append(new_article)
             
 
-        #по всем новым авторам добавляем новые поля
-        for i in range(count_all_author, count_all_author + count_author_temp):
-            #название
-            if "titles" in e:
-                if "title" in e["titles"]:
-                    #если одно название:
-                    if type(e["titles"]["title"])==dict:    
-                        if "#text" in e["titles"]["title"]:
-                             all_elibrary_list_library[i].title = e["titles"]["title"]["#text"]
-                    #если несколько названий
-                    else:
-                        if type(e["titles"]["title"])==list:
-                            for t in e["titles"]["title"]:
-                                if t["@lang"]=="EN":
-                                    all_elibrary_list_library[i].title = t["#text"]
-                                    break
+            #по всем новым авторам добавляем новые поля
+            for i in range(count_all_author, count_all_author + count_author_temp):
+                #название
+                if "titles" in e:
+                    if "title" in e["titles"]:
+                        #если одно название:
+                        if type(e["titles"]["title"])==dict:    
+                            if "#text" in e["titles"]["title"]:
+                                 all_elibrary_list_library[i].title = e["titles"]["title"]["#text"]
+                        #если несколько названий
+                        else:
+                            if type(e["titles"]["title"])==list:
+                                for t in e["titles"]["title"]:
+                                    if t["@lang"]=="EN":
+                                        all_elibrary_list_library[i].title = t["#text"]
+                                        break
                                 
-            #год
-            if "source" in e:
-                if "issue" in e["source"]:
-                    if "year" in e["source"]["issue"]:
-                        all_elibrary_list_library[i].year = e["source"]["issue"]["year"]
-            if all_elibrary_list_library[i].year == None:
-                if "yearpubl" in e:
-                    all_elibrary_list_library[i].year = e["yearpubl"]
+                #год
+                if "source" in e:
+                    if "issue" in e["source"]:
+                        if "year" in e["source"]["issue"]:
+                            all_elibrary_list_library[i].year = e["source"]["issue"]["year"]
+                if all_elibrary_list_library[i].year == None:
+                    if "yearpubl" in e:
+                        all_elibrary_list_library[i].year = e["yearpubl"]
                     
-            #ссылка
-            if "linkurl" in e:
-                all_elibrary_list_library[i].link = e["linkurl"]
+                #ссылка
+                if "linkurl" in e:
+                    all_elibrary_list_library[i].link = e["linkurl"]
                 
-            #doi
-            if "doi" in e:
-                all_elibrary_list_library[i].doi = e["doi"]
+                #doi
+                if "doi" in e:
+                    all_elibrary_list_library[i].doi = e["doi"]
                     
-            #id
-            if "@id" in e:
-                all_elibrary_list_library[i].id = e["@id"]
+                #id
+                if "@id" in e:
+                    all_elibrary_list_library[i].id = e["@id"]
                 
-            #type
-            if "type" in e:
-                all_elibrary_list_library[i].type = e["type"]
+                #type
+                if "type" in e:
+                    all_elibrary_list_library[i].type = e["type"]
                 
-            #cited
-            if "cited" in e:
-                all_elibrary_list_library[i].cited = e["cited"]
+                #cited
+                if "cited" in e:
+                    all_elibrary_list_library[i].cited = e["cited"]
             
-            #pages
-            if "pages" in e:
-                all_elibrary_list_library[i].pages = e["pages"]
+                #pages
+                if "pages" in e:
+                    all_elibrary_list_library[i].pages = e["pages"]
                 
-            #volume
-            if "source" in e:
-                if "issue" in e["source"]:
-                    if "volume" in e["source"]["issue"]:
-                        all_elibrary_list_library[i].volume = e["source"]["issue"]["volume"]
+                #volume
+                if "source" in e:
+                    if "issue" in e["source"]:
+                        if "volume" in e["source"]["issue"]:
+                            all_elibrary_list_library[i].volume = e["source"]["issue"]["volume"]
                         
-            #issn
-            if "source" in e:
-                if "journal" in e["source"]:
-                    if "issn" in e["source"]["journal"]:
-                        all_elibrary_list_library[i].issn = e["source"]["journal"]["issn"]
+                #issn
+                if "source" in e:
+                    if "journal" in e["source"]:
+                        if "issn" in e["source"]["journal"]:
+                            all_elibrary_list_library[i].issn = e["source"]["journal"]["issn"]
                         
-            #eissn
-            if "source" in e:
-                if "journal" in e["source"]:
-                    if "eissn" in e["source"]["journal"]:
-                        all_elibrary_list_library[i].eissn = e["source"]["journal"]["eissn"]
+                #eissn
+                if "source" in e:
+                    if "journal" in e["source"]:
+                        if "eissn" in e["source"]["journal"]:
+                            all_elibrary_list_library[i].eissn = e["source"]["journal"]["eissn"]
                         
-            #tile_journal
-            if "source" in e:
-                if "journal" in e["source"]:
-                    if "title" in e["source"]["journal"]:
-                        all_elibrary_list_library[i].tile_journal = e["source"]["journal"]["title"]
+                #tile_journal
+                if "source" in e:
+                    if "journal" in e["source"]:
+                        if "title" in e["source"]["journal"]:
+                            all_elibrary_list_library[i].tile_journal = e["source"]["journal"]["title"]
                         
-            #publisher
-            if "source" in e:
-                if "journal" in e["source"]:
-                    if "publisher" in e["source"]["journal"]:
-                        all_elibrary_list_library[i].publisher = e["source"]["journal"]["publisher"]
+                #publisher
+                if "source" in e:
+                    if "journal" in e["source"]:
+                        if "publisher" in e["source"]["journal"]:
+                            all_elibrary_list_library[i].publisher = e["source"]["journal"]["publisher"]
                         
-            #country
-            if "source" in e:
-                if "journal" in e["source"]:
-                    if "country" in e["source"]["journal"]:
-                        all_elibrary_list_library[i].country = e["source"]["journal"]["country"]
+                #country
+                if "source" in e:
+                    if "journal" in e["source"]:
+                        if "country" in e["source"]["journal"]:
+                            all_elibrary_list_library[i].country = e["source"]["journal"]["country"]
                         
-            #grnti
-            if "grnti" in e:
-                all_elibrary_list_library[i].grnti = e["grnti"]
-                
+                #grnti
+                if "grnti" in e:
+                    all_elibrary_list_library[i].grnti = e["grnti"]
                             
-        count_all_author += count_author_temp
+            count_all_author += count_author_temp
+    except:
+        return None
 
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].author = Translite(all_elibrary_list_library[i].author)
@@ -177,15 +179,4 @@ def eLibrary(path):
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_author = "".join(e for e in all_elibrary_list_library[i].author if e.isupper())
     
-    print("---------------------------------------")
-    print("Запись в файл началась eLibrary")
-    print(f"Всего строк в таблице: {len(list_library)}")
-    print(f"Всего записей: {len(all_elibrary_list_library)}")
-    with open("Result_eLibrary.txt", "w", encoding="utf-8") as file:
-        for index, val in enumerate(all_elibrary_list_library):
-            file.write("Запись №: " + str(index) + "\n")
-            file.write(val.Print())
-            file.write("\n\n\n")
-    print("Запись в файл закончилась eLibrary")
-    print("---------------------------------------")
-    return all_elibrary_list_library, "eLibrary"
+    return all_elibrary_list_library
