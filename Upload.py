@@ -2,7 +2,7 @@ from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font
 
 
-def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=True):
+async def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=True):
     # создание нового файла
     wb = Workbook()
     ws = wb.active

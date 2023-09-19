@@ -15,6 +15,7 @@ from Parsing.eLibrary import eLibrary
 from Parsing.Equals import identical_sources_equals, different_source_equals
 from tkinter.messagebox import showerror, showwarning, showinfo
 from Upload import Upload
+from tkinter.filedialog import asksaveasfile
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 
@@ -581,7 +582,7 @@ async def open_compare_window():
         list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(
             list1, list2)
 
-    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в xlxs", command=upload)
+    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в xlxs", command=async_handler(upload))
     unload_to_xlsx.place(relx=0.4, rely=0.25, relwidth=0.2, relheight=0.5)
 
     for row in list_new_tuple:
@@ -613,18 +614,17 @@ async def help_guide():
     photo = ImageTk.PhotoImage(image)
     label_help = tkinter.Label(frame_help, image=photo, text="12`12")  # задаем поле
     label_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
+    print("12")
 
 async def upload():
     global add_new_list
     global remove_new_list
     global identical_new_list
 
-    # запрос пути для сохранения
-    ftypes = [('All files', '*')]  # допустимые типы
-    dlg = tkinter.filedialog.Save(filetypes=ftypes, title='Выберите файл',
-                                  initialdir=os.path.abspath(__file__))  # окошко открытия файла
+    dlg = asksaveasfile(initialfile='DefaultName.xlsx',
+                      defaultextension=".xlsx", filetypes=[("All Files", "*.*")])
     path = dlg.show()  # получение имени файла для дальнейшей работы
-    Upload(path, add_new_list, remove_new_list, identical_new_list)
+    await Upload(path, add_new_list, remove_new_list, identical_new_list)
 
 
 # создание окна
