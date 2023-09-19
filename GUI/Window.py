@@ -540,9 +540,9 @@ async def open_file_Ipublishing_right():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Проверьте, что открываете файл iPublishing")
 
 
-add_new_list = None
-remove_new_list = None
-identical_new_list = None
+add_new_list = []
+remove_new_list = []
+identical_new_list = []
 
 
 # кнопка сравнения
@@ -613,7 +613,6 @@ async def help_guide():
     photo = ImageTk.PhotoImage(image)
     label_help = tkinter.Label(frame_help, image=photo, text="12`12")  # задаем поле
     label_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
-
 
 async def upload():
     global add_new_list

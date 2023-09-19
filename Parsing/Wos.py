@@ -1,3 +1,4 @@
+from xls2xlsx import XLS2XLSX
 from openpyxl import load_workbook
 from Class import WOS_Library
 
@@ -5,8 +6,13 @@ from Class import WOS_Library
 def Wos(path):
     # список статей Wos
     all_wos_list_library = []
-
-    # открытие исходного файла
+    
+    if path[-1]=="s":
+        x2x = XLS2XLSX(path)
+        path = path + "x"
+        x2x.to_xlsx(path)
+        
+    #открываем файл
     wb = load_workbook(path)
     ws = wb.active
 

@@ -9,7 +9,27 @@ from Upload import Upload
 
 
 def main():
+    #scopus
+    #_, _, _, list1, list2, list3 = identical_sources_equals(Scopus("Source/Scopus/Scopus1.xlsx")[0], Scopus("Source/Scopus/Scopus2.xlsx")[0])
+    #Upload("", list_new=list1, flag=False)
+    #Upload("", list_new=list1, list_ident=list2, list_remove=list3, flag=True)
+
+    #wos
+    #_, _, _, list1, list2, list3 = identical_sources_equals(Wos("Source/Wos/Wos1.xlsx")[0], Wos("Source/Wos/Wos2.xlsx")[0])
+    #Upload("", list_new=list1, list_ident=list2, list_remove=list3, flag=True)
     
+    #ipublishing scopus
+    #_, _, _, list1, list2, list3 = different_source_equals(IPublishing("Source/IPublishing/IPublishing.xlsx")[0], Scopus("Source/Scopus/Scopus2.xlsx")[0])
+    #Upload("", list_new=list1, list_ident=list2, list_remove=list3, flag=True)
+
+    #ipublishing wos
+    #_, _, _, list1, list2, list3 = different_source_equals(IPublishing("Source/IPublishing/IPublishing.xlsx")[0], Wos("Source/Wos/Wos2.xlsx")[0])
+    #Upload("", list_new=list1, list_ident=list2, list_remove=list3, flag=True)
+
+    #ipublishing eLibrary
+    #_, _, _, list1, list2, list3 = different_source_equals(IPublishing("Source/IPublishing/IPublishing.xlsx")[0], eLibrary("Source/eLibrary/IPunisher.xml")[0])
+    #Upload("", list_new=list1, list_ident=list2, list_remove=list3, flag=True)
+
     async_mainloop(win)
     print("Завершение программы")
     
