@@ -516,7 +516,14 @@ def open_file_Ipublishing_right():
 
 
 # кнопка сравнения
+comparewin_is_open = False
 def open_compare_window():
+    global comparewin_is_open
+    global comparewin
+    if comparewin_is_open == True:
+        comparewin.destroy()
+    comparewin_is_open = True
+
     global add_new_list
     global remove_new_list
     global identical_new_list
@@ -549,7 +556,7 @@ def open_compare_window():
         list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
 
     unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=(upload))
-    unload_to_xlsx.place(relx=0.4, rely=0.25, relwidth=0.2, relheight=0.5)
+    unload_to_xlsx.place(relx=0.1, rely=0.25, relwidth=0.9, relheight=0.5)
 
     for row in list_new_tuple:
         table_compare.insert('', tkinter.END, values=row, tags='new')
@@ -573,7 +580,14 @@ def open_compare_window():
 
 
 photo = "global"
+help_is_open = False
 def help_guide():
+    global help_is_open
+    global helpwin
+    if help_is_open == True:
+        helpwin.destroy()
+    help_is_open = True
+
     global photo
     helpwin = Toplevel(win)  # инициализация
     helpwin.geometry('800x800')  # размер
@@ -592,7 +606,6 @@ def upload():
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
     Upload(path, list_new = add_new_list, list_ident = remove_new_list, list_remove = identical_new_list)
-
 
 def nameleft():
     global left_table_site
@@ -679,8 +692,41 @@ filemenu_load_Ipublishing.add_command(label="Загрузить в левую т
 filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу", command=(open_file_Ipublishing_right))
 filemenu_load.add_cascade(label="Загрузить Ipublishing", menu=filemenu_load_Ipublishing)
 
+
+loading_win_is_open = False
+def loading():
+    global loading_win_is_open
+    global loading_win
+    if loading_win_is_open == True:
+        loading_win.destroy()
+    loading_win_is_open = True
+
+    loading_win = Toplevel(win)  # инициализация
+    loading_win.geometry('200x200')  # размер
+    loading_win.resizable(False, False)
+    loading_win.title("Окно загрузки")  # название
+
+    global progressbar
+    progressbar = ttk.Progressbar(loading_win, orient="horizontal", mode="indeterminate")
+    progressbar.place(relx=0.1, rely=0.45, relwidth=0.8, relheight=0.1)
+    progressbar.start(30)  # запускаем progressbar
+
+    label = tkinter.Label(loading_win, text="Пожалуйста подождите")
+    label.place(relx=0.05, rely=0.1, relwidth=0.9, relheight=0.2)
+
+def stop():
+    loading_win.destroy()      # останавливаем progressbar
+
+
 # создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
 mainmenu.add_cascade(label="Сравнить данные", command=(open_compare_window), state=DISABLED)
 mainmenu.add_cascade(label="Помощь", command=(help_guide))
+mainmenu.add_cascade(label="Запуск загрузки", command=loading)
+mainmenu.add_cascade(label="Стоп", command=stop)
+
+
+
+
+
 
