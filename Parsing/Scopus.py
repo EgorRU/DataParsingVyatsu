@@ -313,5 +313,5 @@ def Scopus(path):
         
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_author = "".join(e for e in all_scopus_list_library[i].author if e.isupper())
-        
+    print("eee")
     return all_scopus_list_library

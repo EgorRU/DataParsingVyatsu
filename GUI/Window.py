@@ -1,4 +1,3 @@
-from async_tkinter_loop import async_handler
 from tkinter import *
 from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
@@ -6,6 +5,7 @@ from tkinter.filedialog import asksaveasfilename
 import tkinter, os
 import tkinter.filedialog
 from PIL import Image, ImageTk
+import multiprocessing as mp
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
@@ -35,13 +35,12 @@ add_new_list = []
 remove_new_list = []
 identical_new_list = []
 
-@async_handler
-async def on_closing():
+def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
         win.destroy()
 
 
-async def open_file_Scopus_left():
+def open_file_Scopus_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -80,7 +79,7 @@ async def open_file_Scopus_left():
                 table_left.heading(header, text=header, anchor='center')
                 table_left.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableleft, command=async_handler(table_left.yview))
+            scroll_pane = ttk.Scrollbar(frametableleft, command=(table_left.yview))
             table_left.configure(yscrollcommand=scroll_pane.set)
             scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_left.pack(expand=tkinter.YES,
@@ -98,7 +97,7 @@ async def open_file_Scopus_left():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
 
 
-async def open_file_Scopus_right():
+def open_file_Scopus_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -152,7 +151,7 @@ async def open_file_Scopus_right():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
 
 
-async def open_file_WoS_left():
+def open_file_WoS_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -204,7 +203,7 @@ async def open_file_WoS_left():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
 
 
-async def open_file_WoS_right():
+def open_file_WoS_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -256,7 +255,7 @@ async def open_file_WoS_right():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
 
 
-async def open_file_Elibrary_left():
+def open_file_Elibrary_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -309,7 +308,7 @@ async def open_file_Elibrary_left():
            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
 
 
-async def open_file_Elibrary_right():
+def open_file_Elibrary_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -362,7 +361,7 @@ async def open_file_Elibrary_right():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
             
 
-async def open_file_Ipublishing_left():
+def open_file_Ipublishing_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -412,7 +411,7 @@ async def open_file_Ipublishing_left():
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
 
 
-async def open_file_Ipublishing_right():
+def open_file_Ipublishing_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
@@ -463,7 +462,7 @@ async def open_file_Ipublishing_right():
 
 
 # кнопка сравнения
-async def open_compare_window():
+def open_compare_window():
     global add_new_list
     global remove_new_list
     global identical_new_list
@@ -485,7 +484,7 @@ async def open_compare_window():
         table_compare.heading(header, text=header, anchor='center')
         table_compare.column(header, anchor='center')
 
-    scroll_pane = ttk.Scrollbar(frame_compare_table, command=async_handler(table_compare.yview))
+    scroll_pane = ttk.Scrollbar(frame_compare_table, command=(table_compare.yview))
     table_compare.configure(yscrollcommand=scroll_pane.set)
     scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
     table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)
@@ -495,7 +494,7 @@ async def open_compare_window():
     else:
         list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
 
-    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=async_handler(upload))
+    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=(upload))
     unload_to_xlsx.place(relx=0.4, rely=0.25, relwidth=0.2, relheight=0.5)
 
     for row in list_new_tuple:
@@ -516,7 +515,7 @@ async def open_compare_window():
 
 
 photo = "global"
-async def help_guide():
+def help_guide():
     global photo
     helpwin = Toplevel(win)  # инициализация
     helpwin.geometry('800x800')  # размер
@@ -529,13 +528,12 @@ async def help_guide():
     label_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
 
 
-async def upload():
+def upload():
     global add_new_list
     global remove_new_list
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
     Upload(path, list_new = add_new_list, list_ident = remove_new_list, list_remove = identical_new_list)
-    tkinter.messagebox.showwarning(title="Уведомление", message="Данные были выгружены в файл")
 
 
 def nameleft():
@@ -604,27 +602,27 @@ filemenu = Menu(mainmenu, tearoff=0)
 filemenu_load = Menu(filemenu, tearoff=0)
 
 filemenu_load_WoF = Menu(filemenu_load, tearoff=0)
-filemenu_load_WoF.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_WoS_left))
-filemenu_load_WoF.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_WoS_right))
+filemenu_load_WoF.add_command(label="Загрузить в левую таблицу", command=(open_file_WoS_left))
+filemenu_load_WoF.add_command(label="Загрузить в правую таблицу", command=(open_file_WoS_right))
 filemenu_load.add_cascade(label="Загрузить Web of Science", menu=filemenu_load_WoF)
 
 filemenu_load_Scopus = Menu(filemenu_load, tearoff=0)
-filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_Scopus_left))
-filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_Scopus_right))
+filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу", command=(open_file_Scopus_left))
+filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу", command=(open_file_Scopus_right))
 filemenu_load.add_cascade(label="Загрузить Scopus", menu=filemenu_load_Scopus)
 
 filemenu_load_Elibrary = Menu(filemenu_load, tearoff=0)
-filemenu_load_Elibrary.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_Elibrary_left))
-filemenu_load_Elibrary.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_Elibrary_right))
+filemenu_load_Elibrary.add_command(label="Загрузить в левую таблицу", command=(open_file_Elibrary_left))
+filemenu_load_Elibrary.add_command(label="Загрузить в правую таблицу", command=(open_file_Elibrary_right))
 filemenu_load.add_cascade(label="Загрузить Elibrary", menu=filemenu_load_Elibrary)
 
 filemenu_load_Ipublishing = Menu(filemenu_load, tearoff=0)
-filemenu_load_Ipublishing.add_command(label="Загрузить в левую таблицу", command=async_handler(open_file_Ipublishing_left))
-filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу", command=async_handler(open_file_Ipublishing_right))
+filemenu_load_Ipublishing.add_command(label="Загрузить в левую таблицу", command=(open_file_Ipublishing_left))
+filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу", command=(open_file_Ipublishing_right))
 filemenu_load.add_cascade(label="Загрузить Ipublishing", menu=filemenu_load_Ipublishing)
 
 # создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
-mainmenu.add_cascade(label="Сравнить данные", command=async_handler(open_compare_window), state=DISABLED)
-mainmenu.add_cascade(label="Помощь", command=async_handler(help_guide))
+mainmenu.add_cascade(label="Сравнить данные", command=(open_compare_window), state=DISABLED)
+mainmenu.add_cascade(label="Помощь", command=(help_guide))
 
