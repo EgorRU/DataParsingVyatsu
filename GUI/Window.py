@@ -40,6 +40,13 @@ def on_closing():
         win.destroy()
 
 
+def sort(table, col, reverse):
+    l = [(table.set(k, col), k) for k in table.get_children("")]
+    l.sort(reverse=reverse)
+    for index, (_, k) in enumerate(l):
+        table.move(k, "", index)
+    table.heading(col, command=lambda: sort(table, col, not reverse))
+
 def open_file_Scopus_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
@@ -53,6 +60,13 @@ def open_file_Scopus_left():
                 (left_table_site == 's' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
 
+        global left_table_create
+        global table_left
+        global scroll_pane_left
+        if left_table_create == True:
+            table_left.destroy()
+            scroll_pane_left.pack_forget()
+
         # обработка файла, получение списка данных
         list_scopus = Scopus(filename)
         if list_scopus != None:
@@ -63,12 +77,6 @@ def open_file_Scopus_left():
                             list_scopus[i].citation))
             global list1
             list1 = list_scopus
-            global left_table_create
-            global table_left
-            global scroll_pane
-            if left_table_create == True:
-                table_left.destroy()
-                scroll_pane.pack_forget()
 
             heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
             table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
@@ -79,9 +87,9 @@ def open_file_Scopus_left():
                 table_left.heading(header, text=header, anchor='center')
                 table_left.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableleft, command=(table_left.yview))
-            table_left.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_left = ttk.Scrollbar(frametableleft, command=(table_left.yview))
+            table_left.configure(yscrollcommand=scroll_pane_left.set)
+            scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_left.pack(expand=tkinter.YES,
                             fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
@@ -93,6 +101,11 @@ def open_file_Scopus_left():
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=180, width=180, stretch=NO)
             table_left.column("citation", minwidth=60, width=60, stretch=NO)
+
+            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
 
@@ -111,6 +124,14 @@ def open_file_Scopus_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_scopus = Scopus(filename)
+
+        global right_table_create
+        global table_right
+        global scroll_pane_right
+        if right_table_create == True:
+            table_right.destroy()
+            scroll_pane_right.pack_forget()
+
         if list_scopus!=None:
             lst = []
             name_right.configure(text=nameright())
@@ -119,12 +140,6 @@ def open_file_Scopus_right():
                             list_scopus[i].citation))
             global list2
             list2 = list_scopus
-            global right_table_create
-            global table_right
-            global scroll_pane
-            if right_table_create == True:
-                table_right.destroy()
-                scroll_pane.pack_forget()
             heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
             table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
             table_right['columns'] = heads  # привязка столбцов к таблице
@@ -134,9 +149,9 @@ def open_file_Scopus_right():
                 table_right.heading(header, text=header, anchor='center')
                 table_right.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-            table_right.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane_right.set)
+            scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -147,6 +162,10 @@ def open_file_Scopus_right():
             table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=180, width=180, stretch=NO)
             table_right.column("citation", minwidth=60, width=60, stretch=NO)
+
+            table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
 
@@ -163,6 +182,14 @@ def open_file_WoS_left():
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
+
+        global left_table_create
+        global table_left
+        global scroll_pane_left
+        if left_table_create == True:
+            table_left.destroy()
+            scroll_pane_left.pack_forget()
+
         # обработка файла, получение списка данных
         list_wos = Wos(filename)
         if list_wos!=None:
@@ -172,12 +199,7 @@ def open_file_WoS_left():
                 lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link))
             global list1
             list1 = list_wos
-            global left_table_create
-            global table_left
-            global scroll_pane
-            if left_table_create == True:
-                table_left.destroy()
-                scroll_pane.pack_forget()
+
             heads = ['author', 'title', 'year', 'link']  # столбики
             table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
             table_left['columns'] = heads  # привязка столбцов к таблице
@@ -187,9 +209,9 @@ def open_file_WoS_left():
                 table_left.heading(header, text=header, anchor='center')
                 table_left.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
-            table_left.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
+            table_left.configure(yscrollcommand=scroll_pane_left.set)
+            scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -199,6 +221,10 @@ def open_file_WoS_left():
             table_left.column("title", minwidth=330, width=330, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=180, width=180, stretch=NO)
+
+            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
 
@@ -217,6 +243,14 @@ def open_file_WoS_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_wos = Wos(filename)
+
+        global right_table_create
+        global table_right
+        global scroll_pane_right
+        if right_table_create == True:
+            table_right.destroy()
+            scroll_pane_right.pack_forget()
+
         if list_wos!=None:
             lst = []
             name_right.configure(text=nameright())
@@ -224,12 +258,6 @@ def open_file_WoS_right():
                 lst.append((list_wos[i].author, list_wos[i].title, list_wos[i].year, list_wos[i].link))
             global list2
             list2 = list_wos
-            global right_table_create
-            global table_right
-            global scroll_pane
-            if right_table_create == True:
-                table_right.destroy()
-                scroll_pane.pack_forget()
             heads = ['author', 'title', 'year', 'link']  # столбики
             table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
             table_right['columns'] = heads  # привязка столбцов к таблице
@@ -239,9 +267,9 @@ def open_file_WoS_right():
                 table_right.heading(header, text=header, anchor='center')
                 table_right.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-            table_right.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane_right.set)
+            scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -251,6 +279,10 @@ def open_file_WoS_right():
             table_right.column("title", minwidth=330, width=330, stretch=YES)
             table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=180, width=180, stretch=NO)
+
+            table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
 
@@ -267,6 +299,14 @@ def open_file_Elibrary_left():
                 (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'e' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
+
+        global left_table_create
+        global table_left
+        global scroll_pane_left
+        if left_table_create == True:
+            table_left.destroy()
+            scroll_pane_left.pack_forget()
+
         # обработка файла, получение списка данных
         list_Elibrary = eLibrary(filename)
         if list_Elibrary!=None:
@@ -277,12 +317,6 @@ def open_file_Elibrary_left():
                     (list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year, list_Elibrary[i].link))
             global list1
             list1 = list_Elibrary
-            global left_table_create
-            global table_left
-            global scroll_pane
-            if left_table_create == True:
-                table_left.destroy()
-                scroll_pane.pack_forget()
             heads = ['author', 'title', 'year', 'link']  # столбики
             table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
             table_left['columns'] = heads  # привязка столбцов к таблице
@@ -292,9 +326,9 @@ def open_file_Elibrary_left():
                 table_left.heading(header, text=header, anchor='center')
                 table_left.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
-            table_left.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
+            table_left.configure(yscrollcommand=scroll_pane_left.set)
+            scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -304,6 +338,10 @@ def open_file_Elibrary_left():
             table_left.column("title", minwidth=370, width=370, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=210, width=210, stretch=NO)
+
+            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
 
@@ -322,6 +360,14 @@ def open_file_Elibrary_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_Elibrary = eLibrary(filename)
+
+        global right_table_create
+        global table_right
+        global scroll_pane_right
+        if right_table_create == True:
+            table_right.destroy()
+            scroll_pane_right.pack_forget()
+
         if list_Elibrary !=None:
             lst = []
             name_right.configure(text=nameright())
@@ -330,12 +376,6 @@ def open_file_Elibrary_right():
                     (list_Elibrary[i].author, list_Elibrary[i].title, list_Elibrary[i].year, list_Elibrary[i].link))
             global list2
             list2 = list_Elibrary
-            global right_table_create
-            global table_right
-            global scroll_pane
-            if right_table_create == True:
-                table_right.destroy()
-                scroll_pane.pack_forget()
             heads = ['author', 'title', 'year', 'link']  # столбики
             table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
             table_right['columns'] = heads  # привязка столбцов к таблице
@@ -345,9 +385,9 @@ def open_file_Elibrary_right():
                 table_right.heading(header, text=header, anchor='center')
                 table_right.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-            table_right.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane_right.set)
+            scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -357,6 +397,10 @@ def open_file_Elibrary_right():
             table_right.column("title", minwidth=370, width=370, stretch=YES)
             table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=210, width=210, stretch=NO)
+
+            table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
             
@@ -370,8 +414,15 @@ def open_file_Ipublishing_left():
         global left_table_site, right_table_site
         left_table_site = 'i'
         mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-        
         list_ipublishing = IPublishing(filename)
+
+        global left_table_create
+        global table_left
+        global scroll_pane_left
+        if left_table_create == True:
+            table_left.destroy()
+            scroll_pane_left.pack_forget()
+
         if list_ipublishing!=None:
             lst = []
             name_left.configure(text=nameleft())
@@ -380,12 +431,6 @@ def open_file_Ipublishing_left():
                             list_ipublishing[i].link))
             global list1
             list1 = list_ipublishing
-            global left_table_create
-            global table_left
-            global scroll_pane
-            if left_table_create == True:
-                table_left.destroy()
-                scroll_pane.pack_forget()
             heads = ['author', 'title', 'year', 'link']  # столбики
             table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
             table_left['columns'] = heads  # привязка столбцов к таблице
@@ -395,9 +440,9 @@ def open_file_Ipublishing_left():
                 table_left.heading(header, text=header, anchor='center')
                 table_left.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableleft, command=table_left.yview)
-            table_left.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
+            table_left.configure(yscrollcommand=scroll_pane_left.set)
+            scrolscroll_pane_leftl_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -407,6 +452,10 @@ def open_file_Ipublishing_left():
             table_left.column("title", minwidth=250, width=250, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=160, width=160, stretch=NO)
+
+            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
 
@@ -420,8 +469,15 @@ def open_file_Ipublishing_right():
         global left_table_site, right_table_site
         right_table_site = 'i'
         mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-        
         list_ipublishing = IPublishing(filename)
+
+        global right_table_create
+        global table_right
+        global scroll_pane_right
+        if right_table_create == True:
+            table_right.destroy()
+            scroll_pane_right.pack_forget()
+
         if list_ipublishing!=None:
             lst = []
             name_right.configure(text=nameright())
@@ -430,12 +486,6 @@ def open_file_Ipublishing_right():
                             list_ipublishing[i].link))
             global list2
             list2 = list_ipublishing
-            global right_table_create
-            global table_right
-            global scroll_pane
-            if right_table_create == True:
-                table_right.destroy()
-                scroll_pane.pack_forget()
             heads = ['author', 'title', 'year', 'link']  # столбики
             table_right = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
             table_right['columns'] = heads  # привязка столбцов к таблице
@@ -445,9 +495,9 @@ def open_file_Ipublishing_right():
                 table_right.heading(header, text=header, anchor='center')
                 table_right.column(header, anchor='center')
 
-            scroll_pane = ttk.Scrollbar(frametableright, command=table_right.yview)
-            table_right.configure(yscrollcommand=scroll_pane.set)
-            scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
+            table_right.configure(yscrollcommand=scroll_pane_right.set)
+            scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -457,6 +507,10 @@ def open_file_Ipublishing_right():
             table_right.column("title", minwidth=250, width=250, stretch=YES)
             table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=160, width=160, stretch=NO)
+
+            table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
 
@@ -484,9 +538,9 @@ def open_compare_window():
         table_compare.heading(header, text=header, anchor='center')
         table_compare.column(header, anchor='center')
 
-    scroll_pane = ttk.Scrollbar(frame_compare_table, command=(table_compare.yview))
-    table_compare.configure(yscrollcommand=scroll_pane.set)
-    scroll_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+    scroll_pane_compare = ttk.Scrollbar(frame_compare_table, command=(table_compare.yview))
+    table_compare.configure(yscrollcommand=scroll_pane_compare.set)
+    scroll_pane_compare.pack(side=tkinter.RIGHT, fill=tkinter.Y)
     table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
     if left_table_site == right_table_site:
@@ -512,6 +566,10 @@ def open_compare_window():
     table_compare.column("title", minwidth=370, width=370, stretch=YES)
     table_compare.column("year", minwidth=40, width=40, stretch=NO)
     table_compare.column("link", minwidth=210, width=210, stretch=NO)
+
+    table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
+    table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
+    table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
 
 
 photo = "global"
