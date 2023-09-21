@@ -2,10 +2,10 @@ from tkinter import *
 from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
 from tkinter.filedialog import asksaveasfilename
-import tkinter, os
+import tkinter, os, signal, time
 import tkinter.filedialog
 from PIL import Image, ImageTk
-import multiprocessing as mp
+from multiprocessing import Process
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
@@ -35,6 +35,7 @@ add_new_list = []
 remove_new_list = []
 identical_new_list = []
 
+
 def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
         win.destroy()
@@ -46,11 +47,18 @@ def sort(table, col, reverse):
     for index, (_, k) in enumerate(l):
         table.move(k, "", index)
     table.heading(col, command=lambda: sort(table, col, not reverse))
+  
+    
+def delegate_os():
+    os.system("py os.py")
+
 
 def open_file_Scopus_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+    p = Process(target = delegate_os)
+    p.start()
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -66,7 +74,6 @@ def open_file_Scopus_left():
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
-
         # обработка файла, получение списка данных
         list_scopus = Scopus(filename)
         if list_scopus != None:
@@ -105,15 +112,19 @@ def open_file_Scopus_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
-
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
+    with open("pid.txt", "r") as file:
+        data = int(file.read())    
+        os.kill(data, signal.SIGILL)
 
 
 def open_file_Scopus_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+    p = Process(target = delegate_os)
+    p.start()
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -168,12 +179,17 @@ def open_file_Scopus_right():
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
+    with open("pid.txt", "r") as file:
+        data = int(file.read())    
+        os.kill(data, signal.SIGILL)
 
 
 def open_file_WoS_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+    p = Process(target = delegate_os)
+    p.start()
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -227,7 +243,9 @@ def open_file_WoS_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
-
+    with open("pid.txt", "r") as file:
+        data = int(file.read())    
+        os.kill(data, signal.SIGILL)
 
 def open_file_WoS_right():
     ftypes = [('All files', '*')]  # допустимые типы
@@ -243,7 +261,6 @@ def open_file_WoS_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_wos = Wos(filename)
-
         global right_table_create
         global table_right
         global scroll_pane_right
@@ -291,6 +308,8 @@ def open_file_Elibrary_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+    p = Process(target = delegate_os)
+    p.start()
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -344,7 +363,11 @@ def open_file_Elibrary_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
-
+    print("111")
+    p.join()
+    print("111")
+    p.terminate()
+    p.close()
 
 def open_file_Elibrary_right():
     ftypes = [('All files', '*')]  # допустимые типы
@@ -442,7 +465,7 @@ def open_file_Ipublishing_left():
 
             scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane_left.set)
-            scrolscroll_pane_leftl_pane.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+            scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
             table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
@@ -523,7 +546,6 @@ def open_compare_window():
     if comparewin_is_open == True:
         comparewin.destroy()
     comparewin_is_open = True
-
     global add_new_list
     global remove_new_list
     global identical_new_list
@@ -587,7 +609,6 @@ def help_guide():
     if help_is_open == True:
         helpwin.destroy()
     help_is_open = True
-
     global photo
     helpwin = Toplevel(win)  # инициализация
     helpwin.geometry('800x800')  # размер
@@ -692,38 +713,10 @@ filemenu_load_Ipublishing.add_command(label="Загрузить в левую т
 filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу", command=(open_file_Ipublishing_right))
 filemenu_load.add_cascade(label="Загрузить Ipublishing", menu=filemenu_load_Ipublishing)
 
-
-loading_win_is_open = False
-def loading():
-    global loading_win_is_open
-    global loading_win
-    if loading_win_is_open == True:
-        loading_win.destroy()
-    loading_win_is_open = True
-
-    loading_win = Toplevel(win)  # инициализация
-    loading_win.geometry('200x200')  # размер
-    loading_win.resizable(False, False)
-    loading_win.title("Окно загрузки")  # название
-
-    global progressbar
-    progressbar = ttk.Progressbar(loading_win, orient="horizontal", mode="indeterminate")
-    progressbar.place(relx=0.1, rely=0.45, relwidth=0.8, relheight=0.1)
-    progressbar.start(30)  # запускаем progressbar
-
-    label = tkinter.Label(loading_win, text="Пожалуйста подождите")
-    label.place(relx=0.05, rely=0.1, relwidth=0.9, relheight=0.2)
-
-def stop():
-    loading_win.destroy()      # останавливаем progressbar
-
-
 # создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
 mainmenu.add_cascade(label="Сравнить данные", command=(open_compare_window), state=DISABLED)
 mainmenu.add_cascade(label="Помощь", command=(help_guide))
-mainmenu.add_cascade(label="Запуск загрузки", command=loading)
-mainmenu.add_cascade(label="Стоп", command=stop)
 
 
 
