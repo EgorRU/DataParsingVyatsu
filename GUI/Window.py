@@ -54,7 +54,7 @@ def sort(table, col, reverse):
   
 
 def open_file_Scopus_left():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx") ]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -65,6 +65,7 @@ def open_file_Scopus_left():
         global left_table_create
         global table_left
         global scroll_pane_left
+        mainmenu.entryconfigure(2, state=DISABLED)
         left_table_site = 's'
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
@@ -122,7 +123,7 @@ def open_file_Scopus_left():
 
 
 def open_file_Scopus_right():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -133,6 +134,7 @@ def open_file_Scopus_right():
         global right_table_create
         global table_right
         global scroll_pane_right
+        mainmenu.entryconfigure(2, state=DISABLED)
         right_table_site = 's'
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
@@ -189,7 +191,7 @@ def open_file_Scopus_right():
 
 
 def open_file_WoS_left():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -200,6 +202,7 @@ def open_file_WoS_left():
         global left_table_create
         global table_left
         global scroll_pane_left
+        mainmenu.entryconfigure(2, state=DISABLED)
         left_table_site = 'w'
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
@@ -255,7 +258,7 @@ def open_file_WoS_left():
 
 
 def open_file_WoS_right():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -266,6 +269,7 @@ def open_file_WoS_right():
         global right_table_create
         global table_right
         global scroll_pane_right
+        mainmenu.entryconfigure(2, state=DISABLED)
         right_table_site = 'w'
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
@@ -320,7 +324,7 @@ def open_file_WoS_right():
 
 
 def open_file_Elibrary_left():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -331,6 +335,7 @@ def open_file_Elibrary_left():
         global left_table_create
         global table_left
         global scroll_pane_left
+        mainmenu.entryconfigure(2, state=DISABLED)
         left_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
@@ -386,7 +391,7 @@ def open_file_Elibrary_left():
 
 
 def open_file_Elibrary_right():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -397,6 +402,7 @@ def open_file_Elibrary_right():
         global right_table_create
         global table_right
         global scroll_pane_right
+        mainmenu.entryconfigure(2, state=DISABLED)
         right_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
@@ -452,7 +458,7 @@ def open_file_Elibrary_right():
 
 
 def open_file_Ipublishing_left():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -463,6 +469,7 @@ def open_file_Ipublishing_left():
         global left_table_create
         global table_left
         global scroll_pane_left
+        mainmenu.entryconfigure(2, state=DISABLED)
         left_table_site = 'i'
         mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing = IPublishing(filename)
@@ -514,7 +521,7 @@ def open_file_Ipublishing_left():
 
 
 def open_file_Ipublishing_right():
-    ftypes = [('All files', '*')]  # допустимые типы
+    ftypes = [('All files', '*'),("xlsx", "*.xlsx")]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
@@ -525,6 +532,7 @@ def open_file_Ipublishing_right():
         global right_table_create
         global table_right
         global scroll_pane_right
+        mainmenu.entryconfigure(2, state=DISABLED)
         right_table_site = 'i'
         mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing = IPublishing(filename)
