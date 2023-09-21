@@ -473,7 +473,7 @@ def open_file_Ipublishing_left():
         left_table_site = 'i'
         if ((left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 's') or
-                (left_table_site == 'i' and right_table_site == 's') or
+                (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing = IPublishing(filename)
@@ -540,7 +540,7 @@ def open_file_Ipublishing_right():
         right_table_site = 'i'
         if ((right_table_site == 'i' and left_table_site == 'w') or
                 (right_table_site == 'i' and left_table_site == 's') or
-                (right_table_site == 'i' and left_table_site == 's') or
+                (right_table_site == 'i' and left_table_site == 'e') or
                 (right_table_site == 'i' and left_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing = IPublishing(filename)
@@ -688,7 +688,15 @@ def upload():
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
     if len(path)>0:
+        p = Process(target=delegate_os)
+        p.start()
         Upload(path, add_new_list, remove_new_list, identical_new_list)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def nameleft():

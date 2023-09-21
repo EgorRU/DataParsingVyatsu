@@ -1,3 +1,10 @@
+def sort(add_new_list, identical_new_list, remove_new_list):
+    add_new_list = sorted(add_new_list, key=lambda x: x.year)
+    identical_new_list = sorted(identical_new_list, key=lambda x: x.year)
+    remove_new_list = sorted(remove_new_list, key=lambda x: x.year)
+    return add_new_list, identical_new_list, remove_new_list
+
+
 def identical_sources_equals(source1, source2):
     #листы новых данных и лист удалённых данных
     add_new_list = []
@@ -54,6 +61,7 @@ def identical_sources_equals(source1, source2):
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
+    add_new_list, identical_new_list, remove_new_list = sort(add_new_list, identical_new_list, remove_new_list)
     return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list
 
 
@@ -110,4 +118,5 @@ def different_source_equals(source1, source2):
     print("---------------------------------------")
     print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
+    add_new_list, identical_new_list, remove_new_list = sort(add_new_list, identical_new_list, remove_new_list)
     return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list
