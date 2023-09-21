@@ -35,17 +35,53 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     for var in list_members:
         if var[0] != "_" and var[0].islower() and var[:5]!="clear":
             new_list_members.append(var)
+            
+    #формируем сортированный список
     new_list_members.remove("author")
     new_list_members.remove("title")
     new_list_members.remove("year")
-    new_list_members.sort()
     list_members = ["№ article","author","title","year", "full bibliographic title"]
+    
+    #если есть поля, то добавляем в нужной очерёдности
+    if "doi" in new_list_members:
+        list_members.append("doi")
+        new_list_members.remove("doi")
+        
+    if "link" in new_list_members:
+        list_members.append("link")
+        new_list_members.remove("link")
+        
+    if "start_page" in new_list_members:
+        list_members.append("start_page")
+        new_list_members.remove("start_page")
+        
+    if "end_page" in new_list_members:
+        list_members.append("end_page")
+        new_list_members.remove("end_page")
+        
+    if "issue" in new_list_members:
+        list_members.append("issue")
+        new_list_members.remove("issue")
+    
+    if "volume" in new_list_members:
+        list_members.append("volume")
+        new_list_members.remove("volume")
+        
+    if "article" in new_list_members:
+        list_members.append("article")
+        new_list_members.remove("article")
+        
+    if "citation" in new_list_members:
+        list_members.append("citation")
+        new_list_members.remove("citation")
+        
+    #добавляем остальные поля
     for i in range(len(new_list_members)):
         list_members.append(new_list_members[i])
     
     for i in range (len(list_members)):
         print(list_members[i])
-        
+
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
         ws.cell(row=1, column=index+1).value = val
@@ -58,95 +94,91 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     ws.column_dimensions["B"].width = 20
     ws.column_dimensions["C"].width = 70
     ws.column_dimensions["D"].width = 10
-    ws.column_dimensions["E"].width = 120
-        
+    ws.column_dimensions["E"].width = 80
+      
     #если выгружаем больше одного листа
     temp_row = 2
     count_article = 0
+    
     #добавляем новые элементы
-    if list_new != None:
-        title = ""
-        for i in range(len(list_new)):
-            title_temp = getattr(list_new[i], "title")
-            ws.cell(row=i+temp_row, column=1).font = Font(size=16)
-            ws.cell(row=i+temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
-            if title_temp!= title:
-                count_article += 1
-                for j in range(1, len(list_members)):
-                    if j==4:
-                        ws.cell(row=i+temp_row, column=4).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
-                    else:
-                        x = getattr(list_new[i], list_members[j])
-                        ws.cell(row=i+temp_row, column=j+1).value = x
-                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
-                        ws.cell(row=i+temp_row, column=j+1).border  = border
-            else:
-                for j in range(1, len(list_members)):
-                     if j==4:
-                        pass
-                     else:
-                        x = getattr(list_new[i], list_members[j])
-                        ws.cell(row=i+temp_row, column=j+1).value = x
-                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
-            ws.cell(row=i+temp_row, column=1).value = count_article
-            title = title_temp
-        temp_row += len(list_new)
+    title = ""
+    for i in range(len(list_new)):
+        title_temp = getattr(list_new[i], "title")
+        ws.cell(row=i+temp_row, column=1).font = Font(size=16)
+        ws.cell(row=i+temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
+        if title_temp!= title:
+            ws.cell(row=i+temp_row, column=1).border = border
+            count_article += 1
+            for j in range(1, len(list_members)):
+                if j==4:
+                    ws.cell(row=i+temp_row, column=j+1).value = "test"
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                ws.cell(row=i+temp_row, column=j+1).border = border
+                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
+        else:
+            for j in range(1, len(list_members)):
+                if j==4:
+                    ws.cell(row=i+temp_row, column=j+1).value = "test"
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
+        ws.cell(row=i+temp_row, column=1).value = count_article
+        title = title_temp
+    temp_row += len(list_new)
 
-    #добавляем поля из других, если они существуют
-    if list_ident != None:
-        title = ""
-        #добавляем одинаковые элементы
-        for i in range(len(list_ident)):
-            title_temp = getattr(list_ident[i], "title")
-            ws.cell(row=i+temp_row, column=1).font = Font(size=16)
-            if title_temp!= title:
-                count_article += 1              
-                for j in range(1, len(list_members)):
-                    if j==4:
-                        pass
-                    else:
-                        x = getattr(list_ident[i], list_members[j])            
-                        ws.cell(row=i+temp_row, column=j+1).value = x
-                        ws.cell(row=i+temp_row, column=j+1).border  = border
-            else:
-                for j in range(1, len(list_members)):
-                     if j==4:
-                        pass
-                     else:
-                        x = getattr(list_ident[i], list_members[j])            
-                        ws.cell(row=i+temp_row, column=j+1).value = x
-            ws.cell(row=i+temp_row, column=1).value = count_article
-            title = title_temp
-        temp_row += len(list_ident)
+
+    #добавляем одинаковые элементы
+    title = ""
+    for i in range(len(list_ident)):
+        title_temp = getattr(list_ident[i], "title")
+        ws.cell(row=i+temp_row, column=1).font = Font(size=16)
+        if title_temp!= title:
+            ws.cell(row=i+temp_row, column=1).border = border
+            count_article += 1              
+            for j in range(1, len(list_members)):
+                if j==4:
+                    ws.cell(row=i+temp_row, column=j+1).value = "test"
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_ident[i], list_members[j]) 
+                ws.cell(row=i+temp_row, column=j+1).border  = border
+        else:
+            for j in range(1, len(list_members)):
+                if j==4:
+                    ws.cell(row=i+temp_row, column=j+1).value = "test"
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])  
+        ws.cell(row=i+temp_row, column=1).value = count_article
+        title = title_temp
+    temp_row += len(list_ident)
         
+
     #добавляем удалённые элементы
-    if list_remove != None:
-        title = ""
-        for i in range(len(list_remove)):
-            title_temp = getattr(list_remove[i], "title")
-            ws.cell(row=i+temp_row, column=1).font = Font(size=16)
-            ws.cell(row=i+temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
-            if title_temp!= title:
-                count_article += 1
-                for j in range(1, len(list_members)):
-                     if j==4:
-                        ws.cell(row=i+temp_row, column=4).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
-                     else:
-                        x = getattr(list_remove[i], list_members[j])
-                        ws.cell(row=i+temp_row, column=j+1).value = x
-                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
-                        ws.cell(row=i+temp_row, column=j+1).border  = border
-            else:
-                for j in range(1, len(list_members)):
-                     if j==4:
-                        pass
-                     else:
-                        x = getattr(list_remove[i], list_members[j])
-                        ws.cell(row=i+temp_row, column=j+1).value = x
-                        ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
-            ws.cell(row=i+temp_row, column=1).value = count_article
-            title = title_temp
-        temp_row += len(list_remove)
+    title = ""
+    for i in range(len(list_remove)):
+        title_temp = getattr(list_remove[i], "title")
+        ws.cell(row=i+temp_row, column=1).font = Font(size=16)
+        ws.cell(row=i+temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
+        if title_temp!= title:
+            ws.cell(row=i+temp_row, column=1).border = border
+            count_article += 1
+            for j in range(1, len(list_members)):
+                if j==4:
+                    ws.cell(row=i+temp_row, column=j+1).value = "test"
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
+                ws.cell(row=i+temp_row, column=j+1).border  = border
+        else:
+            for j in range(1, len(list_members)):
+                if j==4:
+                    ws.cell(row=i+temp_row, column=j+1).value = "test"
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='F08080', end_color='F08080')
+        ws.cell(row=i+temp_row, column=1).value = count_article
+        title = title_temp
+    temp_row += len(list_remove)
              
     print(f"Для проверки: {len(list_new)+len(list_ident)+len(list_remove)} = {ws.max_row-1}")
     wb.save(path)
