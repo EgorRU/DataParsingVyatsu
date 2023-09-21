@@ -471,7 +471,11 @@ def open_file_Ipublishing_left():
         global scroll_pane_left
         mainmenu.entryconfigure(2, state=DISABLED)
         left_table_site = 'i'
-        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
+        if ((left_table_site == 'i' and right_table_site == 'w') or
+                (left_table_site == 'i' and right_table_site == 's') or
+                (left_table_site == 'i' and right_table_site == 's') or
+                (left_table_site == 'i' and right_table_site == 'i')):
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing = IPublishing(filename)
         if left_table_create == True:
             table_left.destroy()
@@ -534,7 +538,11 @@ def open_file_Ipublishing_right():
         global scroll_pane_right
         mainmenu.entryconfigure(2, state=DISABLED)
         right_table_site = 'i'
-        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
+        if ((right_table_site == 'i' and left_table_site == 'w') or
+                (right_table_site == 'i' and left_table_site == 's') or
+                (right_table_site == 'i' and left_table_site == 's') or
+                (right_table_site == 'i' and left_table_site == 'i')):
+            mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         list_ipublishing = IPublishing(filename)
         if right_table_create == True:
             table_right.destroy()
