@@ -36,6 +36,10 @@ remove_new_list = []
 identical_new_list = []
 
 
+def delegate_os():
+    os.system("py Os.py")
+    
+
 def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
         win.destroy()
@@ -48,10 +52,6 @@ def sort(table, col, reverse):
         table.move(k, "", index)
     table.heading(col, command=lambda: sort(table, col, not reverse))
   
-    
-def delegate_os():
-    os.system("py Os.py")
-
 
 def open_file_Scopus_left():
     ftypes = [('All files', '*')]  # допустимые типы
@@ -62,15 +62,14 @@ def open_file_Scopus_left():
         p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
+        global left_table_create
+        global table_left
+        global scroll_pane_left
         left_table_site = 's'
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
                 (left_table_site == 's' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-
-        global left_table_create
-        global table_left
-        global scroll_pane_left
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
@@ -113,10 +112,10 @@ def open_file_Scopus_left():
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
     try:
         with open("pid.txt", "r") as file:
-            data = int(file.read())    
+            data = int(file.read())
             os.kill(data, signal.SIGILL)
     except:
         pass
@@ -126,11 +125,14 @@ def open_file_Scopus_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
+        global right_table_create
+        global table_right
+        global scroll_pane_right
         right_table_site = 's'
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
@@ -138,10 +140,6 @@ def open_file_Scopus_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_scopus = Scopus(filename)
-
-        global right_table_create
-        global table_right
-        global scroll_pane_right
         if right_table_create == True:
             table_right.destroy()
             scroll_pane_right.pack_forget()
@@ -181,30 +179,32 @@ def open_file_Scopus_right():
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())    
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_WoS_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
+        global left_table_create
+        global table_left
+        global scroll_pane_left
         left_table_site = 'w'
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'w' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-
-        global left_table_create
-        global table_left
-        global scroll_pane_left
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
@@ -245,21 +245,27 @@ def open_file_WoS_left():
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())    
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_WoS_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target=delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
+        global right_table_create
+        global table_right
+        global scroll_pane_right
         right_table_site = 'w'
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
@@ -267,9 +273,6 @@ def open_file_WoS_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_wos = Wos(filename)
-        global right_table_create
-        global table_right
-        global scroll_pane_right
         if right_table_create == True:
             table_right.destroy()
             scroll_pane_right.pack_forget()
@@ -307,30 +310,32 @@ def open_file_WoS_right():
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Elibrary_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
+        global left_table_create
+        global table_left
+        global scroll_pane_left
         left_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
                 (left_table_site == 'e' and right_table_site == 'i')):
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-
-        global left_table_create
-        global table_left
-        global scroll_pane_left
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
@@ -371,21 +376,27 @@ def open_file_Elibrary_left():
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Elibrary_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target=delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
+        global right_table_create
+        global table_right
+        global scroll_pane_right
         right_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
@@ -393,10 +404,6 @@ def open_file_Elibrary_right():
             mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
         # обработка файла, получение списка данных
         list_Elibrary = eLibrary(filename)
-
-        global right_table_create
-        global table_right
-        global scroll_pane_right
         if right_table_create == True:
             table_right.destroy()
             scroll_pane_right.pack_forget()
@@ -435,28 +442,30 @@ def open_file_Elibrary_right():
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Ipublishing_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target=delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
-        left_table_site = 'i'
-        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-        list_ipublishing = IPublishing(filename)
-
         global left_table_create
         global table_left
         global scroll_pane_left
+        left_table_site = 'i'
+        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
+        list_ipublishing = IPublishing(filename)
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
@@ -495,28 +504,30 @@ def open_file_Ipublishing_left():
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Ipublishing_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
-    p = Process(target=delegate_os)
-    p.start()
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
-        right_table_site = 'i'
-        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
-        list_ipublishing = IPublishing(filename)
-
         global right_table_create
         global table_right
         global scroll_pane_right
+        right_table_site = 'i'
+        mainmenu.entryconfigure(2, state=NORMAL)  # разблокирование кнопки сравнить данные
+        list_ipublishing = IPublishing(filename)
         if right_table_create == True:
             table_right.destroy()
             scroll_pane_right.pack_forget()
@@ -555,10 +566,13 @@ def open_file_Ipublishing_right():
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 # кнопка сравнения
@@ -566,13 +580,12 @@ comparewin_is_open = False
 def open_compare_window():
     global comparewin_is_open
     global comparewin
-    if comparewin_is_open == True:
-        comparewin.destroy()
-    comparewin_is_open = True
     global add_new_list
     global remove_new_list
     global identical_new_list
-
+    if comparewin_is_open == True:
+        comparewin.destroy()
+    comparewin_is_open = True
     p = Process(target=delegate_os)
     p.start()
     comparewin = Toplevel(win)  # инициализация
@@ -603,7 +616,7 @@ def open_compare_window():
     else:
         list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
 
-    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=(upload))
+    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=upload)
     unload_to_xlsx.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.5)
 
     for row in list_new_tuple:
@@ -625,10 +638,12 @@ def open_compare_window():
     table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
     table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
-
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 photo = "global"
@@ -636,10 +651,10 @@ help_is_open = False
 def help_guide():
     global help_is_open
     global helpwin
+    global photo
     if help_is_open == True:
         helpwin.destroy()
     help_is_open = True
-    global photo
     helpwin = Toplevel(win)  # инициализация
     helpwin.geometry('800x800')  # размер
     helpwin.resizable(False, False)
@@ -656,7 +671,8 @@ def upload():
     global remove_new_list
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
-    Upload(path, list_new = add_new_list, list_ident = remove_new_list, list_remove = identical_new_list)
+    if len(path)>0:
+        Upload(path, add_new_list, remove_new_list, identical_new_list)
 
 
 def nameleft():
