@@ -57,9 +57,9 @@ def open_file_Scopus_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         left_table_site = 's'
@@ -114,18 +114,21 @@ def open_file_Scopus_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())    
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Scopus_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         right_table_site = 's'
@@ -179,18 +182,21 @@ def open_file_Scopus_right():
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())    
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_WoS_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         left_table_site = 'w'
@@ -243,17 +249,20 @@ def open_file_WoS_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())    
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 def open_file_WoS_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target=delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         right_table_site = 'w'
@@ -304,18 +313,21 @@ def open_file_WoS_right():
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Elibrary_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         left_table_site = 'e'
@@ -368,17 +380,20 @@ def open_file_Elibrary_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 def open_file_Elibrary_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target=delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         right_table_site = 'e'
@@ -431,17 +446,20 @@ def open_file_Elibrary_right():
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 def open_file_Ipublishing_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target=delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target=delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         left_table_site = 'i'
@@ -490,9 +508,12 @@ def open_file_Ipublishing_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Ipublishing_right():
@@ -550,9 +571,12 @@ def open_file_Ipublishing_right():
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 # кнопка сравнения
@@ -620,9 +644,12 @@ def open_compare_window():
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
     table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
 
-    with open("pid.txt", "r") as file:
-        data = int(file.read())
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 photo = "global"
