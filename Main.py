@@ -29,7 +29,6 @@ def main():
     #ipublishing eLibrary
     #_, _, _, list1, list2, list3 = different_source_equals(IPublishing("Source/IPublishing/IPublishing.xlsx")[0], eLibrary("Source/eLibrary/IPunisher.xml")[0])
     #Upload("", list_new=list1, list_ident=list2, list_remove=list3, flag=True)
-
     win.mainloop()
     
 

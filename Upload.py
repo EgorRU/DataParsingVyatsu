@@ -126,6 +126,5 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], flag=True):
                     ws.cell(row=i+temp_row, column=j+1).value = x
              title = title_temp
              
-
     print(f"Для проверки: {len(list_new)+len(list_ident)+len(list_remove)} = {ws.max_row-1}")
     wb.save(path)

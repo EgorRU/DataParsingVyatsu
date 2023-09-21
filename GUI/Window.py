@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
 from tkinter.filedialog import asksaveasfilename
-import tkinter, os, signal, time
+import tkinter, os, signal
 import tkinter.filedialog
 from PIL import Image, ImageTk
 from multiprocessing import Process
@@ -50,16 +50,16 @@ def sort(table, col, reverse):
   
     
 def delegate_os():
-    os.system("py os.py")
+    os.system("py Os.py")
 
 
 def open_file_Scopus_left():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
-    p = Process(target = delegate_os)
-    p.start()
     if len(filename) > 0:  # если не пустое имя файла
+        p = Process(target = delegate_os)
+        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         left_table_site = 's'
@@ -114,9 +114,12 @@ def open_file_Scopus_left():
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет срочек данных")
-    with open("pid.txt", "r") as file:
-        data = int(file.read())    
-        os.kill(data, signal.SIGILL)
+    try:
+        with open("pid.txt", "r") as file:
+            data = int(file.read())    
+            os.kill(data, signal.SIGILL)
+    except:
+        pass
 
 
 def open_file_Scopus_right():
@@ -247,6 +250,7 @@ def open_file_WoS_left():
         data = int(file.read())    
         os.kill(data, signal.SIGILL)
 
+
 def open_file_WoS_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
@@ -372,6 +376,7 @@ def open_file_Elibrary_left():
         data = int(file.read())
         os.kill(data, signal.SIGILL)
 
+
 def open_file_Elibrary_right():
     ftypes = [('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
@@ -434,6 +439,7 @@ def open_file_Elibrary_right():
     with open("pid.txt", "r") as file:
         data = int(file.read())
         os.kill(data, signal.SIGILL)
+
 
 def open_file_Ipublishing_left():
     ftypes = [('All files', '*')]  # допустимые типы
@@ -651,6 +657,7 @@ def upload():
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
     Upload(path, list_new = add_new_list, list_ident = remove_new_list, list_remove = identical_new_list)
+
 
 def nameleft():
     global left_table_site
