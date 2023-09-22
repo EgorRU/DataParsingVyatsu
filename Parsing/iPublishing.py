@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 from Class import IPublishing_Library
-from Parsing.Translate import Translite
+from Translate import Translite
 
 
 def IPublishing(path):

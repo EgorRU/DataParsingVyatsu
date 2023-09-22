@@ -1,6 +1,6 @@
 import json
 import xmltodict
-from Parsing.Translate import Translite
+from Translate import Translite
 from Class import eLibrary_Library
 
 

@@ -1,5 +1,6 @@
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
+import json
 
 
 def Upload(path, list_new = [], list_ident = [], list_remove = []):
@@ -8,7 +9,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     ws = wb.active
     
     #границы ячейки
-    border=Border(top=Side(border_style='thick',color="A52A2A"))
+    border=Border(top=Side(border_style='thick',color="FFFF00"))
 
     #название листа 
     ws.title = "Сравнение данных"
@@ -89,8 +90,8 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         list_members.append("source")
         new_list_members.remove("source")
     
-    for i in range (len(list_members)):
-        print(list_members[i])
+    # for i in range (len(list_members)):
+    #     print(list_members[i])
 
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
@@ -112,6 +113,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     temp_row = 2
     count_article = 0
     
+    #словарь с сотрудниками
+    file = open('employee.json', 'r', encoding="utf-8")
+    list_data = json.load(file)
+    
     #добавляем новые элементы
     title = ""
     for i in range(len(list_new)):
@@ -122,6 +127,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             ws.cell(row=i+temp_row, column=1).border = border
             count_article += 1
             for j in range(1, len(list_members)):
+                if j==1:
+                    for k in range(len(list_data)):
+                        if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
+                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            break
                 if j==4:
                     s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                     if "volume" in list_members and list_new[i].volume != None:
@@ -139,6 +149,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
         else:
             for j in range(1, len(list_members)):
+                if j==1:
+                    for k in range(len(list_data)):
+                        if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
+                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            break
                 if j==4:
                     s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                     if "volume" in list_members and list_new[i].volume != None:
@@ -167,6 +182,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             ws.cell(row=i+temp_row, column=1).border = border
             count_article += 1              
             for j in range(1, len(list_members)):
+                if j==1:
+                    for k in range(len(list_data)):
+                        if list_ident[i].author in list_data[k] or list_ident[i].author == list_data[k]:
+                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            break
                 if j==4:
                     s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                     if "volume" in list_members and list_ident[i].volume != None:
@@ -183,6 +203,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 ws.cell(row=i+temp_row, column=j+1).border  = border
         else:
             for j in range(1, len(list_members)):
+                if j==1:
+                    for k in range(len(list_data)):
+                        if list_ident[i].author in list_data[k] or list_ident[i].author == list_data[k]:
+                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            break
                 if j==4:
                     s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                     if "volume" in list_members and list_ident[i].volume != None:
@@ -211,6 +236,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             ws.cell(row=i+temp_row, column=1).border = border
             count_article += 1
             for j in range(1, len(list_members)):
+                if j==1:
+                    for k in range(len(list_data)):
+                         if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
+                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            break
                 if j==4:
                     s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                     if "volume" in list_members and list_remove[i].volume != None:
@@ -228,6 +258,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 ws.cell(row=i+temp_row, column=j+1).border  = border
         else:
             for j in range(1, len(list_members)):
+                if j==1:
+                    for k in range(len(list_data)):
+                        if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
+                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            break
                 if j==4:
                     s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                     if "volume" in list_members and list_remove[i].volume != None:
