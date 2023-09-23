@@ -1,7 +1,6 @@
 .idea
-__pycache__
-Project.pyproj
-Source/eLibrary/
-eLibrary.json
-employee.json
-pid.txt
+*.json
+/__pycache__
+/Project.pyproj
+*.txt
+!requirements.txt
