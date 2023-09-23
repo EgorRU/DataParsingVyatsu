@@ -1,6 +1,6 @@
 from openpyxl import Workbook, load_workbook
 from Class import Scopus_Library
-
+from clear_str import clear_str
 
 def Scopus(path):
     # список статей SCOPUS
@@ -45,7 +45,8 @@ def Scopus(path):
 
             # кол-во авторов статьи в одной строке
             count_author_row = 0
-            # 1ПАРСИНГ ФИО
+            
+            #ПАРСИНГ ФИО
             while s[i] != '"':
                 # обнуляем строку имени писателя
                 author = ""
@@ -58,13 +59,37 @@ def Scopus(path):
                 count_author_row += 1
                 # заполянем ФИО автора
                 new_author.author = author.strip()
+                
+                new = new_author.author.split()
+                if len(new)==3:
+                    new[1] = f"{new[1][0]}"
+                    if new[2][0]==".":
+                        new[2] = f"{new[2][1]}"
+                    else:
+                        new[2] = f"{new[2][0]}"
+                    new_author.author = f"{new[0]} {new[1]}.{new[2]}."
+                if len(new)==2:
+                    counter = new[1].count('.')
+                    if counter==2:
+                        new_str_1 = f"{new[1][0]}"
+                        ii = 1
+                        while new[1][ii]!=".":
+                            ii += 1
+                        ii += 1
+                        new_str_2 = f"{new[1][ii]}"
+                        new_author.author = f"{new[0]} {new_str_1}.{new_str_2}."
+                    else:
+                        new_author.author = f"{new[0]} {new[1][0]}."
+                
+                new_author.author = new_author.author.strip()
+                new_author.author = clear_str(new_author.author)
                 # добавляем экземпляр класса
                 all_scopus_list_library.append(new_author)
                 i += 1
             i += 1
             count_all_author += count_author_row
 
-            # 2ПАРСИНГ id_author
+            #ПАРСИНГ id_author
             count_temp_id = count_temp
             # пока не буква, то есть начало названия
             while s[i].isalpha() == False:
@@ -83,17 +108,26 @@ def Scopus(path):
                 else:
                     break
 
-            # 3ПАРСИНГ НАЗВАНИЯ
+            #ПАРСИНГ НАЗВАНИЯ
             while s[i].isalpha() == False:
                 i += 1
             title = ""
             while s[i] != '"':
                 title += s[i]
                 i += 1
+            title = title.strip()
+            #чистим название
+            s_temp = ""
+            for j in range(len(title)):
+                if title[j]!="(" and title[j]!="[":
+                    s_temp += title[j]
+                else:
+                    if title[-1]==")" or title[-1]=="]":
+                        break
             for j in range(count_temp, count_temp + count_author_row):
-                all_scopus_list_library[j].title = title.strip()
+                all_scopus_list_library[j].title = s_temp
 
-            # 4ПАРСИНГ ГОДА
+            #ПАРСИНГ ГОДА
             while s[i].isdigit() == False:
                 i += 1
             year = ""
@@ -101,9 +135,9 @@ def Scopus(path):
                 year += s[i]
                 i += 1
             for j in range(count_temp, count_temp + count_author_row):
-                all_scopus_list_library[j].year = year.strip()
+                all_scopus_list_library[j].year = year.strip()[:4]
 
-            # 5ПАРСИНГ НАЗВАНИЯ ИСТОЧНИКА
+            #ПАРСИНГ НАЗВАНИЯ ИСТОЧНИКА
             if s[i + 1] != ",":
                 while s[i].isalpha() == False:
                     i += 1
@@ -118,8 +152,8 @@ def Scopus(path):
                     all_scopus_list_library[j].source_name = source_name.strip()
             i += 1
 
-            # 6ПАРСИНГ НОМЕРА ТОМА
-            # если следующий символ НЕ запятая, то значение ЕСТЬ(или кавычка стоит)
+            #ПАРСИНГ НОМЕРА ТОМА
+            #если следующий символ НЕ запятая, то значение ЕСТЬ(или кавычка стоит)
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -142,7 +176,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 7ПАРСИНГ НОМЕРА ВЫПУСКа
+            #ПАРСИНГ НОМЕРА ВЫПУСКа
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -165,7 +199,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 8ПАРСИНГ НОМЕРА СТАТЬИ
+            #ПАРСИНГ НОМЕРА СТАТЬИ
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -188,7 +222,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 9ПАРСИНГ НОМЕРА СТРАНИЦЫ НАЧАЛА
+            #ПАРСИНГ НОМЕРА СТРАНИЦЫ НАЧАЛА
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -211,7 +245,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 10ПАРСИНГ НОМЕРА СТРАНИЦЫ ОКОНЧАНИЯ
+            #ПАРСИНГ НОМЕРА СТРАНИЦЫ ОКОНЧАНИЯ
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -234,7 +268,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 11ПАРСИНГ КОЛИЧЕСТВО СТРАНИЦ
+            #ПАРСИНГ КОЛИЧЕСТВО СТРАНИЦ
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -257,7 +291,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 12ПАРСИНГ Цитирования
+            #ПАРСИНГ Цитирования
             if s[i + 1] != ",":
                 i += 1
                 is_apostrophes = False
@@ -280,7 +314,7 @@ def Scopus(path):
             else:
                 i += 1
 
-            # 13ПАРСИНГ DOI
+            #ПАРСИНГ DOI
             if s[i + 1] != ",":
                 i += 2
                 doi = ""
@@ -292,7 +326,7 @@ def Scopus(path):
                         all_scopus_list_library[j].doi = doi.strip()
             i += 1
 
-            # 14ПАРСИНГ Ссылка
+            #ПАРСИНГ Ссылка
             if s[i + 1] != ",":
                 i += 1
                 while s[i] == '"':
@@ -313,4 +347,5 @@ def Scopus(path):
         
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_author = "".join(e for e in all_scopus_list_library[i].author if e.isupper())
+    
     return all_scopus_list_library

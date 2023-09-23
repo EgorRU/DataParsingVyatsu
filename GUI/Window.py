@@ -788,9 +788,3 @@ filemenu_load.add_cascade(label="Загрузить Ipublishing", menu=filemenu_
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
 mainmenu.add_cascade(label="Сравнить данные", command=(open_compare_window), state=DISABLED)
 mainmenu.add_cascade(label="Помощь", command=(help_guide))
-
-
-
-
-
-

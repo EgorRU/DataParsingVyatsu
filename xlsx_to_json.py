@@ -33,17 +33,16 @@ try:
         string = f"{Translite(temp_list_employee[0])} {Translite(temp_list_employee[1])[0]}.{Translite(temp_list_employee[2])[0]}."
         new_list_employee.append(string)
         
+    #убираем повторки
+    list_employee = list(set(new_list_employee))
+    list_employee.sort()
+    
     #выгрузка в json файл
-    json_string = json.dumps(new_list_employee, ensure_ascii=False, indent=4)
-    json_dict=json.loads(json_string) 
+    json_string = json.dumps(list_employee, ensure_ascii=False, indent=4)
+    json_dict = json.loads(json_string) 
     with open("employee.json", 'w', encoding="utf-8") as file:
         json.dump(json_dict, file, ensure_ascii=False, indent=4)
     print(json_string)
-    
-    #вывод
-    # for i in range(len(new_list_employee)):
-    #    print(new_list_employee[i])
-
 
 except:
     print("Возможно, Вы пытались загрузить файл с другим расширением, отличным от .xls или .xlsx")

@@ -53,8 +53,6 @@ class WOS_Library(Base_Library):
         self.end_page = None
         self.doi = None
         self.link = None
-        self.number_of_pages = None
-        self.source_title = None
         self.conference_title = None
         self.conference_date = None
         self.conference_location = None
@@ -64,6 +62,42 @@ class WOS_Library(Base_Library):
         self.eISSN = None
         self.unique_wos_id = None
         self.source = "WOS"
+
+    def Print(self):
+        return (
+            str(self.author)
+            + ", "
+            + str(self.title)
+            + ", "
+            + str(self.year)
+            + ", "
+            + str(self.link)
+            + ", "
+            + str(self.doi)
+            + ", "
+            + str(self.clear_author)
+            + ", "
+            + str(self.clear_title)
+        )
+    
+
+class eLibrary_Library(Base_Library):
+    def __init__(self):
+        Base_Library.__init__(self)
+        self.link = None
+        self.doi = None
+        self.id = None
+        self.type = None
+        self.citation = None
+        self.pages = None
+        self.volume = None
+        self.issn = None
+        self.eissn = None
+        self.title_journal = None
+        self.publisher = None
+        self.country = None
+        self.GRNTI_code = None
+        self.source = "eLibrary"
 
     def Print(self):
         return (
@@ -106,41 +140,6 @@ class IPublishing_Library(Base_Library):
         self.impact_factor_elibrary_5_year = None
         self.impact_factor_elibrary_2_year = None
         self.source = "iPublishing"
-
-    def Print(self):
-        return (
-            str(self.author)
-            + ", "
-            + str(self.title)
-            + ", "
-            + str(self.year)
-            + ", "
-            + str(self.link)
-            + ", "
-            + str(self.doi)
-            + ", "
-            + str(self.clear_author)
-            + ", "
-            + str(self.clear_title)
-        )
-
-
-class eLibrary_Library(Base_Library):
-    def __init__(self):
-        Base_Library.__init__(self)
-        self.link = None
-        self.doi = None
-        self.id = None
-        self.type = None
-        self.cited = None
-        self.volume = None
-        self.issn = None
-        self.eissn = None
-        self.publisher = None
-        self.country = None
-        self.pages = None
-        self.grnti = None
-        self.source = "eLibrary"
 
     def Print(self):
         return (

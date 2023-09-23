@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 from xls2xlsx import XLS2XLSX
 from Class import WOS_Library
+from clear_str import clear_str
 
 
 def Wos(path):
@@ -29,34 +30,32 @@ def Wos(path):
             for i in range (len(list_author)):
                 new_author = WOS_Library()
                 new_author.author = list_author[i].strip()
-            
+                new_author.author = new_author.author.lower()
+                new = new_author.author.split()
+                if len(new)==3:
+                    new[0] = new[0][0].upper() + new[0][1:]
+                    new[1] = new[1][0].upper()
+                    new[2] = new[2][0].upper()
+                    new_author.author = f"{new[0]} {new[1]}.{new[2]}."
+                if len(new)==2:
+                    if len(new[1])==2:
+                        if new[1][1]!=".":
+                            new[0] = new[0][0].upper() + new[0][1:]
+                            new_author.author = f"{new[0]} {new[1][0].upper()}.{new[1][1].upper()}."
+                        else:
+                            new[0] = new[0][0].upper() + new[0][1:]
+                            new_author.author = f"{new[0]} {new[1][0].upper()}."
+                    else:
+                        new[0] = new[0][0].upper() + new[0][1:]
+                        new_author.author = f"{new[0]} {new[1][0].upper()}."
+                new_author.author = clear_str(new_author.author)
+                
                 if ws[f"I{row_index}"].value != None:
                     new_author.title = ws[f"I{row_index}"].value.lower()
                     new_author.title = new_author.title[0].upper() + new_author.title[1:]
-                
-                new_author.year = ws[f"AU{row_index}"].value
-            
-                new_author.volume = ws[f"AV{row_index}"].value
-            
-                new_author.issue = ws[f"AW{row_index}"].value
-            
-                if ws[f"BD{row_index}"].value != None:
-                    new_author.article = str(ws[f"BD{row_index}"].value).lower()
-                    new_author.article = new_author.article[0].upper() + new_author.article[1:]
-                
-                new_author.start_page = ws[f"BB{row_index}"].value
-            
-                new_author.end_page = ws[f"BC{row_index}"].value
-            
-                new_author.number_of_pages = ws[f"AX{row_index}"].value
-            
-                new_author.doi = ws[f"BE{row_index}"].value
-            
-                if ws[f"BF{row_index}"].value != None:
-                    new_author.link = ws[f"BF{row_index}"].value[10:].strip()
-                
+                    
                 if ws[f"J{row_index}"].value != None:
-                    new_author.source_title = ws[f"J{row_index}"].value
+                    new_author.article = ws[f"J{row_index}"].value
                 
                 if ws[f"O{row_index}"].value != None:
                     new_author.conference_title = ws[f"O{row_index}"].value
@@ -66,6 +65,27 @@ def Wos(path):
                 
                 if ws[f"Q{row_index}"].value != None:
                     new_author.conference_location = ws[f"Q{row_index}"].value
+                   
+                if ws[f"AU{row_index}"].value != None:
+                    new_author.year = ws[f"AU{row_index}"].value
+                
+                if ws[f"AV{row_index}"].value != None:
+                    new_author.volume = ws[f"AV{row_index}"].value
+                
+                if ws[f"AW{row_index}"].value != None:
+                    new_author.issue = ws[f"AW{row_index}"].value            
+                
+                if ws[f"BB{row_index}"].value != None:
+                    new_author.start_page = ws[f"BB{row_index}"].value
+                
+                if ws[f"BC{row_index}"].value != None:
+                    new_author.end_page = ws[f"BC{row_index}"].value
+            
+                if ws[f"BE{row_index}"].value != None:
+                    new_author.doi = ws[f"BE{row_index}"].value
+            
+                if ws[f"BF{row_index}"].value != None:
+                    new_author.link = ws[f"BF{row_index}"].value[10:].strip()
                 
                 if ws[f"AA{row_index}"].value != None:
                     new_author.researcher_ids = ws[f"AA{row_index}"].value

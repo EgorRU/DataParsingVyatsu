@@ -89,9 +89,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         list_members.remove("source")
         list_members.append("source")
         new_list_members.remove("source")
-    
-    # for i in range (len(list_members)):
-    #     print(list_members[i])
 
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
@@ -109,7 +106,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     ws.column_dimensions["F"].width = 70    
     ws.column_dimensions["G"].width = 150
       
-    #если выгружаем больше одного листа
     temp_row = 2
     count_article = 0
     
@@ -286,10 +282,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         ws.row_dimensions[i].height = 40
         
     #перенос строк
-    for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row+1):
+    for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row):
          for cell in row_cells:
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
             
-    print(f"Для проверки: {len(list_new)+len(list_ident)+len(list_remove)} = {ws.max_row-1}")
+    print(f"Для проверки загрузки: {len(list_new)+len(list_ident)+len(list_remove)} = {ws.max_row-1}")
     wb.save(path)

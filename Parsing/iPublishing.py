@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 from Class import IPublishing_Library
 from Translate import Translite
+from clear_str import clear_str
 
 
 def IPublishing(path):
@@ -90,6 +91,28 @@ def IPublishing(path):
 
     for i in range(len(all_IPublishing_list_library)):
         all_IPublishing_list_library[i].author = Translite(all_IPublishing_list_library[i].author_rus)
+        new = all_IPublishing_list_library[i].author.split()
+        if len(new)==3:
+            new[1] = f"{new[1][0]}"
+            if new[2][0]==".":
+                new[2] = f"{new[2][1]}"
+            else:
+                new[2] = f"{new[2][0]}"
+            all_IPublishing_list_library[i].author = f"{new[0]} {new[1]}.{new[2]}."
+        if len(new)==2:
+            counter = new[1].count('.')
+            if counter==2:
+                new_str_1 = f"{new[1][0]}"
+                ii = 1
+                while new[1][ii]!=".":
+                    ii += 1
+                ii += 1
+                new_str_2 = f"{new[1][ii]}"
+                all_IPublishing_list_library[i].author = f"{new[0]} {new_str_1}.{new_str_2}."
+            else:
+                all_IPublishing_list_library[i].author = f"{new[0]} {new[1][0]}."
+                
+        all_IPublishing_list_library[i].author = clear_str(all_IPublishing_list_library[i].author)
         
     for i in range(len(all_IPublishing_list_library)):
         all_IPublishing_list_library[i].clear_title = "".join(e for e in all_IPublishing_list_library[i].title.lower() if e.isalpha())

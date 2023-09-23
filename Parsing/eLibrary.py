@@ -2,6 +2,7 @@ import json
 import xmltodict
 from Translate import Translite
 from Class import eLibrary_Library
+from clear_str import clear_str
 
 
 def eLibrary(path):
@@ -68,10 +69,10 @@ def eLibrary(path):
                     for auth in list_author:
                         new_article = eLibrary_Library()
                         if "lastname" in auth:
-                            #print(str(auth["lastname"]))
                             new_article.author = str(auth["lastname"])
                         if "initials" in auth:
-                                new_article.author = new_article.author + " " + str(auth["initials"])
+                            new_article.author = new_article.author + " " + str(auth["initials"])
+                        new_article.author = clear_str(new_article.author)
                         count_author_temp += 1
                         all_elibrary_list_library.append(new_article)
             
@@ -118,9 +119,9 @@ def eLibrary(path):
                 if "type" in e:
                     all_elibrary_list_library[i].type = e["type"]
                 
-                #cited
+                #citation
                 if "cited" in e:
-                    all_elibrary_list_library[i].cited = e["cited"]
+                    all_elibrary_list_library[i].citation = e["cited"]
             
                 #pages
                 if "pages" in e:
@@ -144,11 +145,11 @@ def eLibrary(path):
                         if "eissn" in e["source"]["journal"]:
                             all_elibrary_list_library[i].eissn = e["source"]["journal"]["eissn"]
                         
-                #tile_journal
+                #title_journal
                 if "source" in e:
                     if "journal" in e["source"]:
                         if "title" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].tile_journal = e["source"]["journal"]["title"]
+                            all_elibrary_list_library[i].title_journal = e["source"]["journal"]["title"]
                         
                 #publisher
                 if "source" in e:
@@ -162,9 +163,9 @@ def eLibrary(path):
                         if "country" in e["source"]["journal"]:
                             all_elibrary_list_library[i].country = e["source"]["journal"]["country"]
                         
-                #grnti
+                #GRNTI_code
                 if "grnti" in e:
-                    all_elibrary_list_library[i].grnti = e["grnti"]
+                    all_elibrary_list_library[i].GRNTI_code = e["grnti"]
                             
             count_all_author += count_author_temp
     except:

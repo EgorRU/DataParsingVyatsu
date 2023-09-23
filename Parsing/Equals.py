@@ -18,8 +18,6 @@ def identical_sources_equals(source1, source2):
             if (
                 source2[i].author == source1[j].author
                 and source2[i].title == source1[j].title
-                and source2[i].link == source1[j].link
-                and source2[i].doi == source1[j].doi
             ):
                 copy = True
                 identical_new_list.append(source2[i])
@@ -34,8 +32,6 @@ def identical_sources_equals(source1, source2):
             if (
                 source1[i].author == source2[j].author
                 and source1[i].title == source2[j].title
-                and source1[i].link == source2[j].link
-                and source1[i].doi == source2[j].doi
             ):
                 copy = True
                 break
@@ -59,7 +55,7 @@ def identical_sources_equals(source1, source2):
     print(f"Одинаковых записей(один автор): {len(identical_new_list)}")
     print(f"Удалено записей(один автор): {len(remove_new_list)}")
     print("---------------------------------------")
-    print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
+    print(f"Для проверки сравнения: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
     add_new_list, identical_new_list, remove_new_list = sort(add_new_list, identical_new_list, remove_new_list)
     return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list
@@ -116,7 +112,7 @@ def different_source_equals(source1, source2):
     print(f"Одинаковых записей(один автор): {len(identical_new_list)}")
     print(f"Удалено записей(один автор): {len(remove_new_list)}")
     print("---------------------------------------")
-    print(f"Для проверки: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
+    print(f"Для проверки сравнения: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
     print("---------------------------------------")
     add_new_list, identical_new_list, remove_new_list = sort(add_new_list, identical_new_list, remove_new_list)
     return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list
