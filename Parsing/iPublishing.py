@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
-from Class import IPublishing_Library
-from Translate import Translite
-from clear_str import clear_str
+from App.Class import IPublishing_Library
+from App.Translate import Translite
+from App.Clear_author import clear_str
 
 
 def IPublishing(path):
@@ -22,7 +22,6 @@ def IPublishing(path):
             list_author = str_author.split(",") #список авторов
             for i in range (len(list_author)):
                 new_author = IPublishing_Library()
-            
                 new_author.author_rus = list_author[i].strip()
             
                 if ws[f"H{row_index}"].value != None:
@@ -85,33 +84,12 @@ def IPublishing(path):
                 if ws[f"AE{row_index}"].value != None:
                     new_author.impact_factor_elibrary_2_year = ws[f"AE{row_index}"].value
     
-            all_IPublishing_list_library.append(new_author)
+                all_IPublishing_list_library.append(new_author)
     except:
         return None
 
     for i in range(len(all_IPublishing_list_library)):
         all_IPublishing_list_library[i].author = Translite(all_IPublishing_list_library[i].author_rus)
-        new = all_IPublishing_list_library[i].author.split()
-        if len(new)==3:
-            new[1] = f"{new[1][0]}"
-            if new[2][0]==".":
-                new[2] = f"{new[2][1]}"
-            else:
-                new[2] = f"{new[2][0]}"
-            all_IPublishing_list_library[i].author = f"{new[0]} {new[1]}.{new[2]}."
-        if len(new)==2:
-            counter = new[1].count('.')
-            if counter==2:
-                new_str_1 = f"{new[1][0]}"
-                ii = 1
-                while new[1][ii]!=".":
-                    ii += 1
-                ii += 1
-                new_str_2 = f"{new[1][ii]}"
-                all_IPublishing_list_library[i].author = f"{new[0]} {new_str_1}.{new_str_2}."
-            else:
-                all_IPublishing_list_library[i].author = f"{new[0]} {new[1][0]}."
-                
         all_IPublishing_list_library[i].author = clear_str(all_IPublishing_list_library[i].author)
         
     for i in range(len(all_IPublishing_list_library)):

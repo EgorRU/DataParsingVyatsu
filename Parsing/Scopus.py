@@ -1,6 +1,6 @@
 from openpyxl import Workbook, load_workbook
-from Class import Scopus_Library
-from clear_str import clear_str
+from App.Class import Scopus_Library
+from App.Clear_author import clear_str
 
 def Scopus(path):
     # список статей SCOPUS
@@ -57,32 +57,10 @@ def Scopus(path):
                 # создание экземпляра класса - статья scopus
                 new_author = Scopus_Library()
                 count_author_row += 1
+                
                 # заполянем ФИО автора
-                new_author.author = author.strip()
+                new_author.author = clear_str(author.strip())
                 
-                new = new_author.author.split()
-                if len(new)==3:
-                    new[1] = f"{new[1][0]}"
-                    if new[2][0]==".":
-                        new[2] = f"{new[2][1]}"
-                    else:
-                        new[2] = f"{new[2][0]}"
-                    new_author.author = f"{new[0]} {new[1]}.{new[2]}."
-                if len(new)==2:
-                    counter = new[1].count('.')
-                    if counter==2:
-                        new_str_1 = f"{new[1][0]}"
-                        ii = 1
-                        while new[1][ii]!=".":
-                            ii += 1
-                        ii += 1
-                        new_str_2 = f"{new[1][ii]}"
-                        new_author.author = f"{new[0]} {new_str_1}.{new_str_2}."
-                    else:
-                        new_author.author = f"{new[0]} {new[1][0]}."
-                
-                new_author.author = new_author.author.strip()
-                new_author.author = clear_str(new_author.author)
                 # добавляем экземпляр класса
                 all_scopus_list_library.append(new_author)
                 i += 1

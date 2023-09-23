@@ -10,8 +10,8 @@ from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
 from Parsing.eLibrary import eLibrary
-from Parsing.Equals import identical_sources_equals, different_source_equals
-from Upload import Upload
+from App.Equals import identical_sources_equals, different_source_equals
+from App.Upload import Upload
 
 win = Tk()
 
@@ -37,7 +37,7 @@ identical_new_list = []
 
 
 def delegate_os():
-    os.system("py Os.py")
+    os.system("py App/Os.py")
     
 
 def on_closing():
@@ -628,9 +628,9 @@ def open_compare_window():
     table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
     if left_table_site == right_table_site:
-        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = identical_sources_equals(list1, list2)
+        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = identical_sources_equals(list1, list2)
     else:
-        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, remove_new_list, identical_new_list = different_source_equals(list1, list2)
+        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = different_source_equals(list1, list2)
 
     unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=upload)
     unload_to_xlsx.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.5)
@@ -690,7 +690,7 @@ def upload():
     if len(path)>0:
         p = Process(target=delegate_os)
         p.start()
-        Upload(path, add_new_list, remove_new_list, identical_new_list)
+        Upload(path, add_new_list, identical_new_list, remove_new_list)
     try:
         with open("pid.txt", "r") as file:
             data = int(file.read())

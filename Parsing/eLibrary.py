@@ -1,8 +1,8 @@
 import json
 import xmltodict
-from Translate import Translite
-from Class import eLibrary_Library
-from clear_str import clear_str
+from App.Translate import Translite
+from App.Class import eLibrary_Library
+from App.Clear_author import clear_str
 
 
 def eLibrary(path):
@@ -60,6 +60,8 @@ def eLibrary(path):
                     new_article.author = str(list_author["lastname"])
                 if "initials" in list_author:
                         new_article.author = new_article.author + " " + str(list_author["initials"])
+                if new_article.author != None:
+                    new_article.author = clear_str(new_article.author.strip())
                 count_author_temp += 1
                 all_elibrary_list_library.append(new_article)
             #если авторов много
@@ -72,7 +74,8 @@ def eLibrary(path):
                             new_article.author = str(auth["lastname"])
                         if "initials" in auth:
                             new_article.author = new_article.author + " " + str(auth["initials"])
-                        new_article.author = clear_str(new_article.author)
+                        if new_article.author != None:
+                            new_article.author = clear_str(new_article.author.strip())
                         count_author_temp += 1
                         all_elibrary_list_library.append(new_article)
             
@@ -85,7 +88,7 @@ def eLibrary(path):
                         #если одно название:
                         if type(e["titles"]["title"])==dict:    
                             if "#text" in e["titles"]["title"]:
-                                 all_elibrary_list_library[i].title = e["titles"]["title"]["#text"]
+                                    all_elibrary_list_library[i].title = e["titles"]["title"]["#text"]
                         #если несколько названий
                         else:
                             if type(e["titles"]["title"])==list:
@@ -93,7 +96,9 @@ def eLibrary(path):
                                     if t["@lang"]=="EN":
                                         all_elibrary_list_library[i].title = t["#text"]
                                         break
-                                
+                all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.lower()
+                all_elibrary_list_library[i].title = all_elibrary_list_library[i].title[0].upper() + all_elibrary_list_library[i].title[1:]
+                                    
                 #год
                 if "source" in e:
                     if "issue" in e["source"]:
