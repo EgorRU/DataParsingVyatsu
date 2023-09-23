@@ -9,7 +9,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     ws = wb.active
     
     #границы ячейки
-    border=Border(top=Side(border_style='thick',color="FFFF00"))
+    border = Border(top=Side(border_style='thick',color="FFFF00"))
 
     #название листа 
     ws.title = "Сравнение данных"
@@ -131,13 +131,14 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             count_article += 1 #кол-во записей
             #Бежим по списку атрибутов класса
             for j in range(1, len(list_members)):
+                employe = False
                 #если вторая колонка - то фио надо бы выделить
                 if j==1:
                     #проходимся по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения - то добавляем бордер и выходим из цикла
                         if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
-                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            employe = True
                             break
                 #если 4 колонка - то делаем фул библиографический список
                 if j==4:
@@ -155,7 +156,13 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 else:
                     ws.cell(row=i+temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
                 #делаем бордер и красим в зелёный цвет
-                ws.cell(row=i+temp_row, column=j+1).border = border
+                if employe:
+                    ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),
+                                                                                right = Side(border_style='thick', color='8B0000'),
+                                                                                bottom = Side(border_style='thick', color='8B0000'),
+                                                                                left = Side(border_style='thick', color='8B0000'))
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).border = border
                 ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='7FFF00', end_color='7FFF00')
         #иначе если текущее название сходится с прошлым, то бордер делать не надо
         else:
@@ -209,6 +216,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             count_article += 1 #кол-во записей
             #Бежим по списку атрибутов класса
             for j in range(1, len(list_members)):
+                employe = False
                 #если вторая колонка - то фио надо бы выделить
                 if j==1:
                     #проходимся по всем сотрудникам вуза
@@ -216,6 +224,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         #если есть совпадения - то добавляем бордер и выходим из цикла
                         if list_ident[i].author in list_data[k] or list_ident[i].author == list_data[k]:
                             ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            employe = True
                             break
                 #если 4 колонка - то делаем фул библиографический список
                 if j==4:
@@ -233,7 +242,13 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 else:
                     ws.cell(row=i+temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
                 #делаем бордер
-                ws.cell(row=i+temp_row, column=j+1).border = border
+                if employe:
+                   ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),
+                                                                                right = Side(border_style='thick', color='8B0000'),
+                                                                                bottom = Side(border_style='thick', color='8B0000'),
+                                                                                left = Side(border_style='thick', color='8B0000'))
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).border = border
         #иначе если текущщее название свходится с прошлым, то бордер делать не надо
         else:
             #по всем атрибутам класса
@@ -285,13 +300,14 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             count_article += 1 #кол-во записей
             #Бежим по списку атрибутов класса
             for j in range(1, len(list_members)):
+                employe = False
                 #если вторая колонка - то фио надо бы выделить
                 if j==1:
                     #проходимся по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения - то добавляем бордер и выходим из цикла
                         if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
-                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            employe = True
                             break
                 #если 4 колонка - то делаем фул библиографический список
                 if j==4:
@@ -309,7 +325,13 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 else:
                     ws.cell(row=i+temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
                 #делаем бордер и красим в красный цвет
-                ws.cell(row=i+temp_row, column=j+1).border = border
+                if employe:
+                    ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),
+                                                                                right = Side(border_style='thick', color='8B0000'),
+                                                                                bottom = Side(border_style='thick', color='8B0000'),
+                                                                                left = Side(border_style='thick', color='8B0000'))
+                else:
+                    ws.cell(row=i+temp_row, column=j+1).border = border
                 ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='DC143C', end_color='DC143C')
         #иначе если текущщее название свходится с прошлым, то бордер делать не надо
         else:

@@ -2,6 +2,7 @@ from openpyxl import Workbook, load_workbook
 from App.Class import Scopus_Library
 from App.Clear_author import clear_str
 
+
 def Scopus(path):
     # список статей SCOPUS
     all_scopus_list_library = []
