@@ -2,10 +2,9 @@ from tkinter import *
 from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
 from tkinter.filedialog import asksaveasfilename
-import tkinter, os, signal
+import tkinter, os
 import tkinter.filedialog
 from PIL import Image, ImageTk
-from multiprocessing import Process
 from Parsing.Scopus import Scopus
 from Parsing.Wos import Wos
 from Parsing.iPublishing import IPublishing
@@ -36,10 +35,6 @@ remove_new_list = []
 identical_new_list = []
 
 
-def delegate_os():
-    os.system("py App/Os.py")
-    
-
 def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
         win.destroy()
@@ -58,8 +53,6 @@ def open_file_Scopus_left():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target = delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global left_table_create
@@ -84,7 +77,6 @@ def open_file_Scopus_left():
                             list_scopus[i].citation))
             global list1
             list1 = list_scopus
-
             heads = ['author', 'title', 'year', 'link', 'citation']  # столбики
             table_left = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
             table_left['columns'] = heads  # привязка столбцов к таблице
@@ -112,14 +104,9 @@ def open_file_Scopus_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_Scopus_right():
@@ -127,8 +114,6 @@ def open_file_Scopus_right():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global right_table_create
@@ -145,7 +130,6 @@ def open_file_Scopus_right():
         if right_table_create == True:
             table_right.destroy()
             scroll_pane_right.pack_forget()
-
         if list_scopus!=None:
             lst = []
             name_right.configure(text=nameright())
@@ -180,14 +164,9 @@ def open_file_Scopus_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_WoS_left():
@@ -195,8 +174,6 @@ def open_file_WoS_left():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global left_table_create
@@ -211,7 +188,6 @@ def open_file_WoS_left():
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
-
         # обработка файла, получение списка данных
         list_wos = Wos(filename)
         if list_wos!=None:
@@ -247,14 +223,9 @@ def open_file_WoS_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_WoS_right():
@@ -262,8 +233,6 @@ def open_file_WoS_right():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global right_table_create
@@ -313,14 +282,9 @@ def open_file_WoS_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_Elibrary_left():
@@ -328,8 +292,6 @@ def open_file_Elibrary_left():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global left_table_create
@@ -344,7 +306,6 @@ def open_file_Elibrary_left():
         if left_table_create == True:
             table_left.destroy()
             scroll_pane_left.pack_forget()
-
         # обработка файла, получение списка данных
         list_Elibrary = eLibrary(filename)
         if list_Elibrary!=None:
@@ -380,14 +341,9 @@ def open_file_Elibrary_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_Elibrary_right():
@@ -395,8 +351,6 @@ def open_file_Elibrary_right():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global right_table_create
@@ -447,14 +401,9 @@ def open_file_Elibrary_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_Ipublishing_left():
@@ -462,8 +411,6 @@ def open_file_Ipublishing_left():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global left_table_create
@@ -514,14 +461,9 @@ def open_file_Ipublishing_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 def open_file_Ipublishing_right():
@@ -529,8 +471,6 @@ def open_file_Ipublishing_right():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
     if len(filename) > 0:  # если не пустое имя файла
-        p = Process(target=delegate_os)
-        p.start()
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
         global right_table_create
@@ -581,14 +521,9 @@ def open_file_Ipublishing_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 # кнопка сравнения
@@ -602,8 +537,6 @@ def open_compare_window():
     if comparewin_is_open == True:
         comparewin.destroy()
     comparewin_is_open = True
-    p = Process(target=delegate_os)
-    p.start()
     comparewin = Toplevel(win)  # инициализация
     comparewin.geometry('750x700')  # размер
     comparewin.minsize(750, 700)
@@ -654,12 +587,6 @@ def open_compare_window():
     table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
     table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
 
 
 photo = "global"
@@ -677,7 +604,7 @@ def help_guide():
     helpwin.title("Окно помощи")  # название
     frame_help = Frame(helpwin)  # задаем поле
     frame_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
-    photo = ImageTk.PhotoImage(Image.open("GUI/Source/help.jpg"))
+    photo = ImageTk.PhotoImage(Image.open("help.jpg"))
     label_help = tkinter.Label(frame_help, image=photo)  # задаем поле
     label_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
 
@@ -688,15 +615,8 @@ def upload():
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
     if len(path)>0:
-        p = Process(target=delegate_os)
-        p.start()
         Upload(path, add_new_list, identical_new_list, remove_new_list)
-    try:
-        with open("pid.txt", "r") as file:
-            data = int(file.read())
-            os.kill(data, signal.SIGILL)
-    except:
-        pass
+        tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
 
 
 def nameleft():
