@@ -587,6 +587,7 @@ def open_compare_window():
     table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
     table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
+    tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно были сравнены")
 
 
 photo = "global"

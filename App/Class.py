@@ -23,25 +23,6 @@ class Scopus_Library(Base_Library):
         self.link = None
         self.source = "Scopus"
 
-    def Print(self):
-        return (
-            str(self.author)
-            + ", "
-            + str(self.title)
-            + ", "
-            + str(self.year)
-            + ", "
-            + str(self.link)
-            + ", "
-            + str(self.citation)
-            + ", "
-            + str(self.doi)
-            + ", "
-            + str(self.clear_author)
-            + ", "
-            + str(self.clear_title)
-        )
-
 
 class WOS_Library(Base_Library):
     def __init__(self):
@@ -62,24 +43,7 @@ class WOS_Library(Base_Library):
         self.eISSN = None
         self.unique_wos_id = None
         self.source = "WOS"
-
-    def Print(self):
-        return (
-            str(self.author)
-            + ", "
-            + str(self.title)
-            + ", "
-            + str(self.year)
-            + ", "
-            + str(self.link)
-            + ", "
-            + str(self.doi)
-            + ", "
-            + str(self.clear_author)
-            + ", "
-            + str(self.clear_title)
-        )
-    
+  
 
 class eLibrary_Library(Base_Library):
     def __init__(self):
@@ -98,23 +62,6 @@ class eLibrary_Library(Base_Library):
         self.country = None
         self.GRNTI_code = None
         self.source = "eLibrary"
-
-    def Print(self):
-        return (
-            str(self.author)
-            + ", "
-            + str(self.title)
-            + ", "
-            + str(self.year)
-            + ", "
-            + str(self.link)
-            + ", "
-            + str(self.doi)
-            + ", "
-            + str(self.clear_author)
-            + ", "
-            + str(self.clear_title)
-        )
     
 
 class IPublishing_Library(Base_Library):
@@ -140,20 +87,3 @@ class IPublishing_Library(Base_Library):
         self.impact_factor_elibrary_5_year = None
         self.impact_factor_elibrary_2_year = None
         self.source = "iPublishing"
-
-    def Print(self):
-        return (
-            str(self.author)
-            + ", "
-            + str(self.title)
-            + ", "
-            + str(self.year)
-            + ", "
-            + str(self.link)
-            + ", "
-            + str(self.doi)
-            + ", "
-            + str(self.clear_author)
-            + ", "
-            + str(self.clear_title)
-        )
