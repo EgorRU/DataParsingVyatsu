@@ -1,5 +1,5 @@
 .idea
-*.json
+/*.json
 /__pycache__
 /Project.pyproj
 *.txt

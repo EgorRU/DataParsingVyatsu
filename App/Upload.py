@@ -416,7 +416,8 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     temp_row = 2
     count_article = 0
     
-    #добавляем новые элементы
+
+    #по новым элементам списка
     title = ""
     for i in range(len(list_new)):
         #сотрудник
@@ -427,33 +428,63 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 employe_flag = True
                 break
         if employe_flag:
-        #берём текущее название
+            #берём текущее название
+            title_temp = getattr(list_new[i], "title")
+            #первая ячейка для нумерации
             ws.cell(row=temp_row, column=1).font = Font(size=16)
             ws.cell(row=temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
-            count_article += 1 #кол-во записей
-            #Бежим по списку атрибутов класса
-            for j in range(1, len(list_members)):
-                #если 4 колонка - то делаем фул библиографический список
-                if j==4:
-                    s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
-                    if "volume" in list_members and list_new[i].volume != None:
-                        s += f" - Vol. {list_new[i].volume}."
-                    if "issue" in list_members and list_new[i].issue != None:
-                        s += f" - №{list_new[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
-                        s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
-                    if "source_name" in list_members and list_new[i].source_name != None:
-                        s += f", {list_new[i].source_name}"
-                    ws.cell(row=temp_row, column=j+1).value = s
-                #иначе обычное поле заполняем
-                else:
-                    ws.cell(row=temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
-                #красим в зелёный цвет
-                ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+            #если текущее название не совпало с прошлым, то отделяем чертой ячейки
+            if title_temp!= title:
+                #ставим линию в первой колонке
+                ws.cell(row=temp_row, column=1).border = border
+                count_article += 1 #кол-во записей
+                #Бежим по списку атрибутов класса
+                for j in range(1, len(list_members)):
+                    #если 4 колонка - то делаем фул библиографический список
+                    if j==4:
+                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                        if "volume" in list_members and list_new[i].volume != None:
+                            s += f" - Vol. {list_new[i].volume}."
+                        if "issue" in list_members and list_new[i].issue != None:
+                            s += f" - №{list_new[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
+                            s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
+                        if "source_name" in list_members and list_new[i].source_name != None:
+                            s += f", {list_new[i].source_name}"
+                        ws.cell(row=temp_row, column=j+1).value = s
+                    #иначе обычное поле заполняем
+                    else:
+                        ws.cell(row=temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                    #делаем бордер и красим в зелёный цвет
+                    ws.cell(row=temp_row, column=j+1).border = border
+                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+            #иначе если текущее название сходится с прошлым, то бордер делать не надо
+            else:
+                #по всем атрибутам класса
+                for j in range(1, len(list_members)):
+                    #если библиографический список, то делаем его
+                    if j==4:
+                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                        if "volume" in list_members and list_new[i].volume != None:
+                            s += f" - Vol. {list_new[i].volume}."
+                        if "issue" in list_members and list_new[i].issue != None:
+                            s += f" - №{list_new[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
+                            s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
+                        if "source_name" in list_members and list_new[i].source_name != None:
+                            s += f", {list_new[i].source_name}"
+                        ws.cell(row=temp_row, column=j+1).value = s
+                    #иначе обычное поле заполняем
+                    else:
+                        ws.cell(row=temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                    #красим ячейку в зелёный
+                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
             #нумеруем первую колонку
             ws.cell(row=temp_row, column=1).value = count_article
-            temp_row +=1
-    
+            #меняем текущее название для дальнейшего бордера
+            title = title_temp
+            temp_row += 1
+
 
     #добавляем одинаковые элементы
     title = ""
@@ -466,28 +497,59 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 employe_flag = True
                 break
         if employe_flag:
+            #берём текущее название
+            title_temp = getattr(list_ident[i], "title")
+            #первая ячейка для нумерации
             ws.cell(row=temp_row, column=1).font = Font(size=16)
-            count_article += 1 #кол-во записей
-            #Бежим по списку атрибутов класса
-            for j in range(1, len(list_members)):
-                #если 4 колонка - то делаем фул библиографический список
-                if j==4:
-                    s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
-                    if "volume" in list_members and list_ident[i].volume != None:
-                        s += f" - Vol. {list_ident[i].volume}."
-                    if "issue" in list_members and list_ident[i].issue != None:
-                        s += f" - №{list_ident[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
-                        s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
-                    if "source_name" in list_members and list_ident[i].source_name != None:
-                        s += f", {list_ident[i].source_name}"
-                    ws.cell(row=temp_row, column=j+1).value = s
-                #иначе обычное поле заполняем
-                else:
-                    ws.cell(row=temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
+            #если текущее название не совпало с прошлым, то отделяем чертой ячейки
+            if title_temp!= title:
+                #ставим линию в первой колонке
+                ws.cell(row=temp_row, column=1).border = border
+                count_article += 1 #кол-во записей
+                #Бежим по списку атрибутов класса
+                for j in range(1, len(list_members)):
+                    #если 4 колонка - то делаем фул библиографический список
+                    if j==4:
+                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if "volume" in list_members and list_ident[i].volume != None:
+                            s += f" - Vol. {list_ident[i].volume}."
+                        if "issue" in list_members and list_ident[i].issue != None:
+                            s += f" - №{list_ident[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
+                            s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
+                        if "source_name" in list_members and list_ident[i].source_name != None:
+                            s += f", {list_ident[i].source_name}"
+                        ws.cell(row=temp_row, column=j+1).value = s
+                    #иначе обычное поле заполняем
+                    else:
+                        ws.cell(row=temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
+                    #делаем бордер
+                    ws.cell(row=temp_row, column=j+1).border = border
+            #иначе если текущщее название свходится с прошлым, то бордер делать не надо
+            else:
+                #по всем атрибутам класса
+                for j in range(1, len(list_members)):
+                    #если библиографический список, то делаем его
+                    if j==4:
+                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if "volume" in list_members and list_ident[i].volume != None:
+                            s += f" - Vol. {list_ident[i].volume}."
+                        if "issue" in list_members and list_ident[i].issue != None:
+                            s += f" - №{list_ident[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
+                            s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
+                        if "source_name" in list_members and list_ident[i].source_name != None:
+                            s += f", {list_ident[i].source_name}"
+                        ws.cell(row=temp_row, column=j+1).value = s
+                    #иначе обычное поле заполняем
+                    else:
+                        ws.cell(row=temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
             #нумеруем первую колонку
             ws.cell(row=temp_row, column=1).value = count_article
+            #меняем текущее название для дальнейшего бордера
+            title = title_temp
             temp_row += 1
+    
 
 
     #добавляем удалённые элементы
@@ -501,30 +563,62 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 employe_flag = True
                 break
         if employe_flag:
+            #берём текущее название
+            title_temp = getattr(list_remove[i], "title")
+            #первая ячейка для нумерации
             ws.cell(row=temp_row, column=1).font = Font(size=16)
             ws.cell(row=temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
-            count_article += 1 #кол-во записей
-            #Бежим по списку атрибутов класса
-            for j in range(1, len(list_members)):
-                #если 4 колонка - то делаем фул библиографический список
-                if j==4:
-                    s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
-                    if "volume" in list_members and list_remove[i].volume != None:
-                        s += f" - Vol. {list_remove[i].volume}."
-                    if "issue" in list_members and list_remove[i].issue != None:
-                        s += f" - №{list_remove[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
-                        s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
-                    if "source_name" in list_members and list_remove[i].source_name != None:
-                        s += f", {list_remove[i].source_name}"
-                    ws.cell(row=temp_row, column=j+1).value = s
-                #иначе обычное поле заполняем
-                else:
-                    ws.cell(row=temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
-                #красим в красный цвет
-                ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+            #если текущее название не совпало с прошлым, то отделяем чертой ячейки
+            if title_temp!= title:
+                #ставим линию в первой колонке
+                ws.cell(row=temp_row, column=1).border = border
+                count_article += 1 #кол-во записей
+                #Бежим по списку атрибутов класса
+                for j in range(1, len(list_members)):
+                    #если 4 колонка - то делаем фул библиографический список
+                    if j==4:
+                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if "volume" in list_members and list_remove[i].volume != None:
+                            s += f" - Vol. {list_remove[i].volume}."
+                        if "issue" in list_members and list_remove[i].issue != None:
+                            s += f" - №{list_remove[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
+                            s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
+                        if "source_name" in list_members and list_remove[i].source_name != None:
+                            s += f", {list_remove[i].source_name}"
+                        ws.cell(row=temp_row, column=j+1).value = s
+                    #иначе обычное поле заполняем
+                    else:
+                        ws.cell(row=temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                    #делаем бордер и красим в красный цвет
+                    ws.cell(row=temp_row, column=j+1).border = border
+                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+            #иначе если текущщее название свходится с прошлым, то бордер делать не надо
+            else:
+                #по всем атрибутам класса
+                for j in range(1, len(list_members)):
+                    #если библиографический список, то делаем его
+                    if j==4:
+                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if "volume" in list_members and list_remove[i].volume != None:
+                            s += f" - Vol. {list_remove[i].volume}."
+                        if "issue" in list_members and list_remove[i].issue != None:
+                            s += f" - №{list_remove[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
+                            s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
+                        if "source_name" in list_members and list_remove[i].source_name != None:
+                            s += f", {list_remove[i].source_name}"
+                        ws.cell(row=temp_row, column=j+1).value = s
+                    #иначе обычное поле заполняем
+                    else:
+                        ws.cell(row=temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                    #красим ячейку в красный
+                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
             #нумеруем первую колонку
             ws.cell(row=temp_row, column=1).value = count_article
+            #меняем текущее название для дальнейшего бордера
+            title = title_temp
             temp_row += 1
+
 
     wb.save(path[0:-5]+"_vyatsu.xlsx")
