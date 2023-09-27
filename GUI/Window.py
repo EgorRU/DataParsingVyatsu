@@ -47,11 +47,24 @@ def sort(table, col, reverse):
         table.move(k, "", index)
     table.heading(col, command=lambda: sort(table, col, not reverse))
   
+left_name_file = ""
+right_name_file = ""
 
 def open_file_Scopus_left():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -104,7 +117,6 @@ def open_file_Scopus_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
 
@@ -113,6 +125,17 @@ def open_file_Scopus_right():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -164,7 +187,6 @@ def open_file_Scopus_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
 
@@ -173,6 +195,17 @@ def open_file_WoS_left():
     ftypes = [("xls", "*.xls?"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -223,7 +256,6 @@ def open_file_WoS_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
 
@@ -232,6 +264,17 @@ def open_file_WoS_right():
     ftypes = [("xls", "*.xls?"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -282,7 +325,6 @@ def open_file_WoS_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
 
@@ -291,6 +333,17 @@ def open_file_Elibrary_left():
     ftypes = [("xml", "*.xml"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -341,7 +394,6 @@ def open_file_Elibrary_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
 
@@ -350,6 +402,17 @@ def open_file_Elibrary_right():
     ftypes = [("xml", "*.xml"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -401,7 +464,6 @@ def open_file_Elibrary_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
 
@@ -410,6 +472,17 @@ def open_file_Ipublishing_left():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -461,7 +534,6 @@ def open_file_Ipublishing_left():
             table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
             table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
 
@@ -470,6 +542,17 @@ def open_file_Ipublishing_right():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -521,7 +604,6 @@ def open_file_Ipublishing_right():
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
             table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
-            tkinter.messagebox.showwarning(title="Оповещение", message="Файл загружен")
         else:
             tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
 
@@ -587,7 +669,6 @@ def open_compare_window():
     table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
     table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
-    tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно были сравнены")
 
 
 photo = "global"
@@ -624,28 +705,16 @@ def nameleft():
     global left_table_site
     if left_table_site == '':
         return ""
-    if left_table_site == 's':
-        return "Scopus"
-    if left_table_site == 'w':
-        return "Web Of Science"
-    if left_table_site == 'e':
-        return "Elibrary"
-    if left_table_site == 'i':
-        return "iPublishing"
+    else:
+        return left_name_file
 
 
 def nameright():
     global right_table_site
     if right_table_site == '':
         return ""
-    if right_table_site == 's':
-        return "Scopus"
-    if right_table_site == 'w':
-        return "Web Of Science"
-    if right_table_site == 'e':
-        return "Elibrary"
-    if right_table_site == 'i':
-        return "iPublishing"
+    else:
+        return right_name_file
     
 
 # создание окна
