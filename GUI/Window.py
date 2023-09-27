@@ -47,11 +47,24 @@ def sort(table, col, reverse):
         table.move(k, "", index)
     table.heading(col, command=lambda: sort(table, col, not reverse))
   
+left_name_file = ""
+right_name_file = ""
 
 def open_file_Scopus_left():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -113,6 +126,17 @@ def open_file_Scopus_right():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -173,6 +197,17 @@ def open_file_WoS_left():
     ftypes = [("xls", "*.xls?"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -232,6 +267,17 @@ def open_file_WoS_right():
     ftypes = [("xls", "*.xls?"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -291,6 +337,17 @@ def open_file_Elibrary_left():
     ftypes = [("xml", "*.xml"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -350,6 +407,17 @@ def open_file_Elibrary_right():
     ftypes = [("xml", "*.xml"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -410,6 +478,17 @@ def open_file_Ipublishing_left():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global left_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    left_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -470,6 +549,17 @@ def open_file_Ipublishing_right():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    global right_name_file
+    temp = filename[::-1]
+    temp2 = ""
+    for i in range(0, len(temp)):
+        if (temp[i] != '/'):
+            temp2 += temp[i]
+        else:
+            break
+    right_name_file = temp2[::-1]
+
     if len(filename) > 0:  # если не пустое имя файла
         # переменные чтоб понимать что было загружено в таблицу 'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
         global left_table_site, right_table_site
@@ -624,28 +714,16 @@ def nameleft():
     global left_table_site
     if left_table_site == '':
         return ""
-    if left_table_site == 's':
-        return "Scopus"
-    if left_table_site == 'w':
-        return "Web Of Science"
-    if left_table_site == 'e':
-        return "Elibrary"
-    if left_table_site == 'i':
-        return "iPublishing"
+    else:
+        return left_name_file
 
 
 def nameright():
     global right_table_site
     if right_table_site == '':
         return ""
-    if right_table_site == 's':
-        return "Scopus"
-    if right_table_site == 'w':
-        return "Web Of Science"
-    if right_table_site == 'e':
-        return "Elibrary"
-    if right_table_site == 'i':
-        return "iPublishing"
+    else:
+        return right_name_file
     
 
 # создание окна
