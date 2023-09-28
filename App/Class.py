@@ -48,6 +48,7 @@ class WOS_Library(Base_Library):
 class eLibrary_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
+        self.origin_author = None
         self.link = None
         self.doi = None
         self.id = None

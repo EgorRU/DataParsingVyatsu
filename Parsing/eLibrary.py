@@ -62,6 +62,7 @@ def eLibrary(path):
                         new_article.author = new_article.author + " " + str(list_author["initials"])
                 if new_article.author != None:
                     new_article.author = clear_str(new_article.author.strip())
+                    new_article.author = clear_str(new_article.author)
                 count_author_temp += 1
                 all_elibrary_list_library.append(new_article)
             #если авторов много
@@ -76,6 +77,7 @@ def eLibrary(path):
                             new_article.author = new_article.author + " " + str(auth["initials"])
                         if new_article.author != None:
                             new_article.author = clear_str(new_article.author.strip())
+                            new_article.author = clear_str(new_article.author)
                         count_author_temp += 1
                         all_elibrary_list_library.append(new_article)
             
@@ -175,8 +177,9 @@ def eLibrary(path):
             count_all_author += count_author_temp
     except:
         return None
-
+    
     for i in range(len(all_elibrary_list_library)):
+        all_elibrary_list_library[i].origin_author = all_elibrary_list_library[i].author
         all_elibrary_list_library[i].author = Translite(all_elibrary_list_library[i].author)
         
     for i in range(len(all_elibrary_list_library)):

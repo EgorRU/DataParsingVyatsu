@@ -3,6 +3,10 @@ from openpyxl import Workbook
 import json
 
 
+def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
+    return not alphabet.isdisjoint(text.lower())
+
+
 def Upload(path, list_new = [], list_ident = [], list_remove = []):
     # создание нового файла
     wb = Workbook()
@@ -90,9 +94,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         list_members.append("source")
         new_list_members.remove("source")
 
+    #меняем заголовки столбиков
     ws.cell(row=1, column=1).value = "№№"
     ws.cell(row=1, column=2).value = "№"
-    #меняем заголовки столбиков
     for index, val in enumerate(list_members):
         if val!="article":
             ws.cell(row=1, column=index+3).value = val
@@ -106,7 +110,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 40
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
-    ws.column_dimensions["C"].width = 20
+    if "origin_author" in list_members:
+        ws.column_dimensions["C"].width = 40
+    else:
+        ws.column_dimensions["C"].width = 20
     ws.column_dimensions["D"].width = 90
     ws.column_dimensions["E"].width = 10
     ws.column_dimensions["F"].width = 200
@@ -178,7 +185,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             employe = True
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                    s = ''
+                    if "origin_author" in list_members:
+                        s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                    else:
+                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                     if "volume" in list_members and list_new[i].volume != None:
                         s += f" - Vol. {list_new[i].volume}."
                     if "issue" in list_members and list_new[i].issue != None:
@@ -212,7 +223,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                    s = ''
+                    if "origin_author" in list_members:
+                        s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                    else:
+                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                     if "volume" in list_members and list_new[i].volume != None:
                         s += f" - Vol. {list_new[i].volume}."
                     if "issue" in list_members and list_new[i].issue != None:
@@ -280,7 +295,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             employe = True
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                    s = ''
+                    if "origin_author" in list_members:
+                        s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                    else:
+                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                     if "volume" in list_members and list_ident[i].volume != None:
                         s += f" - Vol. {list_ident[i].volume}."
                     if "issue" in list_members and list_ident[i].issue != None:
@@ -313,7 +332,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                    s = ''
+                    if "origin_author" in list_members:
+                        s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                    else:
+                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                     if "volume" in list_members and list_ident[i].volume != None:
                         s += f" - Vol. {list_ident[i].volume}."
                     if "issue" in list_members and list_ident[i].issue != None:
@@ -380,7 +403,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             employe = True
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                    s = ''
+                    if "origin_author" in list_members:
+                        s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                    else:
+                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                     if "volume" in list_members and list_remove[i].volume != None:
                         s += f" - Vol. {list_remove[i].volume}."
                     if "issue" in list_members and list_remove[i].issue != None:
@@ -414,7 +441,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                    s = ''
+                    if "origin_author" in list_members:
+                        s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                    else:
+                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                     if "volume" in list_members and list_remove[i].volume != None:
                         s += f" - Vol. {list_remove[i].volume}."
                     if "issue" in list_members and list_remove[i].issue != None:
@@ -558,17 +589,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     
 
 
-
-
-
-
-
-
-
-
-
-
-
     #выгружаем только сотрудников вуза
     wb = Workbook()
     ws = wb.active
@@ -595,7 +615,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 40
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
-    ws.column_dimensions["C"].width = 20
+    if "origin_author" in list_members:
+        ws.column_dimensions["C"].width = 40
+    else:
+        ws.column_dimensions["C"].width = 20
     ws.column_dimensions["D"].width = 90
     ws.column_dimensions["E"].width = 10
     ws.column_dimensions["F"].width = 200
@@ -659,7 +682,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        else:
+                            s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                         if "volume" in list_members and list_new[i].volume != None:
                             s += f" - Vol. {list_new[i].volume}."
                         if "issue" in list_members and list_new[i].issue != None:
@@ -681,7 +708,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full bibliographic title":
-                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        else:
+                            s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                         if "volume" in list_members and list_new[i].volume != None:
                             s += f" - Vol. {list_new[i].volume}."
                         if "issue" in list_members and list_new[i].issue != None:
@@ -747,7 +778,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        else:
+                            s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                         if "volume" in list_members and list_ident[i].volume != None:
                             s += f" - Vol. {list_ident[i].volume}."
                         if "issue" in list_members and list_ident[i].issue != None:
@@ -768,7 +803,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full bibliographic title":
-                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        else:
+                            s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                         if "volume" in list_members and list_ident[i].volume != None:
                             s += f" - Vol. {list_ident[i].volume}."
                         if "issue" in list_members and list_ident[i].issue != None:
@@ -834,7 +873,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        else:
+                            s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                         if "volume" in list_members and list_remove[i].volume != None:
                             s += f" - Vol. {list_remove[i].volume}."
                         if "issue" in list_members and list_remove[i].issue != None:
@@ -855,7 +898,11 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        else:
+                            s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                         if "volume" in list_members and list_remove[i].volume != None:
                             s += f" - Vol. {list_remove[i].volume}."
                         if "issue" in list_members and list_remove[i].issue != None:
@@ -882,14 +929,12 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     #изменяем высоту ячейки
     for i in range(1, ws.max_row + 1):
         ws.row_dimensions[i].height = 40
-        
 
     #перенос строк
     for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row):
          for cell in row_cells:
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
-    
     
     #статистика в новый лист книги
     ws = wb.create_sheet('Статистика')
@@ -988,7 +1033,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
     
-
     print("---------------нефул файл-------------------")
     print(f"Новых статей: {count_add}")
     print(f"Одинаковых статей: {count_ident}")

@@ -318,6 +318,7 @@ def Scopus(path):
                     for j in range(count_temp, count_temp + count_author_row):
                         all_scopus_list_library[j].link = link.strip()
             i += 1
+            
     except:
         return None
 
