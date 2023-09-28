@@ -116,7 +116,16 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     temp_row = 2
     count_article = 0
     
-
+    #словари с кол-во статей для add, ident, remove листов
+    dict_add_count = dict()
+    dict_ident_count = dict()
+    dict_remove_count = dict()
+    
+    #словари с кол-во статей для add, ident, remove листов
+    dict_add_citated = dict()
+    dict_ident_citated = dict()
+    dict_remove_citated = dict()
+    
     #словарь с сотрудниками
     file = open('employee.json', 'r', encoding="utf-8")
     list_data = json.load(file)
@@ -138,6 +147,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         ws.cell(row=i+temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
         #если текущее название не совпало с прошлым, то отделяем чертой ячейки
         if title_temp!= title:
+            #заполяем словари
+            #кол-во статей по годам
+            if list_new[i].year in dict_add_count:
+                dict_add_count[list_new[i].year] += 1
+            else:
+                dict_add_count[list_new[i].year] = 1  
+            
+            #если есть столбец с цитированием
+            if "citation" in list_members:
+                #кол-во цитирований по годам
+                if list_new[i].year in dict_add_citated:
+                    dict_add_citated[list_new[i].year] += int(list_new[i].citation)
+                else:
+                    dict_add_citated[list_new[i].year] = int(list_new[i].citation)
+                
             #ставим линию в 1 и 2 колонке
             ws.cell(row=i+temp_row, column=1).border = border
             ws.cell(row=i+temp_row, column=2).border = border
@@ -224,6 +248,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         ws.cell(row=i+temp_row, column=2).font = Font(size=16)
         #если текущее название не совпало с прошлым, то отделяем чертой ячейки
         if title_temp!= title:
+            #заполяем словари
+            #кол-во статей по годам
+            if list_ident[i].year in dict_ident_count:
+                dict_ident_count[list_ident[i].year] += 1
+            else:
+                dict_ident_count[list_ident[i].year] = 1  
+            
+            #если есть столбец с цитированием
+            if "citation" in list_members:
+                #кол-во цитирований по годам
+                if list_ident[i].year in dict_ident_citated:
+                    dict_ident_citated[list_ident[i].year] += int(list_ident[i].citation)
+                else:
+                    dict_ident_citated[list_ident[i].year] = int(list_ident[i].citation)
+                
             #ставим линию в 1 и 2 колонке
             ws.cell(row=i+temp_row, column=1).border = border
             ws.cell(row=i+temp_row, column=2).border = border
@@ -310,6 +349,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         ws.cell(row=i+temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
         #если текущее название не совпало с прошлым, то отделяем чертой ячейки
         if title_temp!= title:
+            #заполяем словари
+            #кол-во статей по годам
+            if list_remove[i].year in dict_remove_count:
+                dict_remove_count[list_remove[i].year] += 1
+            else:
+                dict_remove_count[list_remove[i].year] = 1  
+            
+            #если есть столбец с цитированием
+            if "citation" in list_members:
+                #кол-во цитирований по годам
+                if list_remove[i].year in dict_remove_citated:
+                    dict_remove_citated[list_remove[i].year] += int(list_remove[i].citation)
+                else:
+                    dict_remove_citated[list_remove[i].year] = int(list_remove[i].citation)
+                    
             #ставим линию в 1 и 2 колонке
             ws.cell(row=i+temp_row, column=1).border = border
             ws.cell(row=i+temp_row, column=2).border = border
@@ -398,8 +452,101 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
 
     #статистика в новый лист книги
     ws = wb.create_sheet('Статистика')
+    ws.column_dimensions["A"].width = 30
+    ws.column_dimensions["B"].width = 30
+    ws.column_dimensions["C"].width = 30
+    ws.column_dimensions["D"].width = 30
+    ws.column_dimensions["E"].width = 30
+    ws.column_dimensions["F"].width = 30
     
+    ws.column_dimensions["I"].width = 30
+    ws.column_dimensions["J"].width = 30
+    ws.column_dimensions["K"].width = 30
+    ws.column_dimensions["L"].width = 30
+    ws.column_dimensions["M"].width = 30
+    ws.column_dimensions["N"].width = 30
+    
+    ws.merge_cells('A1:F1')
+    ws['A1'] = 'Кол-во статей по годам'
+    
+    ws.merge_cells('I1:N1')
+    ws['I1'] = 'Кол-во цитирований по годам'
+    
+    ws.merge_cells('A2:B2')
+    ws['A2'] = 'Добавленные статьи'
+    
+    ws.merge_cells('C2:D2')
+    ws['C2'] = 'Одинаковые статьи'
 
+    ws.merge_cells('E2:F2')
+    ws['E2'] = 'Удалённые статьи'
+    
+    ws.merge_cells('I2:J2')
+    ws['I2'] = 'Добавленные статьи'
+    
+    ws.merge_cells('K2:L2')
+    ws['K2'] = 'Одинаковые статьи'
+
+    ws.merge_cells('M2:N2')
+    ws['M2'] = 'Удалённые статьи'
+    
+    ws['A3'] = 'Год'
+    ws['C3'] = 'Год'
+    ws['E3'] = 'Год'
+    ws['I3'] = 'Год'
+    ws['K3'] = 'Год'
+    ws['M3'] = 'Год'
+    
+    ws['B3'] = 'Кол-во'
+    ws['D3'] = 'Кол-во'
+    ws['F3'] = 'Кол-во'
+    ws['J3'] = 'Кол-во'
+    ws['L3'] = 'Кол-во'
+    ws['N3'] = 'Кол-во'
+    
+    i = 4
+    for key in dict_add_count:
+        ws.cell(row=i, column=1).value = key
+        ws.cell(row=i, column=2).value = dict_add_count[key]
+        i += 1
+    
+    i = 4
+    for key in dict_ident_count:
+        ws.cell(row=i, column=3).value = key
+        ws.cell(row=i, column=4).value = dict_ident_count[key]
+        i += 1
+
+    i = 4
+    for key in dict_remove_count:
+        ws.cell(row=i, column=5).value = key
+        ws.cell(row=i, column=6).value = dict_remove_count[key]
+        i += 1
+        
+    i = 4
+    for key in dict_add_citated:
+        ws.cell(row=i, column=9).value = key
+        ws.cell(row=i, column=10).value = dict_add_citated[key]
+        i += 1
+        
+    i = 4
+    for key in dict_ident_citated:
+        ws.cell(row=i, column=11).value = key
+        ws.cell(row=i, column=12).value = dict_ident_citated[key]
+        i += 1
+        
+    i = 4
+    for key in dict_remove_citated:
+        ws.cell(row=i, column=13).value = key
+        ws.cell(row=i, column=14).value = dict_remove_citated[key]
+        i += 1
+        
+
+    #перенос строк и центирование текста
+    for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row):
+         for cell in row_cells:
+            cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
+            cell.font = Font(size=16)
+            
     print("---------------фул файл---------------------")
     print(f"Новых статей: {count_add}")
     print(f"Одинаковых статей: {count_ident}")
@@ -407,24 +554,8 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     print(f"Всего статей: {count_add + count_ident + count_remove}")
     print()
     
-
     wb.save(path)
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -474,6 +605,16 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     temp_row = 2
     count_article = 0
     
+    #словари с кол-во статей для add, ident, remove листов
+    dict_add_count = dict()
+    dict_ident_count = dict()
+    dict_remove_count = dict()
+    
+    #словари с кол-во статей для add, ident, remove листов
+    dict_add_citated = dict()
+    dict_ident_citated = dict()
+    dict_remove_citated = dict()
+
     count = 0
     #по новым элементам списка
     title = ""
@@ -495,6 +636,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             ws.cell(row=temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
             #если текущее название не совпало с прошлым, то отделяем чертой ячейки
             if title_temp!= title:
+                #заполяем словари
+                #кол-во статей по годам
+                if list_new[i].year in dict_add_count:
+                    dict_add_count[list_new[i].year] += 1
+                else:
+                    dict_add_count[list_new[i].year] = 1  
+            
+                #если есть столбец с цитированием
+                if "citation" in list_members:
+                    #кол-во цитирований по годам
+                    if list_new[i].year in dict_add_citated:
+                        dict_add_citated[list_new[i].year] += int(list_new[i].citation)
+                    else:
+                        dict_add_citated[list_new[i].year] = int(list_new[i].citation)
+                
                 #ставим линию в 1 и 2 колонке
                 ws.cell(row=temp_row, column=1).border = border
                 ws.cell(row=temp_row, column=2).border = border
@@ -568,6 +724,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             ws.cell(row=temp_row, column=2).font = Font(size=16)
             #если текущее название не совпало с прошлым, то отделяем чертой ячейки
             if title_temp!= title:
+                #заполяем словари
+                #кол-во статей по годам
+                if list_ident[i].year in dict_ident_count:
+                    dict_ident_count[list_ident[i].year] += 1
+                else:
+                    dict_ident_count[list_ident[i].year] = 1  
+            
+                #если есть столбец с цитированием
+                if "citation" in list_members:
+                    #кол-во цитирований по годам
+                    if list_ident[i].year in dict_ident_citated:
+                        dict_ident_citated[list_ident[i].year] += int(list_ident[i].citation)
+                    else:
+                        dict_ident_citated[list_ident[i].year] = int(list_ident[i].citation)
+                        
                 #ставим линию в 1 и 2 колонке
                 ws.cell(row=temp_row, column=1).border = border
                 ws.cell(row=temp_row, column=2).border = border
@@ -640,6 +811,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             ws.cell(row=temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
             #если текущее название не совпало с прошлым, то отделяем чертой ячейки
             if title_temp!= title:
+                #заполяем словари
+                #кол-во статей по годам
+                if list_remove[i].year in dict_remove_count:
+                    dict_remove_count[list_remove[i].year] += 1
+                else:
+                    dict_remove_count[list_remove[i].year] = 1  
+            
+                #если есть столбец с цитированием
+                if "citation" in list_members:
+                    #кол-во цитирований по годам
+                    if list_remove[i].year in dict_remove_citated:
+                        dict_remove_citated[list_remove[i].year] += int(list_remove[i].citation)
+                    else:
+                        dict_remove_citated[list_remove[i].year] = int(list_remove[i].citation)
+                        
                 #ставим линию в 1 и 2 колонке
                 ws.cell(row=temp_row, column=1).border = border
                 ws.cell(row=temp_row, column=2).border = border
@@ -707,6 +893,100 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     
     #статистика в новый лист книги
     ws = wb.create_sheet('Статистика')
+    ws.column_dimensions["A"].width = 30
+    ws.column_dimensions["B"].width = 30
+    ws.column_dimensions["C"].width = 30
+    ws.column_dimensions["D"].width = 30
+    ws.column_dimensions["E"].width = 30
+    ws.column_dimensions["F"].width = 30
+    
+    ws.column_dimensions["I"].width = 30
+    ws.column_dimensions["J"].width = 30
+    ws.column_dimensions["K"].width = 30
+    ws.column_dimensions["L"].width = 30
+    ws.column_dimensions["M"].width = 30
+    ws.column_dimensions["N"].width = 30
+    
+    ws.merge_cells('A1:F1')
+    ws['A1'] = 'Кол-во статей по годам'
+    
+    ws.merge_cells('I1:N1')
+    ws['I1'] = 'Кол-во цитирований по годам'
+    
+    ws.merge_cells('A2:B2')
+    ws['A2'] = 'Добавленные статьи'
+    
+    ws.merge_cells('C2:D2')
+    ws['C2'] = 'Одинаковые статьи'
+
+    ws.merge_cells('E2:F2')
+    ws['E2'] = 'Удалённые статьи'
+    
+    ws.merge_cells('I2:J2')
+    ws['I2'] = 'Добавленные статьи'
+    
+    ws.merge_cells('K2:L2')
+    ws['K2'] = 'Одинаковые статьи'
+
+    ws.merge_cells('M2:N2')
+    ws['M2'] = 'Удалённые статьи'
+    
+    ws['A3'] = 'Год'
+    ws['C3'] = 'Год'
+    ws['E3'] = 'Год'
+    ws['I3'] = 'Год'
+    ws['K3'] = 'Год'
+    ws['M3'] = 'Год'
+    
+    ws['B3'] = 'Кол-во'
+    ws['D3'] = 'Кол-во'
+    ws['F3'] = 'Кол-во'
+    ws['J3'] = 'Кол-во'
+    ws['L3'] = 'Кол-во'
+    ws['N3'] = 'Кол-во'
+    
+    i = 4
+    for key in dict_add_count:
+        ws.cell(row=i, column=1).value = key
+        ws.cell(row=i, column=2).value = dict_add_count[key]
+        i += 1
+    
+    i = 4
+    for key in dict_ident_count:
+        ws.cell(row=i, column=3).value = key
+        ws.cell(row=i, column=4).value = dict_ident_count[key]
+        i += 1
+
+    i = 4
+    for key in dict_remove_count:
+        ws.cell(row=i, column=5).value = key
+        ws.cell(row=i, column=6).value = dict_remove_count[key]
+        i += 1
+        
+    i = 4
+    for key in dict_add_citated:
+        ws.cell(row=i, column=9).value = key
+        ws.cell(row=i, column=10).value = dict_add_citated[key]
+        i += 1
+        
+    i = 4
+    for key in dict_ident_citated:
+        ws.cell(row=i, column=11).value = key
+        ws.cell(row=i, column=12).value = dict_ident_citated[key]
+        i += 1
+        
+    i = 4
+    for key in dict_remove_citated:
+        ws.cell(row=i, column=13).value = key
+        ws.cell(row=i, column=14).value = dict_remove_citated[key]
+        i += 1
+        
+
+    #перенос строк и центирование текста
+    for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row):
+         for cell in row_cells:
+            cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
+            cell.font = Font(size=16)
     
 
     print("---------------нефул файл-------------------")
@@ -715,6 +995,5 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     print(f"Удалённых статей: {count_remove}")
     print(f"Всего статей: {count_add + count_ident + count_remove}")
     print()
-
 
     wb.save(path[0:-5]+"_vyatsu.xlsx")
