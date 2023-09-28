@@ -1,7 +1,8 @@
 def sort(add_new_list, identical_new_list, remove_new_list):
-    add_new_list = sorted(add_new_list, key=lambda x: x.year)
-    identical_new_list = sorted(identical_new_list, key=lambda x: x.year)
-    remove_new_list = sorted(remove_new_list, key=lambda x: x.year)
+    add_new_list = sorted(add_new_list, key=lambda x: x.year, reverse=True)
+    identical_new_list = sorted(identical_new_list, key=lambda x: x.year, reverse=True)
+    remove_new_list = sorted(remove_new_list, key=lambda x: x.year, reverse=True)
+    
     return add_new_list, identical_new_list, remove_new_list
 
 
@@ -51,10 +52,11 @@ def identical_sources_equals(source1, source2):
     for i in range(len(remove_new_list)):
         list_remove_tuple.append((remove_new_list[i].author, remove_new_list[i].title, remove_new_list[i].year, remove_new_list[i].link ))
 
-    print(f"Добавлено записей(один автор): {len(add_new_list)}")
-    print(f"Одинаковых записей(один автор): {len(identical_new_list)}")
-    print(f"Удалено записей(один автор): {len(remove_new_list)}")
-    print(f"Для проверки сравнения: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
+    print("---------------Сравнение---------------------")
+    print(f"Добавлено строк: {len(add_new_list)}")
+    print(f"Одинаковых строк: {len(identical_new_list)}")
+    print(f"Удалено строк: {len(remove_new_list)}")
+    print()
     
     add_new_list, identical_new_list, remove_new_list = sort(add_new_list, identical_new_list, remove_new_list)
     return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list
@@ -106,11 +108,11 @@ def different_source_equals(source1, source2):
     for i in range(len(remove_new_list)):
         list_remove_tuple.append((remove_new_list[i].author, remove_new_list[i].title, remove_new_list[i].year, remove_new_list[i].link ))
         
-
-    print(f"Добавлено записей(один автор): {len(add_new_list)}")
-    print(f"Одинаковых записей(один автор): {len(identical_new_list)}")
-    print(f"Удалено записей(один автор): {len(remove_new_list)}")
-    print(f"Для проверки сравнения: {(len(source2) - len(source1))} = {len(add_new_list)-len(remove_new_list)}")
+    print("---------------Сравнение---------------------")
+    print(f"Добавлено строк: {len(add_new_list)}")
+    print(f"Одинаковых строк: {len(identical_new_list)}")
+    print(f"Удалено строк: {len(remove_new_list)}")
+    print()
     
     add_new_list, identical_new_list, remove_new_list = sort(add_new_list, identical_new_list, remove_new_list)
     return list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list

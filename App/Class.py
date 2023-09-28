@@ -18,7 +18,7 @@ class Scopus_Library(Base_Library):
         self.start_page = None
         self.end_page = None
         self.number_of_pages = None
-        self.citation = None
+        self.citation = 0
         self.doi = None
         self.link = None
         self.source = "Scopus"
@@ -52,7 +52,7 @@ class eLibrary_Library(Base_Library):
         self.doi = None
         self.id = None
         self.type = None
-        self.citation = None
+        self.citation = 0
         self.pages = None
         self.volume = None
         self.issn = None

@@ -41,7 +41,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     new_list_members.remove("author")
     new_list_members.remove("title")
     new_list_members.remove("year")
-    list_members = ["№ article","author","title","year", "full bibliographic title"]
+    list_members = ["author", "title", "year", "full bibliographic title"]
     
     #если есть поля, то добавляем в нужной очерёдности
     if "doi" in new_list_members:
@@ -51,6 +51,14 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     if "link" in new_list_members:
         list_members.append("link")
         new_list_members.remove("link")
+        
+    if "volume" in new_list_members:
+        list_members.append("volume")
+        new_list_members.remove("volume")
+        
+    if "issue" in new_list_members:
+        list_members.append("issue")
+        new_list_members.remove("issue")
         
     if "start_page" in new_list_members:
         list_members.append("start_page")
@@ -63,15 +71,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     if "number_of_pages" in new_list_members:
         list_members.append("number_of_pages")
         new_list_members.remove("number_of_pages")
-        
-    if "issue" in new_list_members:
-        list_members.append("issue")
-        new_list_members.remove("issue")
     
-    if "volume" in new_list_members:
-        list_members.append("volume")
-        new_list_members.remove("volume")
-        
     if "article" in new_list_members:
         list_members.append("article")
         new_list_members.remove("article")
@@ -90,21 +90,28 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         list_members.append("source")
         new_list_members.remove("source")
 
+    ws.cell(row=1, column=1).value = "№№"
+    ws.cell(row=1, column=2).value = "№"
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
-        ws.cell(row=1, column=index+1).value = val
-        ws.cell(row=1, column=index+1).font = Font(size=20)
+        if val!="article":
+            ws.cell(row=1, column=index+3).value = val
+            ws.cell(row=1, column=index+3).font = Font(size=16)
+        else:
+            ws.cell(row=1, column=index+3).value = "№ article"
+            ws.cell(row=1, column=index+3).font = Font(size=16)
     
     #меняем ширину ячеек
     for i in range(len(list_members)):
-        ws.column_dimensions[ws.cell(row=1, column=i+1).column_letter].width = 60
+        ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 40
     ws.column_dimensions["A"].width = 15
-    ws.column_dimensions["B"].width = 20
-    ws.column_dimensions["C"].width = 90
-    ws.column_dimensions["D"].width = 10
-    ws.column_dimensions["E"].width = 200
-    ws.column_dimensions["F"].width = 70    
-    ws.column_dimensions["G"].width = 150
+    ws.column_dimensions["B"].width = 15
+    ws.column_dimensions["C"].width = 20
+    ws.column_dimensions["D"].width = 90
+    ws.column_dimensions["E"].width = 10
+    ws.column_dimensions["F"].width = 200
+    ws.column_dimensions["G"].width = 70    
+    ws.column_dimensions["H"].width = 150
       
     temp_row = 2
     count_article = 0
@@ -114,34 +121,39 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     file = open('employee.json', 'r', encoding="utf-8")
     list_data = json.load(file)
     
-
+    count_add = 0
+    count_ident = 0 
+    count_remove = 0
+    count = 0
     #добавляем новые элементы
     title = ""
     #по новым элементам списка
     for i in range(len(list_new)):
         #берём текущее название
         title_temp = getattr(list_new[i], "title")
-        #первая ячейка для нумерации
+        #1-2 ячейки для нумерации
         ws.cell(row=i+temp_row, column=1).font = Font(size=16)
+        ws.cell(row=i+temp_row, column=2).font = Font(size=16)
         ws.cell(row=i+temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+        ws.cell(row=i+temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
         #если текущее название не совпало с прошлым, то отделяем чертой ячейки
         if title_temp!= title:
-            #ставим линию в первой колонке
+            #ставим линию в 1 и 2 колонке
             ws.cell(row=i+temp_row, column=1).border = border
+            ws.cell(row=i+temp_row, column=2).border = border
             count_article += 1 #кол-во записей
+            count += 1 #кол-во записей
             #Бежим по списку атрибутов класса
-            for j in range(1, len(list_members)):
+            for j in range(len(list_members)):
                 employe = False
-                #если вторая колонка - то фио надо бы выделить
-                if j==1:
+                if list_members[j]=="author":
                     #проходимся по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения - то добавляем бордер и выходим из цикла
                         if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
                             employe = True
                             break
-                #если 4 колонка - то делаем фул библиографический список
-                if j==4:
+                if list_members[j]=="full bibliographic title":
                     s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                     if "volume" in list_members and list_new[i].volume != None:
                         s += f" - Vol. {list_new[i].volume}."
@@ -151,33 +163,31 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
                     if "source_name" in list_members and list_new[i].source_name != None:
                         s += f", {list_new[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+1).value = s
+                    ws.cell(row=i+temp_row, column=j+3).value = s
                 #иначе обычное поле заполняем
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                 #делаем бордер и красим в зелёный цвет
                 if employe:
-                    ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),
+                    ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),
                                                                                 right = Side(border_style='thick', color='8B0000'),
                                                                                 bottom = Side(border_style='thick', color='8B0000'),
                                                                                 left = Side(border_style='thick', color='8B0000'))
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).border = border
-                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+                    ws.cell(row=i+temp_row, column=j+3).border = border
+                ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
         #иначе если текущее название сходится с прошлым, то бордер делать не надо
         else:
             #по всем атрибутам класса
-            for j in range(1, len(list_members)):
-                #если фио  - то смотрим, надо ли его выделить
-                if j==1:
+            for j in range(len(list_members)):
+                if list_members[j]=="author":
                     #по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения, то выделяем ячейку и выходим из цикла
                         if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
-                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
-                #если библиографический список, то делаем его
-                if j==4:
+                if list_members[j]=="full bibliographic title":
                     s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                     if "volume" in list_members and list_new[i].volume != None:
                         s += f" - Vol. {list_new[i].volume}."
@@ -187,47 +197,50 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
                     if "source_name" in list_members and list_new[i].source_name != None:
                         s += f", {list_new[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+1).value = s
+                    ws.cell(row=i+temp_row, column=j+3).value = s
                 #иначе обычное поле заполняем
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                 #красим ячейку в зелёный
-                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
-        #нумеруем первую колонку
+                ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+        #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
+        ws.cell(row=i+temp_row, column=2).value = count
         #меняем текущее название для дальнейшего бордера
         title = title_temp
     temp_row += len(list_new)
+    count_add = count
 
 
-
+    count = 0
     #добавляем одинаковые элементы
     title = ""
     #по новым элементам списка
     for i in range(len(list_ident)):
         #берём текущее название
         title_temp = getattr(list_ident[i], "title")
-        #первая ячейка для нумерации
+        #1-2 ячейки для нумерации
         ws.cell(row=i+temp_row, column=1).font = Font(size=16)
+        ws.cell(row=i+temp_row, column=2).font = Font(size=16)
         #если текущее название не совпало с прошлым, то отделяем чертой ячейки
         if title_temp!= title:
-            #ставим линию в первой колонке
+            #ставим линию в 1 и 2 колонке
             ws.cell(row=i+temp_row, column=1).border = border
+            ws.cell(row=i+temp_row, column=2).border = border
             count_article += 1 #кол-во записей
+            count += 1 #кол-во записей
             #Бежим по списку атрибутов класса
-            for j in range(1, len(list_members)):
+            for j in range(len(list_members)):
                 employe = False
-                #если вторая колонка - то фио надо бы выделить
-                if j==1:
+                if list_members[j]=="author":
                     #проходимся по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения - то добавляем бордер и выходим из цикла
                         if list_ident[i].author in list_data[k] or list_ident[i].author == list_data[k]:
-                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             employe = True
                             break
-                #если 4 колонка - то делаем фул библиографический список
-                if j==4:
+                if list_members[j]=="full bibliographic title":
                     s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                     if "volume" in list_members and list_ident[i].volume != None:
                         s += f" - Vol. {list_ident[i].volume}."
@@ -237,32 +250,30 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
                     if "source_name" in list_members and list_ident[i].source_name != None:
                         s += f", {list_ident[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+1).value = s
+                    ws.cell(row=i+temp_row, column=j+3).value = s
                 #иначе обычное поле заполняем
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
                 #делаем бордер
                 if employe:
-                   ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),
+                   ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),
                                                                                 right = Side(border_style='thick', color='8B0000'),
                                                                                 bottom = Side(border_style='thick', color='8B0000'),
                                                                                 left = Side(border_style='thick', color='8B0000'))
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).border = border
+                    ws.cell(row=i+temp_row, column=j+3).border = border
         #иначе если текущщее название свходится с прошлым, то бордер делать не надо
         else:
             #по всем атрибутам класса
-            for j in range(1, len(list_members)):
-                #если фио  - то смотрим, надо ли его выделить
-                if j==1:
+            for j in range(len(list_members)):
+                if list_members[j]=="author":
                     #по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения, то выделяем ячейку и выходим из цикла
                         if list_ident[i].author in list_data[k] or list_ident[i].author == list_data[k]:
-                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
-                #если библиографический список, то делаем его
-                if j==4:
+                if list_members[j]=="full bibliographic title":
                     s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                     if "volume" in list_members and list_ident[i].volume != None:
                         s += f" - Vol. {list_ident[i].volume}."
@@ -272,45 +283,49 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
                     if "source_name" in list_members and list_ident[i].source_name != None:
                         s += f", {list_ident[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+1).value = s
+                    ws.cell(row=i+temp_row, column=j+3).value = s
                 #иначе обычное поле заполняем
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
-        #нумеруем первую колонку
+                    ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
+        #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
+        ws.cell(row=i+temp_row, column=2).value = count
         #меняем текущее название для дальнейшего бордера
         title = title_temp
     temp_row += len(list_ident)
-    
+    count_ident = count
 
 
+    count = 0
     #добавляем удалённые элементы
     title = ""
     #по новым элементам списка
     for i in range(len(list_remove)):
         #берём текущее название
         title_temp = getattr(list_remove[i], "title")
-        #первая ячейка для нумерации
+        #1-2 ячейки для нумерации
         ws.cell(row=i+temp_row, column=1).font = Font(size=16)
+        ws.cell(row=i+temp_row, column=2).font = Font(size=16)
         ws.cell(row=i+temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+        ws.cell(row=i+temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
         #если текущее название не совпало с прошлым, то отделяем чертой ячейки
         if title_temp!= title:
-            #ставим линию в первой колонке
+            #ставим линию в 1 и 2 колонке
             ws.cell(row=i+temp_row, column=1).border = border
+            ws.cell(row=i+temp_row, column=2).border = border
             count_article += 1 #кол-во записей
+            count += 1 #кол-во записей
             #Бежим по списку атрибутов класса
-            for j in range(1, len(list_members)):
+            for j in range(len(list_members)):
                 employe = False
-                #если вторая колонка - то фио надо бы выделить
-                if j==1:
+                if list_members[j]=="author":
                     #проходимся по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения - то добавляем бордер и выходим из цикла
                         if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
                             employe = True
                             break
-                #если 4 колонка - то делаем фул библиографический список
-                if j==4:
+                if list_members[j]=="full bibliographic title":
                     s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                     if "volume" in list_members and list_remove[i].volume != None:
                         s += f" - Vol. {list_remove[i].volume}."
@@ -320,33 +335,31 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
                     if "source_name" in list_members and list_remove[i].source_name != None:
                         s += f", {list_remove[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+1).value = s
+                    ws.cell(row=i+temp_row, column=j+3).value = s
                 #иначе обычное поле заполняем
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                 #делаем бордер и красим в красный цвет
                 if employe:
-                    ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),
+                    ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),
                                                                                 right = Side(border_style='thick', color='8B0000'),
                                                                                 bottom = Side(border_style='thick', color='8B0000'),
                                                                                 left = Side(border_style='thick', color='8B0000'))
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).border = border
-                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+                    ws.cell(row=i+temp_row, column=j+3).border = border
+                ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
         #иначе если текущщее название свходится с прошлым, то бордер делать не надо
         else:
             #по всем атрибутам класса
-            for j in range(1, len(list_members)):
-                #если фио  - то смотрим, надо ли его выделить
-                if j==1:
+            for j in range(len(list_members)):
+                if list_members[j]=="author":
                     #по всем сотрудникам вуза
                     for k in range(len(list_data)):
                         #если есть совпадения, то выделяем ячейку и выходим из цикла
                         if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
-                            ws.cell(row=i+temp_row, column=j+1).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
+                            ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
-                #если библиографический список, то делаем его
-                if j==4:
+                if list_members[j]=="full bibliographic title":
                     s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                     if "volume" in list_members and list_remove[i].volume != None:
                         s += f" - Vol. {list_remove[i].volume}."
@@ -356,37 +369,75 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
                     if "source_name" in list_members and list_remove[i].source_name != None:
                         s += f", {list_remove[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+1).value = s
+                    ws.cell(row=i+temp_row, column=j+3).value = s
                 #иначе обычное поле заполняем
                 else:
-                    ws.cell(row=i+temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                    ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                 #красим ячейку в красный
-                ws.cell(row=i+temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
-        #нумеруем первую колонку
+                ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+        #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
+        ws.cell(row=i+temp_row, column=2).value = count
         #меняем текущее название для дальнейшего бордера
         title = title_temp
     temp_row += len(list_remove)
-    
+    count_remove = count    
+
 
     #изменяем высоту ячейки
     for i in range(1, ws.max_row + 1):
         ws.row_dimensions[i].height = 40
-        
+
 
     #перенос строк
     for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row):
          for cell in row_cells:
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
-            
+    
 
-    print(f"Новых: {len(list_new)}")
-    print(f"Одинаковых: {len(list_ident)}")
-    print(f"Старых: {len(list_remove)}")
-    print(f"Для проверки загрузки: {len(list_new)+len(list_ident)+len(list_remove)} = {ws.max_row-1}")
+    #статистика в новый лист книги
+    ws = wb.create_sheet('Статистика')
+    
+
+    print("---------------фул файл---------------------")
+    print(f"Новых статей: {count_add}")
+    print(f"Одинаковых статей: {count_ident}")
+    print(f"Удалённых статей: {count_remove}")
+    print(f"Всего статей: {count_add + count_ident + count_remove}")
+    print()
+    
+
     wb.save(path)
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #выгружаем только сотрудников вуза
     wb = Workbook()
     ws = wb.active
@@ -397,26 +448,33 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
     #название листа 
     ws.title = "Сравнение данных"
     
+    ws.cell(row=1, column=1).value = "№№"
+    ws.cell(row=1, column=2).value = "№"
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
-        ws.cell(row=1, column=index+1).value = val
-        ws.cell(row=1, column=index+1).font = Font(size=20)
+        if val!="article":
+            ws.cell(row=1, column=index+3).value = val
+            ws.cell(row=1, column=index+3).font = Font(size=16)
+        else:
+            ws.cell(row=1, column=index+3).value = "№ article"
+            ws.cell(row=1, column=index+3).font = Font(size=16)
     
     #меняем ширину ячеек
     for i in range(len(list_members)):
-        ws.column_dimensions[ws.cell(row=1, column=i+1).column_letter].width = 60
+        ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 40
     ws.column_dimensions["A"].width = 15
-    ws.column_dimensions["B"].width = 20
-    ws.column_dimensions["C"].width = 90
-    ws.column_dimensions["D"].width = 10
-    ws.column_dimensions["E"].width = 200
-    ws.column_dimensions["F"].width = 70    
-    ws.column_dimensions["G"].width = 150
+    ws.column_dimensions["B"].width = 15
+    ws.column_dimensions["C"].width = 20
+    ws.column_dimensions["D"].width = 90
+    ws.column_dimensions["E"].width = 10
+    ws.column_dimensions["F"].width = 200
+    ws.column_dimensions["G"].width = 70    
+    ws.column_dimensions["H"].width = 150
       
     temp_row = 2
     count_article = 0
     
-
+    count = 0
     #по новым элементам списка
     title = ""
     for i in range(len(list_new)):
@@ -430,18 +488,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         if employe_flag:
             #берём текущее название
             title_temp = getattr(list_new[i], "title")
-            #первая ячейка для нумерации
+            #1 и 2 ячейки для нумерации
             ws.cell(row=temp_row, column=1).font = Font(size=16)
+            ws.cell(row=temp_row, column=2).font = Font(size=16)
             ws.cell(row=temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+            ws.cell(row=temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
             #если текущее название не совпало с прошлым, то отделяем чертой ячейки
             if title_temp!= title:
-                #ставим линию в первой колонке
+                #ставим линию в 1 и 2 колонке
                 ws.cell(row=temp_row, column=1).border = border
+                ws.cell(row=temp_row, column=2).border = border
                 count_article += 1 #кол-во записей
+                count += 1 #кол-во записей
                 #Бежим по списку атрибутов класса
-                for j in range(1, len(list_members)):
-                    #если 4 колонка - то делаем фул библиографический список
-                    if j==4:
+                for j in range(len(list_members)):
+                    if list_members[j]=="full bibliographic title":
                         s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                         if "volume" in list_members and list_new[i].volume != None:
                             s += f" - Vol. {list_new[i].volume}."
@@ -451,19 +512,19 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
                         if "source_name" in list_members and list_new[i].source_name != None:
                             s += f", {list_new[i].source_name}"
-                        ws.cell(row=temp_row, column=j+1).value = s
+                        ws.cell(row=temp_row, column=j+3).value = s
                     #иначе обычное поле заполняем
                     else:
-                        ws.cell(row=temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                        ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                     #делаем бордер и красим в зелёный цвет
-                    ws.cell(row=temp_row, column=j+1).border = border
-                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+                    ws.cell(row=temp_row, column=j+3).border = border
+                    ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
             #иначе если текущее название сходится с прошлым, то бордер делать не надо
             else:
                 #по всем атрибутам класса
-                for j in range(1, len(list_members)):
+                for j in range(len(list_members)):
                     #если библиографический список, то делаем его
-                    if j==4:
+                    if list_members[j]=="full bibliographic title":
                         s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                         if "volume" in list_members and list_new[i].volume != None:
                             s += f" - Vol. {list_new[i].volume}."
@@ -473,19 +534,22 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
                         if "source_name" in list_members and list_new[i].source_name != None:
                             s += f", {list_new[i].source_name}"
-                        ws.cell(row=temp_row, column=j+1).value = s
+                        ws.cell(row=temp_row, column=j+3).value = s
                     #иначе обычное поле заполняем
                     else:
-                        ws.cell(row=temp_row, column=j+1).value = getattr(list_new[i], list_members[j])
+                        ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                     #красим ячейку в зелёный
-                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
-            #нумеруем первую колонку
+                    ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+            #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
+            ws.cell(row=temp_row, column=2).value = count
             #меняем текущее название для дальнейшего бордера
             title = title_temp
             temp_row += 1
+    count_add = count
 
 
+    count = 0
     #добавляем одинаковые элементы
     title = ""
     for i in range(len(list_ident)):
@@ -499,17 +563,19 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         if employe_flag:
             #берём текущее название
             title_temp = getattr(list_ident[i], "title")
-            #первая ячейка для нумерации
+            #1 и 2 ячейки для нумерации
             ws.cell(row=temp_row, column=1).font = Font(size=16)
+            ws.cell(row=temp_row, column=2).font = Font(size=16)
             #если текущее название не совпало с прошлым, то отделяем чертой ячейки
             if title_temp!= title:
-                #ставим линию в первой колонке
+                #ставим линию в 1 и 2 колонке
                 ws.cell(row=temp_row, column=1).border = border
+                ws.cell(row=temp_row, column=2).border = border
                 count_article += 1 #кол-во записей
+                count += 1 #кол-во записей
                 #Бежим по списку атрибутов класса
-                for j in range(1, len(list_members)):
-                    #если 4 колонка - то делаем фул библиографический список
-                    if j==4:
+                for j in range(len(list_members)):
+                    if list_members[j]=="full bibliographic title":
                         s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                         if "volume" in list_members and list_ident[i].volume != None:
                             s += f" - Vol. {list_ident[i].volume}."
@@ -519,18 +585,18 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
                         if "source_name" in list_members and list_ident[i].source_name != None:
                             s += f", {list_ident[i].source_name}"
-                        ws.cell(row=temp_row, column=j+1).value = s
+                        ws.cell(row=temp_row, column=j+3).value = s
                     #иначе обычное поле заполняем
                     else:
-                        ws.cell(row=temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
+                        ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
                     #делаем бордер
-                    ws.cell(row=temp_row, column=j+1).border = border
+                    ws.cell(row=temp_row, column=j+3).border = border
             #иначе если текущщее название свходится с прошлым, то бордер делать не надо
             else:
                 #по всем атрибутам класса
-                for j in range(1, len(list_members)):
+                for j in range(len(list_members)):
                     #если библиографический список, то делаем его
-                    if j==4:
+                    if list_members[j]=="full bibliographic title":
                         s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                         if "volume" in list_members and list_ident[i].volume != None:
                             s += f" - Vol. {list_ident[i].volume}."
@@ -540,18 +606,20 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
                         if "source_name" in list_members and list_ident[i].source_name != None:
                             s += f", {list_ident[i].source_name}"
-                        ws.cell(row=temp_row, column=j+1).value = s
+                        ws.cell(row=temp_row, column=j+3).value = s
                     #иначе обычное поле заполняем
                     else:
-                        ws.cell(row=temp_row, column=j+1).value = getattr(list_ident[i], list_members[j])
-            #нумеруем первую колонку
+                        ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
+            #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
+            ws.cell(row=temp_row, column=2).value = count
             #меняем текущее название для дальнейшего бордера
             title = title_temp
             temp_row += 1
-    
+    count_ident = count
 
 
+    count = 0
     #добавляем удалённые элементы
     title = ""
     for i in range(len(list_remove)):
@@ -565,18 +633,21 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
         if employe_flag:
             #берём текущее название
             title_temp = getattr(list_remove[i], "title")
-            #первая ячейка для нумерации
+            #1 и 2 ячейки для нумерации
             ws.cell(row=temp_row, column=1).font = Font(size=16)
+            ws.cell(row=temp_row, column=2).font = Font(size=16)
             ws.cell(row=temp_row, column=1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+            ws.cell(row=temp_row, column=2).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
             #если текущее название не совпало с прошлым, то отделяем чертой ячейки
             if title_temp!= title:
-                #ставим линию в первой колонке
+                #ставим линию в 1 и 2 колонке
                 ws.cell(row=temp_row, column=1).border = border
+                ws.cell(row=temp_row, column=2).border = border
                 count_article += 1 #кол-во записей
+                count += 1 #кол-во записей
                 #Бежим по списку атрибутов класса
-                for j in range(1, len(list_members)):
-                    #если 4 колонка - то делаем фул библиографический список
-                    if j==4:
+                for j in range(len(list_members)):
+                    if list_members[j]=="full bibliographic title":
                         s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                         if "volume" in list_members and list_remove[i].volume != None:
                             s += f" - Vol. {list_remove[i].volume}."
@@ -586,19 +657,18 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
                         if "source_name" in list_members and list_remove[i].source_name != None:
                             s += f", {list_remove[i].source_name}"
-                        ws.cell(row=temp_row, column=j+1).value = s
+                        ws.cell(row=temp_row, column=j+3).value = s
                     #иначе обычное поле заполняем
                     else:
-                        ws.cell(row=temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                        ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                     #делаем бордер и красим в красный цвет
-                    ws.cell(row=temp_row, column=j+1).border = border
-                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+                    ws.cell(row=temp_row, column=j+3).border = border
+                    ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
             #иначе если текущщее название свходится с прошлым, то бордер делать не надо
             else:
                 #по всем атрибутам класса
-                for j in range(1, len(list_members)):
-                    #если библиографический список, то делаем его
-                    if j==4:
+                for j in range(len(list_members)):
+                    if list_members[j]=="full bibliographic title":
                         s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                         if "volume" in list_members and list_remove[i].volume != None:
                             s += f" - Vol. {list_remove[i].volume}."
@@ -608,17 +678,43 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                             s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
                         if "source_name" in list_members and list_remove[i].source_name != None:
                             s += f", {list_remove[i].source_name}"
-                        ws.cell(row=temp_row, column=j+1).value = s
+                        ws.cell(row=temp_row, column=j+3).value = s
                     #иначе обычное поле заполняем
                     else:
-                        ws.cell(row=temp_row, column=j+1).value = getattr(list_remove[i], list_members[j])
+                        ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                     #красим ячейку в красный
-                    ws.cell(row=temp_row, column=j+1).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
-            #нумеруем первую колонку
+                    ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+            #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
+            ws.cell(row=temp_row, column=2).value = count
             #меняем текущее название для дальнейшего бордера
             title = title_temp
             temp_row += 1
+    count_remove = count
+
+
+    #изменяем высоту ячейки
+    for i in range(1, ws.max_row + 1):
+        ws.row_dimensions[i].height = 40
+        
+
+    #перенос строк
+    for row_cells in ws.iter_rows(min_row=1, max_row=ws.max_row):
+         for cell in row_cells:
+            cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
+            cell.font = Font(size=16)
+    
+    
+    #статистика в новый лист книги
+    ws = wb.create_sheet('Статистика')
+    
+
+    print("---------------нефул файл-------------------")
+    print(f"Новых статей: {count_add}")
+    print(f"Одинаковых статей: {count_ident}")
+    print(f"Удалённых статей: {count_remove}")
+    print(f"Всего статей: {count_add + count_ident + count_remove}")
+    print()
 
 
     wb.save(path[0:-5]+"_vyatsu.xlsx")

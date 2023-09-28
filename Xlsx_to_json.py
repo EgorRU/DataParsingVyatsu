@@ -85,7 +85,7 @@ def Translite(s_input):
 
 
 
-filename = askopenfilename(filetypes = [("xlsx", "*.xlsx"), ('All files', '*')])
+filename = askopenfilename(filetypes = [("xlsx, xls", "*.xls?"), ('All files', '*')])
 print(f"Расположение файла: {filename}\n")
 
 
