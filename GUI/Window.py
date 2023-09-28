@@ -46,9 +46,11 @@ def sort(table, col, reverse):
     for index, (_, k) in enumerate(l):
         table.move(k, "", index)
     table.heading(col, command=lambda: sort(table, col, not reverse))
-  
+
+
 left_name_file = ""
 right_name_file = ""
+
 
 def open_file_Scopus_left():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
@@ -106,7 +108,7 @@ def open_file_Scopus_left():
                             fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row) 
+                table_left.insert('', tkinter.END, values=row)
 
             table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=330, width=330, stretch=YES)
@@ -114,11 +116,14 @@ def open_file_Scopus_left():
             table_left.column("link", minwidth=180, width=180, stretch=NO)
             table_left.column("citation", minwidth=60, width=60, stretch=NO)
 
-            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
-            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
-            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left, 2, False))
+            table_left.heading("link", text="link", command=lambda: sort(table_left, 3, False))
+            table_left.heading("citation", text="citation", command=lambda: sort(table_left, 4, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_Scopus_right():
@@ -153,7 +158,7 @@ def open_file_Scopus_right():
         if right_table_create == True:
             table_right.destroy()
             scroll_pane_right.pack_forget()
-        if list_scopus!=None:
+        if list_scopus != None:
             lst = []
             name_right.configure(text=nameright())
             for i in range(len(list_scopus)):
@@ -173,10 +178,10 @@ def open_file_Scopus_right():
             scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane_right.set)
             scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row)  
+                table_right.insert('', tkinter.END, values=row)
 
             table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=330, width=330, stretch=YES)
@@ -184,16 +189,19 @@ def open_file_Scopus_right():
             table_right.column("link", minwidth=180, width=180, stretch=NO)
             table_right.column("citation", minwidth=60, width=60, stretch=NO)
 
-            table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
-            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
-            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right, 2, False))
+            table_right.heading("link", text="link", command=lambda: sort(table_right, 3, False))
+            table_right.heading("citation", text="citation", command=lambda: sort(table_right, 4, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не Scopus, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_WoS_left():
     ftypes = [("xls", "*.xls?"), ('All files', '*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__)) 
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
 
     global left_name_file
@@ -223,7 +231,7 @@ def open_file_WoS_left():
             scroll_pane_left.pack_forget()
         # обработка файла, получение списка данных
         list_wos = Wos(filename)
-        if list_wos!=None:
+        if list_wos != None:
             lst = []
             name_left.configure(text=nameleft())
             for i in range(len(list_wos)):
@@ -243,21 +251,23 @@ def open_file_WoS_left():
             scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane_left.set)
             scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
+            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row)  
+                table_left.insert('', tkinter.END, values=row)
 
             table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=330, width=330, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=180, width=180, stretch=NO)
 
-            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
-            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
-            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left, 2, False))
+            table_left.heading("link", text="link", command=lambda: sort(table_left, 3, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_WoS_right():
@@ -293,7 +303,7 @@ def open_file_WoS_right():
             table_right.destroy()
             scroll_pane_right.pack_forget()
 
-        if list_wos!=None:
+        if list_wos != None:
             lst = []
             name_right.configure(text=nameright())
             for i in range(len(list_wos)):
@@ -312,26 +322,28 @@ def open_file_WoS_right():
             scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane_right.set)
             scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row) 
+                table_right.insert('', tkinter.END, values=row)
 
             table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=330, width=330, stretch=YES)
             table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=180, width=180, stretch=NO)
 
-            table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
-            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
-            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right, 2, False))
+            table_right.heading("link", text="link", command=lambda: sort(table_right, 3, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не Wos, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_Elibrary_left():
     ftypes = [("xml", "*.xml"), ('All files', '*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
 
     global left_name_file
@@ -361,7 +373,7 @@ def open_file_Elibrary_left():
             scroll_pane_left.pack_forget()
         # обработка файла, получение списка данных
         list_Elibrary = eLibrary(filename)
-        if list_Elibrary!=None:
+        if list_Elibrary != None:
             lst = []
             name_left.configure(text=nameleft())
             for i in range(len(list_Elibrary)):
@@ -381,26 +393,28 @@ def open_file_Elibrary_left():
             scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane_left.set)
             scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
+            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row)  
+                table_left.insert('', tkinter.END, values=row)
 
             table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=370, width=370, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=210, width=210, stretch=NO)
 
-            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
-            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
-            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left, 2, False))
+            table_left.heading("link", text="link", command=lambda: sort(table_left, 3, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_Elibrary_right():
     ftypes = [("xml", "*.xml"), ('All files', '*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
 
     global right_name_file
@@ -431,7 +445,7 @@ def open_file_Elibrary_right():
             table_right.destroy()
             scroll_pane_right.pack_forget()
 
-        if list_Elibrary !=None:
+        if list_Elibrary != None:
             lst = []
             name_right.configure(text=nameright())
             for i in range(len(list_Elibrary)):
@@ -451,26 +465,28 @@ def open_file_Elibrary_right():
             scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane_right.set)
             scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)  
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row) 
+                table_right.insert('', tkinter.END, values=row)
 
             table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=370, width=370, stretch=YES)
             table_right.column("year", minwidth=40, width=40, stretch=NO)
             table_right.column("link", minwidth=210, width=210, stretch=NO)
 
-            table_right.heading("author", text="author", command=lambda: sort(table_right,0, False))
-            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
-            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right, 2, False))
+            table_right.heading("link", text="link", command=lambda: sort(table_right, 3, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не eLibrary, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_Ipublishing_left():
     ftypes = [("xlsx", "*.xlsx"), ('All files', '*')]  # допустимые типы
-    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))  
+    dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
 
     global left_name_file
@@ -501,7 +517,7 @@ def open_file_Ipublishing_left():
             table_left.destroy()
             scroll_pane_left.pack_forget()
 
-        if list_ipublishing!=None:
+        if list_ipublishing != None:
             lst = []
             name_left.configure(text=nameleft())
             for i in range(len(list_ipublishing)):
@@ -521,21 +537,23 @@ def open_file_Ipublishing_left():
             scroll_pane_left = ttk.Scrollbar(frametableleft, command=table_left.yview)
             table_left.configure(yscrollcommand=scroll_pane_left.set)
             scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
+            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_left.insert('', tkinter.END, values=row) 
+                table_left.insert('', tkinter.END, values=row)
 
             table_left.column("author", minwidth=100, width=100, stretch=NO)
             table_left.column("title", minwidth=250, width=250, stretch=YES)
             table_left.column("year", minwidth=40, width=40, stretch=NO)
             table_left.column("link", minwidth=160, width=160, stretch=NO)
 
-            table_left.heading("author", text="author", command=lambda: sort(table_left,0, False))
-            table_left.heading("title", text="title", command=lambda: sort(table_left,1, False))
-            table_left.heading("year", text="year", command=lambda: sort(table_left,2, False))
+            table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
+            table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
+            table_left.heading("year", text="year", command=lambda: sort(table_left, 2, False))
+            table_left.heading("link", text="link", command=lambda: sort(table_left, 3, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
 
 
 def open_file_Ipublishing_right():
@@ -571,7 +589,7 @@ def open_file_Ipublishing_right():
             table_right.destroy()
             scroll_pane_right.pack_forget()
 
-        if list_ipublishing!=None:
+        if list_ipublishing != None:
             lst = []
             name_right.configure(text=nameright())
             for i in range(len(list_ipublishing)):
@@ -591,10 +609,10 @@ def open_file_Ipublishing_right():
             scroll_pane_right = ttk.Scrollbar(frametableright, command=table_right.yview)
             table_right.configure(yscrollcommand=scroll_pane_right.set)
             scroll_pane_right.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH) 
+            table_right.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
-                table_right.insert('', tkinter.END, values=row) 
+                table_right.insert('', tkinter.END, values=row)
 
             table_right.column("author", minwidth=100, width=100, stretch=NO)
             table_right.column("title", minwidth=250, width=250, stretch=YES)
@@ -602,14 +620,18 @@ def open_file_Ipublishing_right():
             table_right.column("link", minwidth=160, width=160, stretch=NO)
 
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
-            table_right.heading("title", text="title", command=lambda: sort(table_right,1, False))
-            table_right.heading("year", text="year", command=lambda: sort(table_right,2, False))
+            table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
+            table_right.heading("year", text="year", command=lambda: sort(table_right, 2, False))
+            table_right.heading("link", text="link", command=lambda: sort(table_right, 3, False))
         else:
-            tkinter.messagebox.showwarning(title="Предупреждение", message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
+            tkinter.messagebox.showwarning(title="Предупреждение",
+                                           message="Возможно Вы пытаетесь загрузить не IPublishing, или файл повреждён, или не имеет строчек данных")
 
 
 # кнопка сравнения
 comparewin_is_open = False
+
+
 def open_compare_window():
     global comparewin_is_open
     global comparewin
@@ -643,9 +665,11 @@ def open_compare_window():
     table_compare.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
     if left_table_site == right_table_site:
-        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = identical_sources_equals(list1, list2)
+        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = identical_sources_equals(
+            list1, list2)
     else:
-        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = different_source_equals(list1, list2)
+        list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = different_source_equals(
+            list1, list2)
 
     unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=upload)
     unload_to_xlsx.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.5)
@@ -669,10 +693,13 @@ def open_compare_window():
     table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
     table_compare.heading("year", text="year", command=lambda: sort(table_compare, 2, False))
+    table_compare.heading("link", text="link", command=lambda: sort(table_compare, 3, False))
 
 
 photo = "global"
 help_is_open = False
+
+
 def help_guide():
     global help_is_open
     global helpwin
@@ -696,7 +723,7 @@ def upload():
     global remove_new_list
     global identical_new_list
     path = asksaveasfilename(initialfile='DefaultName.xlsx', defaultextension=".xlsx", filetypes=[("xlsx", "*.xlsx")])
-    if len(path)>0:
+    if len(path) > 0:
         Upload(path, add_new_list, identical_new_list, remove_new_list)
         tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
 
@@ -715,7 +742,7 @@ def nameright():
         return ""
     else:
         return right_name_file
-    
+
 
 # создание окна
 win['bg'] = '#FFFFFF'  # цвет
