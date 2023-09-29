@@ -6,7 +6,6 @@ import json
 def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
     return not alphabet.isdisjoint(text.lower())
 
-#'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
 def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", right=""):
     # создание нового файла
     wb = Workbook()
@@ -42,10 +41,18 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             new_list_members.append(var)
             
     #формируем сортированный список
+    list_members = []
     new_list_members.remove("author")
     new_list_members.remove("title")
     new_list_members.remove("year")
-    list_members = ["author", "title", "year", "full bibliographic title"]
+    
+    if "full_bibliographic_description" in new_list_members:
+        new_list_members.remove("full_bibliographic_description")
+        
+    if "origin_author" in new_list_members:
+        list_members = ["author", "origin_author", "title", "year", "full bibliographic title"]
+    else:
+        list_members = ["author", "title", "year", "full bibliographic title"]
     
     #если есть поля, то добавляем в нужной очерёдности
     if "doi" in new_list_members:
@@ -242,9 +249,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                 #красим ячейку в зелёный
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
-        #если есть поле orign_author на русском языке - добавляем в 3 столбик
-        if "origin_author" in list_members and match(list_new[i].origin_author):
-            ws.cell(row=i+temp_row, column=3).value = f"{ws.cell(row=i+temp_row, column=3).value} ({list_new[i].origin_author})"
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -352,9 +356,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
-        #если есть поле orign_author на русском языке - добавляем в 3 столбик
-        if "origin_author" in list_members and match(list_ident[i].origin_author):
-            ws.cell(row=i+temp_row, column=3).value = f"{ws.cell(row=i+temp_row, column=3).value} ({list_ident[i].origin_author})"
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -466,9 +467,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                 #красим ячейку в красный
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
-        #если есть поле orign_author на русском языке - добавляем в 3 столбик
-        if "origin_author" in list_members and match(list_remove[i].origin_author):
-            ws.cell(row=i+temp_row, column=3).value = f"{ws.cell(row=i+temp_row, column=3).value} ({list_remove[i].origin_author})"
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -586,16 +584,8 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
             
-    print("---------------фул файл---------------------")
-    print(f"Новых статей: {count_add}")
-    print(f"Одинаковых статей: {count_ident}")
-    print(f"Удалённых статей: {count_remove}")
-    print(f"Всего статей: {count_add + count_ident + count_remove}")
-    print()
-    
     wb.save(path)
     
-
 
     #выгружаем только сотрудников вуза
     wb = Workbook()
@@ -735,9 +725,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                     #красим ячейку в зелёный
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
-            #если есть поле orign_author на русском языке - добавляем в 3 столбик
-            if "origin_author" in list_members and match(list_new[i].origin_author):
-                ws.cell(row=temp_row, column=3).value = f"{ws.cell(row=temp_row, column=3).value} ({list_new[i].origin_author})"
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -831,9 +818,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
-            #если есть поле orign_author на русском языке - добавляем в 3 столбик
-            if "origin_author" in list_members and match(list_ident[i].origin_author):
-                ws.cell(row=temp_row, column=3).value = f"{ws.cell(row=temp_row, column=3).value} ({list_ident[i].origin_author})"
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -931,9 +915,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                     #красим ячейку в красный
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
-            #если есть поле orign_author на русском языке - добавляем в 3 столбик
-            if "origin_author" in list_members and match(list_remove[i].origin_author):
-                ws.cell(row=temp_row, column=3).value = f"{ws.cell(row=temp_row, column=3).value} ({list_remove[i].origin_author})"
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -1049,11 +1030,4 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
     
-    print("---------------нефул файл-------------------")
-    print(f"Новых статей: {count_add}")
-    print(f"Одинаковых статей: {count_ident}")
-    print(f"Удалённых статей: {count_remove}")
-    print(f"Всего статей: {count_add + count_ident + count_remove}")
-    print()
-
     wb.save(path[0:-5]+"_vyatsu.xlsx")

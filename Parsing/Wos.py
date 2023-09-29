@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
 from xls2xlsx import XLS2XLSX
 from App import WOS_Library
-from App import clear_str
+from App import clear_author
 
 
 def Wos(path):
@@ -29,8 +29,11 @@ def Wos(path):
             list_author = str_author.split(";") #список авторов
             for i in range (len(list_author)):
                 new_author = WOS_Library()
-                new_author.author = clear_str(list_author[i].strip())
-                
+                try:
+                    new_author.author = clear_author(list_author[i].strip())
+                except:
+                    new_author.author = list_author[i].strip()
+                    
                 if ws[f"I{row_index}"].value != None:
                     new_author.title = ws[f"I{row_index}"].value.lower()
                     new_author.title = new_author.title[0].upper() + new_author.title[1:]

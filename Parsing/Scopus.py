@@ -1,6 +1,6 @@
 from openpyxl import Workbook, load_workbook
 from App import Scopus_Library
-from App import clear_str
+from App import clear_author
 
 
 def Scopus(path):
@@ -60,7 +60,10 @@ def Scopus(path):
                 count_author_row += 1
                 
                 # заполянем ФИО автора
-                new_author.author = clear_str(author.strip())
+                try:
+                    new_author.author = clear_author(author.strip())
+                except:
+                    new_author.author = author.strip()
                 
                 # добавляем экземпляр класса
                 all_scopus_list_library.append(new_author)

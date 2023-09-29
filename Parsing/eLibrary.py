@@ -2,7 +2,7 @@ import json
 import xmltodict
 from App import Translite
 from App import eLibrary_Library
-from App import clear_str
+from App import clear_author
 
 
 def eLibrary(path):
@@ -59,8 +59,14 @@ def eLibrary(path):
                     new_article.author = str(list_author["lastname"])
                 if "initials" in list_author:
                     new_article.author = new_article.author + " " + str(list_author["initials"])
-                new_article.origin_author = clear_str(new_article.author.strip())
-                new_article.author = clear_str(Translite(new_article.origin_author))
+                try:
+                    new_article.origin_author = clear_author(new_article.author.strip())
+                except:
+                    new_article.origin_author = new_article.author.strip()
+                try:
+                    new_article.author = clear_author(Translite(new_article.origin_author))
+                except:
+                    new_article.author = new_article.origin_author
                 count_author_temp += 1
                 all_elibrary_list_library.append(new_article)
             #если авторов много
@@ -75,8 +81,14 @@ def eLibrary(path):
                             new_article.author = str(auth["lastname"])
                         if "initials" in auth:
                             new_article.author = new_article.author + " " + str(auth["initials"])
-                        new_article.origin_author = clear_str(new_article.author.strip())
-                        new_article.author = clear_str(Translite(new_article.origin_author))
+                        try:
+                            new_article.origin_author = clear_author(new_article.author.strip())
+                        except:
+                            new_article.origin_author = new_article.author.strip()
+                        try:
+                            new_article.author = clear_author(Translite(new_article.origin_author))
+                        except:
+                            new_article.author = new_article.origin_author
                         #если запись не повторяется
                         if old_article=="":
                             all_elibrary_list_library.append(new_article)
@@ -113,9 +125,11 @@ def eLibrary(path):
                     if "issue" in e["source"]:
                         if "year" in e["source"]["issue"]:
                             all_elibrary_list_library[i].year = e["source"]["issue"]["year"]
-                if all_elibrary_list_library[i].year == None:
+                if all_elibrary_list_library[i].year == None or all_elibrary_list_library[i].year == "":
                     if "yearpubl" in e:
                         all_elibrary_list_library[i].year = e["yearpubl"]
+                if all_elibrary_list_library[i].year == None:
+                    all_elibrary_list_library[i].year = ""
                     
                 #ссылка
                 if "linkurl" in e:

@@ -42,7 +42,7 @@ class WOS_Library(Base_Library):
         self.ISSN = ""
         self.eISSN = ""
         self.unique_wos_id = ""
-        self.citations = ""
+        self.citations = 0
         self.document_type = ""
         self.source = "WOS"
   
@@ -73,7 +73,6 @@ class IPublishing_Library(Base_Library):
         self.origin_author = ""
         self.article = ""
         self.link = ""
-        self.description = ""
         self.doi = ""
         self.institute = ""
         self.faculty = ""

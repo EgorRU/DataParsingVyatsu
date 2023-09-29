@@ -1,5 +1,6 @@
 from .Translate import Translite
-from .Clear_author import clear_str
+from .Clear_str import clear_author
+from .Clear_str import clear_IPublishing_title
 from .Class import Scopus_Library
 from .Class import WOS_Library
 from .Class import eLibrary_Library

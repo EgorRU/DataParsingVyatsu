@@ -1,4 +1,4 @@
-﻿def clear_str(string):  
+﻿def clear_author(string):  
     #убираем лишние символы из строки и делаем нижний регистр
     new_str = ""
     if string != None and len(string)>0:
@@ -65,3 +65,13 @@
                 new_str = f"{new[0]} {new[1][0].upper()}."
                 
     return new_str.replace("é","e").replace("É","E")
+
+
+def clear_IPublishing_title(string):
+    index = string.find("/")
+    if index == -1:
+        return string
+    new_str = string[:index:-1]
+    index = new_str.find(".")
+    new_str = new_str[:index:-1].strip()
+    return new_str
