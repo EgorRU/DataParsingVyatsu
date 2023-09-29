@@ -118,14 +118,20 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
     if "origin_author" in list_members:
-        ws.column_dimensions["C"].width = 40
+        ws.column_dimensions["C"].width = 20
+        ws.column_dimensions["D"].width = 20
+        ws.column_dimensions["E"].width = 90
+        ws.column_dimensions["F"].width = 10
+        ws.column_dimensions["G"].width = 200
+        ws.column_dimensions["H"].width = 70    
+        ws.column_dimensions["I"].width = 150
     else:
         ws.column_dimensions["C"].width = 20
-    ws.column_dimensions["D"].width = 90
-    ws.column_dimensions["E"].width = 10
-    ws.column_dimensions["F"].width = 200
-    ws.column_dimensions["G"].width = 70    
-    ws.column_dimensions["H"].width = 150
+        ws.column_dimensions["D"].width = 90
+        ws.column_dimensions["E"].width = 10
+        ws.column_dimensions["F"].width = 200
+        ws.column_dimensions["G"].width = 70    
+        ws.column_dimensions["H"].width = 150
       
     temp_row = 2
     count_article = 0
@@ -144,9 +150,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     file = open('employee.json', 'r', encoding="utf-8")
     list_data = json.load(file)
     
-    count_add = 0
-    count_ident = 0 
-    count_remove = 0
     count = 0
     #добавляем новые элементы
     title = ""
@@ -192,20 +195,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             employe = True
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = ''
-                    if "origin_author" in list_members:
-                        s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                    if not hasattr(list_new[i],'full_bibliographic_title'):
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        else:
+                            s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                        if "volume" in list_members and list_new[i].volume != None:
+                            s += f" - Vol. {list_new[i].volume}."
+                        if "issue" in list_members and list_new[i].issue != None:
+                            s += f" - №{list_new[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
+                            s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
+                        if "source_name" in list_members and list_new[i].source_name != None:
+                            s += f", {list_new[i].source_name}"
+                        ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
-                    if "volume" in list_members and list_new[i].volume != None:
-                        s += f" - Vol. {list_new[i].volume}."
-                    if "issue" in list_members and list_new[i].issue != None:
-                        s += f" - №{list_new[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
-                        s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
-                    if "source_name" in list_members and list_new[i].source_name != None:
-                        s += f", {list_new[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+3).value = s
+                         ws.cell(row=i+temp_row, column=j+3).value = list_new[i].full_bibliographic_title
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -230,20 +236,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = ''
-                    if "origin_author" in list_members:
-                        s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                    if not hasattr(list_new[i],'full_bibliographic_title'):
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        else:
+                            s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                        if "volume" in list_members and list_new[i].volume != None:
+                            s += f" - Vol. {list_new[i].volume}."
+                        if "issue" in list_members and list_new[i].issue != None:
+                            s += f" - №{list_new[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
+                            s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
+                        if "source_name" in list_members and list_new[i].source_name != None:
+                            s += f", {list_new[i].source_name}"
+                        ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
-                    if "volume" in list_members and list_new[i].volume != None:
-                        s += f" - Vol. {list_new[i].volume}."
-                    if "issue" in list_members and list_new[i].issue != None:
-                        s += f" - №{list_new[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
-                        s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
-                    if "source_name" in list_members and list_new[i].source_name != None:
-                        s += f", {list_new[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+3).value = s
+                         ws.cell(row=i+temp_row, column=j+3).value = list_new[i].full_bibliographic_title
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -302,20 +311,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             employe = True
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = ''
-                    if "origin_author" in list_members:
-                        s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                    if not hasattr(list_ident[i],'full_bibliographic_title'):
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        else:
+                            s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if "volume" in list_members and list_ident[i].volume != None:
+                            s += f" - Vol. {list_ident[i].volume}."
+                        if "issue" in list_members and list_ident[i].issue != None:
+                            s += f" - №{list_ident[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
+                            s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
+                        if "source_name" in list_members and list_ident[i].source_name != None:
+                            s += f", {list_ident[i].source_name}"
+                        ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
-                    if "volume" in list_members and list_ident[i].volume != None:
-                        s += f" - Vol. {list_ident[i].volume}."
-                    if "issue" in list_members and list_ident[i].issue != None:
-                        s += f" - №{list_ident[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
-                        s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
-                    if "source_name" in list_members and list_ident[i].source_name != None:
-                        s += f", {list_ident[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+3).value = s
+                        ws.cell(row=i+temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -339,20 +351,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = ''
-                    if "origin_author" in list_members:
-                        s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                    if not hasattr(list_ident[i],'full_bibliographic_title'):
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        else:
+                            s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if "volume" in list_members and list_ident[i].volume != None:
+                            s += f" - Vol. {list_ident[i].volume}."
+                        if "issue" in list_members and list_ident[i].issue != None:
+                            s += f" - №{list_ident[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
+                            s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
+                        if "source_name" in list_members and list_ident[i].source_name != None:
+                            s += f", {list_ident[i].source_name}"
+                        ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
-                    if "volume" in list_members and list_ident[i].volume != None:
-                        s += f" - Vol. {list_ident[i].volume}."
-                    if "issue" in list_members and list_ident[i].issue != None:
-                        s += f" - №{list_ident[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
-                        s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
-                    if "source_name" in list_members and list_ident[i].source_name != None:
-                        s += f", {list_ident[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+3).value = s
+                        ws.cell(row=i+temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -410,20 +425,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             employe = True
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = ''
-                    if "origin_author" in list_members:
-                        s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                    if not hasattr(list_remove[i],'full_bibliographic_title'):
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        else:
+                            s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if "volume" in list_members and list_remove[i].volume != None:
+                            s += f" - Vol. {list_remove[i].volume}."
+                        if "issue" in list_members and list_remove[i].issue != None:
+                            s += f" - №{list_remove[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
+                            s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
+                        if "source_name" in list_members and list_remove[i].source_name != None:
+                            s += f", {list_remove[i].source_name}"
+                        ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
-                    if "volume" in list_members and list_remove[i].volume != None:
-                        s += f" - Vol. {list_remove[i].volume}."
-                    if "issue" in list_members and list_remove[i].issue != None:
-                        s += f" - №{list_remove[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
-                        s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
-                    if "source_name" in list_members and list_remove[i].source_name != None:
-                        s += f", {list_remove[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+3).value = s
+                        ws.cell(row=i+temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
@@ -448,20 +466,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full bibliographic title":
-                    s = ''
-                    if "origin_author" in list_members:
-                        s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                    if not hasattr(list_remove[i],'full_bibliographic_title'):
+                        s = ''
+                        if "origin_author" in list_members:
+                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        else:
+                            s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if "volume" in list_members and list_remove[i].volume != None:
+                            s += f" - Vol. {list_remove[i].volume}."
+                        if "issue" in list_members and list_remove[i].issue != None:
+                            s += f" - №{list_remove[i].issue}."
+                        if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
+                            s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
+                        if "source_name" in list_members and list_remove[i].source_name != None:
+                            s += f", {list_remove[i].source_name}"
+                        ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
-                    if "volume" in list_members and list_remove[i].volume != None:
-                        s += f" - Vol. {list_remove[i].volume}."
-                    if "issue" in list_members and list_remove[i].issue != None:
-                        s += f" - №{list_remove[i].issue}."
-                    if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
-                        s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
-                    if "source_name" in list_members and list_remove[i].source_name != None:
-                        s += f", {list_remove[i].source_name}"
-                    ws.cell(row=i+temp_row, column=j+3).value = s
+                        ws.cell(row=i+temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
@@ -614,14 +635,20 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
     if "origin_author" in list_members:
-        ws.column_dimensions["C"].width = 40
+        ws.column_dimensions["C"].width = 20
+        ws.column_dimensions["D"].width = 20
+        ws.column_dimensions["E"].width = 90
+        ws.column_dimensions["F"].width = 10
+        ws.column_dimensions["G"].width = 200
+        ws.column_dimensions["H"].width = 70    
+        ws.column_dimensions["I"].width = 150
     else:
         ws.column_dimensions["C"].width = 20
-    ws.column_dimensions["D"].width = 90
-    ws.column_dimensions["E"].width = 10
-    ws.column_dimensions["F"].width = 200
-    ws.column_dimensions["G"].width = 70    
-    ws.column_dimensions["H"].width = 150
+        ws.column_dimensions["D"].width = 90
+        ws.column_dimensions["E"].width = 10
+        ws.column_dimensions["F"].width = 200
+        ws.column_dimensions["G"].width = 70    
+        ws.column_dimensions["H"].width = 150
       
     temp_row = 2
     count_article = 0
@@ -680,20 +707,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        if not hasattr(list_new[i],'full_bibliographic_title'):
+                            s = ''
+                            if "origin_author" in list_members:
+                                s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                            else:
+                                s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                            if "volume" in list_members and list_new[i].volume != None:
+                                s += f" - Vol. {list_new[i].volume}."
+                            if "issue" in list_members and list_new[i].issue != None:
+                                s += f" - №{list_new[i].issue}."
+                            if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
+                                s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
+                            if "source_name" in list_members and list_new[i].source_name != None:
+                                s += f", {list_new[i].source_name}"
+                            ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
-                        if "volume" in list_members and list_new[i].volume != None:
-                            s += f" - Vol. {list_new[i].volume}."
-                        if "issue" in list_members and list_new[i].issue != None:
-                            s += f" - №{list_new[i].issue}."
-                        if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
-                            s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
-                        if "source_name" in list_members and list_new[i].source_name != None:
-                            s += f", {list_new[i].source_name}"
-                        ws.cell(row=temp_row, column=j+3).value = s
+                            ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_title
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -706,20 +736,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full bibliographic title":
-                        s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        if not hasattr(list_new[i],'full_bibliographic_title'):
+                            s = ''
+                            if "origin_author" in list_members:
+                                s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                            else:
+                                s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
+                            if "volume" in list_members and list_new[i].volume != None:
+                                s += f" - Vol. {list_new[i].volume}."
+                            if "issue" in list_members and list_new[i].issue != None:
+                                s += f" - №{list_new[i].issue}."
+                            if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
+                                s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
+                            if "source_name" in list_members and list_new[i].source_name != None:
+                                s += f", {list_new[i].source_name}"
+                            ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
-                        if "volume" in list_members and list_new[i].volume != None:
-                            s += f" - Vol. {list_new[i].volume}."
-                        if "issue" in list_members and list_new[i].issue != None:
-                            s += f" - №{list_new[i].issue}."
-                        if "start_page" in list_members and "end_page" in list_members and list_new[i].start_page != None and list_new[i].end_page != None:
-                            s += f" - pp. {list_new[i].start_page}-{list_new[i].end_page}"
-                        if "source_name" in list_members and list_new[i].source_name != None:
-                            s += f", {list_new[i].source_name}"
-                        ws.cell(row=temp_row, column=j+3).value = s
+                            ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_title
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -776,20 +809,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if not hasattr(list_ident[i],'full_bibliographic_title'):
+                            s = ''
+                            if "origin_author" in list_members:
+                                s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                            else:
+                                s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                            if "volume" in list_members and list_ident[i].volume != None:
+                                s += f" - Vol. {list_ident[i].volume}."
+                            if "issue" in list_members and list_ident[i].issue != None:
+                                s += f" - №{list_ident[i].issue}."
+                            if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
+                                s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
+                            if "source_name" in list_members and list_ident[i].source_name != None:
+                                s += f", {list_ident[i].source_name}"
+                            ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
-                        if "volume" in list_members and list_ident[i].volume != None:
-                            s += f" - Vol. {list_ident[i].volume}."
-                        if "issue" in list_members and list_ident[i].issue != None:
-                            s += f" - №{list_ident[i].issue}."
-                        if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
-                            s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
-                        if "source_name" in list_members and list_ident[i].source_name != None:
-                            s += f", {list_ident[i].source_name}"
-                        ws.cell(row=temp_row, column=j+3).value = s
+                             ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -801,20 +837,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full bibliographic title":
-                        s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if not hasattr(list_ident[i],'full_bibliographic_title'):
+                            s = ''
+                            if "origin_author" in list_members:
+                                s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                            else:
+                                s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
+                            if "volume" in list_members and list_ident[i].volume != None:
+                                s += f" - Vol. {list_ident[i].volume}."
+                            if "issue" in list_members and list_ident[i].issue != None:
+                                s += f" - №{list_ident[i].issue}."
+                            if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
+                                s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
+                            if "source_name" in list_members and list_ident[i].source_name != None:
+                                s += f", {list_ident[i].source_name}"
+                            ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
-                        if "volume" in list_members and list_ident[i].volume != None:
-                            s += f" - Vol. {list_ident[i].volume}."
-                        if "issue" in list_members and list_ident[i].issue != None:
-                            s += f" - №{list_ident[i].issue}."
-                        if "start_page" in list_members and "end_page" in list_members and list_ident[i].start_page != None and list_ident[i].end_page != None:
-                            s += f" - pp. {list_ident[i].start_page}-{list_ident[i].end_page}"
-                        if "source_name" in list_members and list_ident[i].source_name != None:
-                            s += f", {list_ident[i].source_name}"
-                        ws.cell(row=temp_row, column=j+3).value = s
+                             ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -871,20 +910,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if not hasattr(list_remove[i],'full_bibliographic_title'):
+                            s = ''
+                            if "origin_author" in list_members:
+                                s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                            else:
+                                s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                            if "volume" in list_members and list_remove[i].volume != None:
+                                s += f" - Vol. {list_remove[i].volume}."
+                            if "issue" in list_members and list_remove[i].issue != None:
+                                s += f" - №{list_remove[i].issue}."
+                            if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
+                                s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
+                            if "source_name" in list_members and list_remove[i].source_name != None:
+                                s += f", {list_remove[i].source_name}"
+                            ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
-                        if "volume" in list_members and list_remove[i].volume != None:
-                            s += f" - Vol. {list_remove[i].volume}."
-                        if "issue" in list_members and list_remove[i].issue != None:
-                            s += f" - №{list_remove[i].issue}."
-                        if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
-                            s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
-                        if "source_name" in list_members and list_remove[i].source_name != None:
-                            s += f", {list_remove[i].source_name}"
-                        ws.cell(row=temp_row, column=j+3).value = s
+                            ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
@@ -896,20 +938,23 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full bibliographic title":
-                        s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if not hasattr(list_remove[i],'full_bibliographic_title'):
+                            s = ''
+                            if "origin_author" in list_members:
+                                s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                            else:
+                                s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
+                            if "volume" in list_members and list_remove[i].volume != None:
+                                s += f" - Vol. {list_remove[i].volume}."
+                            if "issue" in list_members and list_remove[i].issue != None:
+                                s += f" - №{list_remove[i].issue}."
+                            if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
+                                s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
+                            if "source_name" in list_members and list_remove[i].source_name != None:
+                                s += f", {list_remove[i].source_name}"
+                            ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
-                        if "volume" in list_members and list_remove[i].volume != None:
-                            s += f" - Vol. {list_remove[i].volume}."
-                        if "issue" in list_members and list_remove[i].issue != None:
-                            s += f" - №{list_remove[i].issue}."
-                        if "start_page" in list_members and "end_page" in list_members and list_remove[i].start_page != None and list_remove[i].end_page != None:
-                            s += f" - pp. {list_remove[i].start_page}-{list_remove[i].end_page}"
-                        if "source_name" in list_members and list_remove[i].source_name != None:
-                            s += f", {list_remove[i].source_name}"
-                        ws.cell(row=temp_row, column=j+3).value = s
+                            ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
