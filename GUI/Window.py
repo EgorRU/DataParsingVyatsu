@@ -1,3 +1,4 @@
+from ast import Global
 from tkinter import *
 from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
@@ -5,12 +6,12 @@ from tkinter.filedialog import asksaveasfilename
 import tkinter, os
 import tkinter.filedialog
 from PIL import Image, ImageTk
-from Parsing.Scopus import Scopus
-from Parsing.Wos import Wos
-from Parsing.iPublishing import IPublishing
-from Parsing.eLibrary import eLibrary
-from App.Equals import identical_sources_equals, different_source_equals
-from App.Upload import Upload
+from Parsing import Scopus
+from Parsing import Wos
+from Parsing import eLibrary
+from Parsing import IPublishing
+from App import identical_sources_equals, different_source_equals
+from App import Upload
 
 win = Tk()
 
@@ -719,6 +720,9 @@ def help_guide():
 
 
 def upload():
+    global right_table_site
+    global left_table_site
+    
     global add_new_list
     global remove_new_list
     global identical_new_list
@@ -726,7 +730,7 @@ def upload():
     if len(path) > 0:
         check = True
         try:
-            Upload(path, add_new_list, identical_new_list, remove_new_list)
+            Upload(path, add_new_list, identical_new_list, remove_new_list, left_table_site, right_table_site)
         except:
             tkinter.messagebox.showwarning(title="Оповещение", message="Возможно Вы пытаетесь перезаписать файл, который открыт. Необходимо:\n1)Закрыть файл и нажать занова кнопку 'Выгрузить в xlsx'\nИЛИ\n2)Выбрать другое название файла при новом нажатии на кнопку 'Выгрузить в xlsx'")
             check = False

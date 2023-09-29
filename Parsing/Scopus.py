@@ -1,6 +1,6 @@
 from openpyxl import Workbook, load_workbook
-from App.Class import Scopus_Library
-from App.Clear_author import clear_str
+from App import Scopus_Library
+from App import clear_str
 
 
 def Scopus(path):
@@ -318,7 +318,6 @@ def Scopus(path):
                     for j in range(count_temp, count_temp + count_author_row):
                         all_scopus_list_library[j].link = link.strip()
             i += 1
-            
     except:
         return None
 

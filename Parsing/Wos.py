@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
 from xls2xlsx import XLS2XLSX
-from App.Class import WOS_Library
-from App.Clear_author import clear_str
+from App import WOS_Library
+from App import clear_str
 
 
 def Wos(path):
@@ -82,6 +82,12 @@ def Wos(path):
                 
                 if ws[f"BS{row_index}"].value != None:
                     new_author.unique_wos_id = ws[f"BS{row_index}"].value
+                    
+                if ws[f"N{row_index}"].value != None:
+                    new_author.document_type = ws[f"N{row_index}"].value
+                    
+                if ws[f"AF{row_index}"].value != None:
+                    new_author.citations = ws[f"AF{row_index}"].value
                 
                 all_wos_list_library.append(new_author)
     except:

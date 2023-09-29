@@ -6,8 +6,8 @@ import json
 def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
     return not alphabet.isdisjoint(text.lower())
 
-
-def Upload(path, list_new = [], list_ident = [], list_remove = []):
+#'w' - WoS, 's' - Scopus, 'i' - iPublishing, 'e' - eLibrary
+def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", right=""):
     # создание нового файла
     wb = Workbook()
     ws = wb.active
@@ -242,6 +242,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                 #красим ячейку в зелёный
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+        #если есть поле orign_author на русском языке - добавляем в 3 столбик
+        if "origin_author" in list_members and match(list_new[i].origin_author):
+            ws.cell(row=i+temp_row, column=3).value = f"{ws.cell(row=i+temp_row, column=3).value} ({list_new[i].origin_author})"
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -349,6 +352,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
+        #если есть поле orign_author на русском языке - добавляем в 3 столбик
+        if "origin_author" in list_members and match(list_ident[i].origin_author):
+            ws.cell(row=i+temp_row, column=3).value = f"{ws.cell(row=i+temp_row, column=3).value} ({list_ident[i].origin_author})"
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -460,6 +466,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                 #красим ячейку в красный
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+        #если есть поле orign_author на русском языке - добавляем в 3 столбик
+        if "origin_author" in list_members and match(list_remove[i].origin_author):
+            ws.cell(row=i+temp_row, column=3).value = f"{ws.cell(row=i+temp_row, column=3).value} ({list_remove[i].origin_author})"
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -480,7 +489,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
             cell.font = Font(size=16)
     
-
     #статистика в новый лист книги
     ws = wb.create_sheet('Статистика')
     ws.column_dimensions["A"].width = 30
@@ -727,6 +735,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
                     #красим ячейку в зелёный
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
+            #если есть поле orign_author на русском языке - добавляем в 3 столбик
+            if "origin_author" in list_members and match(list_new[i].origin_author):
+                ws.cell(row=temp_row, column=3).value = f"{ws.cell(row=temp_row, column=3).value} ({list_new[i].origin_author})"
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -820,6 +831,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
+            #если есть поле orign_author на русском языке - добавляем в 3 столбик
+            if "origin_author" in list_members and match(list_ident[i].origin_author):
+                ws.cell(row=temp_row, column=3).value = f"{ws.cell(row=temp_row, column=3).value} ({list_ident[i].origin_author})"
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -917,6 +931,9 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
                     #красим ячейку в красный
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
+            #если есть поле orign_author на русском языке - добавляем в 3 столбик
+            if "origin_author" in list_members and match(list_remove[i].origin_author):
+                ws.cell(row=temp_row, column=3).value = f"{ws.cell(row=temp_row, column=3).value} ({list_remove[i].origin_author})"
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -924,7 +941,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = []):
             title = title_temp
             temp_row += 1
     count_remove = count
-
 
     #изменяем высоту ячейки
     for i in range(1, ws.max_row + 1):

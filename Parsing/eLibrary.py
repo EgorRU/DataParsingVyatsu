@@ -1,8 +1,8 @@
 import json
 import xmltodict
-from App.Translate import Translite
-from App.Class import eLibrary_Library
-from App.Clear_author import clear_str
+from App import Translite
+from App import eLibrary_Library
+from App import clear_str
 
 
 def eLibrary(path):
@@ -56,31 +56,38 @@ def eLibrary(path):
             if type(list_author)==dict:
                 new_article = eLibrary_Library()
                 if "lastname" in list_author:
-                    #print(str(auth["lastname"]))
                     new_article.author = str(list_author["lastname"])
                 if "initials" in list_author:
-                        new_article.author = new_article.author + " " + str(list_author["initials"])
-                if new_article.author != None:
-                    new_article.author = clear_str(new_article.author.strip())
-                    new_article.author = clear_str(new_article.author)
+                    new_article.author = new_article.author + " " + str(list_author["initials"])
+                new_article.origin_author = clear_str(new_article.author.strip())
+                new_article.author = clear_str(Translite(new_article.origin_author))
                 count_author_temp += 1
                 all_elibrary_list_library.append(new_article)
             #если авторов много
             else:
                 if type(list_author)==list:
                     #создаём экземпляры
+                    old_article = ""
                     for auth in list_author:
+                        #создаём запись
                         new_article = eLibrary_Library()
                         if "lastname" in auth:
                             new_article.author = str(auth["lastname"])
                         if "initials" in auth:
                             new_article.author = new_article.author + " " + str(auth["initials"])
-                        if new_article.author != None:
-                            new_article.author = clear_str(new_article.author.strip())
-                            new_article.author = clear_str(new_article.author)
-                        count_author_temp += 1
-                        all_elibrary_list_library.append(new_article)
-            
+                        new_article.origin_author = clear_str(new_article.author.strip())
+                        new_article.author = clear_str(Translite(new_article.origin_author))
+                        #если запись не повторяется
+                        if old_article=="":
+                            all_elibrary_list_library.append(new_article)
+                            count_author_temp += 1
+                        else:
+                            if new_article.author != old_article.author:
+                                all_elibrary_list_library.append(new_article)
+                                count_author_temp += 1
+                        #заменяем прошлую запись для дальнейшего сравнения
+                        old_article = new_article
+                
 
             #по всем новым авторам добавляем новые поля
             for i in range(count_all_author, count_all_author + count_author_temp):
@@ -177,10 +184,6 @@ def eLibrary(path):
             count_all_author += count_author_temp
     except:
         return None
-    
-    for i in range(len(all_elibrary_list_library)):
-        all_elibrary_list_library[i].origin_author = all_elibrary_list_library[i].author
-        all_elibrary_list_library[i].author = Translite(all_elibrary_list_library[i].author)
         
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_title = "".join(e for e in all_elibrary_list_library[i].title.lower() if e.isalpha())

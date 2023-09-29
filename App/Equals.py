@@ -21,7 +21,7 @@ def identical_sources_equals(source1, source2):
                 and source2[i].title == source1[j].title
             ):
                 copy = True
-                identical_new_list.append(source2[i])
+                identical_new_list.append(source1[i])
                 break
         if copy == False:
             add_new_list.append(source2[i])

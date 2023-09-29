@@ -1,90 +1,92 @@
 class Base_Library:
     def __init__(self):
-        self.author = None
-        self.title = None
-        self.year = None
-        self.clear_author = None
-        self.clear_title = None
+        self.author = ""
+        self.title = ""
+        self.year = ""
+        self.clear_author = ""
+        self.clear_title = ""
 
 
 class Scopus_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.id_author = None
-        self.source_name = None
-        self.volume = None
-        self.issue = None
-        self.article = None
-        self.start_page = None
-        self.end_page = None
-        self.number_of_pages = None
+        self.id_author = ""
+        self.source_name = ""
+        self.volume = ""
+        self.issue = ""
+        self.article = ""
+        self.start_page = ""
+        self.end_page = ""
+        self.number_of_pages = ""
         self.citation = 0
-        self.doi = None
-        self.link = None
+        self.doi = ""
+        self.link = ""
         self.source = "Scopus"
 
 
 class WOS_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.volume = None
-        self.issue = None
-        self.article = None
-        self.start_page = None
-        self.end_page = None
-        self.doi = None
-        self.link = None
-        self.conference_title = None
-        self.conference_date = None
-        self.conference_location = None
-        self.researcher_ids = None
-        self.ORCIDs = None
-        self.ISSN = None
-        self.eISSN = None
-        self.unique_wos_id = None
+        self.volume = ""
+        self.issue = ""
+        self.article = ""
+        self.start_page = ""
+        self.end_page = ""
+        self.doi = ""
+        self.link = ""
+        self.conference_title = ""
+        self.conference_date = ""
+        self.conference_location = ""
+        self.researcher_ids = ""
+        self.ORCIDs = ""
+        self.ISSN = ""
+        self.eISSN = ""
+        self.unique_wos_id = ""
+        self.citations = ""
+        self.document_type = ""
         self.source = "WOS"
   
 
 class eLibrary_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.origin_author = None
-        self.link = None
-        self.doi = None
-        self.id = None
-        self.type = None
+        self.origin_author = ""
+        self.link = ""
+        self.doi = ""
+        self.id = ""
+        self.type = ""
         self.citation = 0
-        self.pages = None
-        self.volume = None
-        self.issn = None
-        self.eissn = None
-        self.title_journal = None
-        self.publisher = None
-        self.country = None
-        self.GRNTI_code = None
+        self.pages = ""
+        self.volume = ""
+        self.issn = ""
+        self.eissn = ""
+        self.title_journal = ""
+        self.publisher = ""
+        self.country = ""
+        self.GRNTI_code = ""
         self.source = "eLibrary"
     
 
 class IPublishing_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.author_rus = None
-        self.article = None
-        self.link = None
-        self.description = None
-        self.doi = None
-        self.institute = None
-        self.faculty = None
-        self.cathedra = None
-        self.full_bibliographic_description = None
-        self.cod_OECD = None
-        self.group_of_scientific_specialties = None
-        self.GRNTI_code = None
-        self.quartile_wos = None
-        self.quartile_scopus = None
-        self.quartile_scopus_sjr = None
-        self.impact_factor_wos = None
-        self.impact_factor_scopus = None
-        self.impact_factor_elibrary_5_year = None
-        self.impact_factor_elibrary_2_year = None
+        self.origin_author = ""
+        self.article = ""
+        self.link = ""
+        self.description = ""
+        self.doi = ""
+        self.institute = ""
+        self.faculty = ""
+        self.cathedra = ""
+        self.full_bibliographic_description = ""
+        self.cod_OECD = ""
+        self.group_of_scientific_specialties = ""
+        self.GRNTI_code = ""
+        self.quartile_wos = ""
+        self.quartile_scopus = ""
+        self.quartile_scopus_sjr = ""
+        self.impact_factor_wos = ""
+        self.impact_factor_scopus = ""
+        self.impact_factor_elibrary_5_year = ""
+        self.impact_factor_elibrary_2_year = ""
         self.source = "iPublishing"
