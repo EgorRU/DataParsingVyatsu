@@ -212,7 +212,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             s += f", {list_new[i].source_name}"
                         ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                         ws.cell(row=i+temp_row, column=j+3).value = list_new[i].full_bibliographic_title
+                         ws.cell(row=i+temp_row, column=j+3).value = list_new[i].full_bibliographic_description
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -253,7 +253,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             s += f", {list_new[i].source_name}"
                         ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                         ws.cell(row=i+temp_row, column=j+3).value = list_new[i].full_bibliographic_title
+                         ws.cell(row=i+temp_row, column=j+3).value = list_new[i].full_bibliographic_description
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -327,7 +327,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             s += f", {list_ident[i].source_name}"
                         ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        ws.cell(row=i+temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
+                        ws.cell(row=i+temp_row, column=j+3).value = list_ident[i].full_bibliographic_description
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -367,7 +367,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             s += f", {list_ident[i].source_name}"
                         ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        ws.cell(row=i+temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
+                        ws.cell(row=i+temp_row, column=j+3).value = list_ident[i].full_bibliographic_description
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -440,7 +440,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             s += f", {list_remove[i].source_name}"
                         ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        ws.cell(row=i+temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
+                        ws.cell(row=i+temp_row, column=j+3).value = list_remove[i].full_bibliographic_description
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
@@ -481,7 +481,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             s += f", {list_remove[i].source_name}"
                         ws.cell(row=i+temp_row, column=j+3).value = s
                     else:
-                        ws.cell(row=i+temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
+                        ws.cell(row=i+temp_row, column=j+3).value = list_remove[i].full_bibliographic_description
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
@@ -721,7 +721,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                                 s += f", {list_new[i].source_name}"
                             ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_title
+                            ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_description
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -750,7 +750,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                                 s += f", {list_new[i].source_name}"
                             ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_title
+                            ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_description
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
@@ -822,7 +822,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                                 s += f", {list_ident[i].source_name}"
                             ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                             ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
+                             ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_description
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -850,7 +850,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                                 s += f", {list_ident[i].source_name}"
                             ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                             ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_title
+                             ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_description
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
@@ -922,7 +922,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                                 s += f", {list_remove[i].source_name}"
                             ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
+                            ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_description
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
@@ -950,7 +950,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                                 s += f", {list_remove[i].source_name}"
                             ws.cell(row=temp_row, column=j+3).value = s
                         else:
-                            ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_title
+                            ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_description
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
