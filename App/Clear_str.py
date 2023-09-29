@@ -74,4 +74,4 @@ def clear_IPublishing_title(string):
     new_str = string[:index:-1]
     index = new_str.find(".")
     new_str = new_str[:index:-1].strip()
-    return new_str
+    return new_str.replace("/", "").strip()

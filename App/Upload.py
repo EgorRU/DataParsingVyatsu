@@ -50,9 +50,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
         new_list_members.remove("full_bibliographic_description")
         
     if "origin_author" in new_list_members:
-        list_members = ["author", "origin_author", "title", "year", "full bibliographic title"]
+        list_members = ["author", "origin_author", "title", "year", "full_bibliographic_description"]
+        new_list_members.remove("origin_author")
     else:
-        list_members = ["author", "title", "year", "full bibliographic title"]
+        list_members = ["author", "title", "year", "full_bibliographic_description"]
     
     #если есть поля, то добавляем в нужной очерёдности
     if "doi" in new_list_members:
@@ -114,7 +115,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     
     #меняем ширину ячеек
     for i in range(len(list_members)):
-        ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 40
+        ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 60
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
     if "origin_author" in list_members:
@@ -194,8 +195,8 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
                             employe = True
                             break
-                if list_members[j]=="full bibliographic title":
-                    if not hasattr(list_new[i],'full_bibliographic_title'):
+                if list_members[j]=="full_bibliographic_description":
+                    if not hasattr(list_new[i],'full_bibliographic_description'):
                         s = ''
                         if "origin_author" in list_members:
                             s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
@@ -235,7 +236,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         if list_new[i].author in list_data[k] or list_new[i].author == list_data[k]:
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
-                if list_members[j]=="full bibliographic title":
+                if list_members[j]=="full_bibliographic_description":
                     if not hasattr(list_new[i],'full_bibliographic_title'):
                         s = ''
                         if "origin_author" in list_members:
@@ -264,7 +265,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
         #меняем текущее название для дальнейшего бордера
         title = title_temp
     temp_row += len(list_new)
-    count_add = count
 
 
     count = 0
@@ -310,7 +310,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             employe = True
                             break
-                if list_members[j]=="full bibliographic title":
+                if list_members[j]=="full_bibliographic_description":
                     if not hasattr(list_ident[i],'full_bibliographic_title'):
                         s = ''
                         if "origin_author" in list_members:
@@ -350,7 +350,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         if list_ident[i].author in list_data[k] or list_ident[i].author == list_data[k]:
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
-                if list_members[j]=="full bibliographic title":
+                if list_members[j]=="full_bibliographic_description":
                     if not hasattr(list_ident[i],'full_bibliographic_title'):
                         s = ''
                         if "origin_author" in list_members:
@@ -377,7 +377,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
         #меняем текущее название для дальнейшего бордера
         title = title_temp
     temp_row += len(list_ident)
-    count_ident = count
 
 
     count = 0
@@ -424,7 +423,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
                             employe = True
                             break
-                if list_members[j]=="full bibliographic title":
+                if list_members[j]=="full_bibliographic_description":
                     if not hasattr(list_remove[i],'full_bibliographic_title'):
                         s = ''
                         if "origin_author" in list_members:
@@ -465,7 +464,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                         if list_remove[i].author in list_data[k] or list_remove[i].author == list_data[k]:
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
-                if list_members[j]=="full bibliographic title":
+                if list_members[j]=="full_bibliographic_description":
                     if not hasattr(list_remove[i],'full_bibliographic_title'):
                         s = ''
                         if "origin_author" in list_members:
@@ -494,7 +493,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
         #меняем текущее название для дальнейшего бордера
         title = title_temp
     temp_row += len(list_remove)
-    count_remove = count    
 
 
     #изменяем высоту ячейки
@@ -631,7 +629,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     
     #меняем ширину ячеек
     for i in range(len(list_members)):
-        ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 40
+        ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 60
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
     if "origin_author" in list_members:
@@ -706,7 +704,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 count += 1 #кол-во записей
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
-                    if list_members[j]=="full bibliographic title":
+                    if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_new[i],'full_bibliographic_title'):
                             s = ''
                             if "origin_author" in list_members:
@@ -735,7 +733,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
-                    if list_members[j]=="full bibliographic title":
+                    if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_new[i],'full_bibliographic_title'):
                             s = ''
                             if "origin_author" in list_members:
@@ -764,7 +762,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             #меняем текущее название для дальнейшего бордера
             title = title_temp
             temp_row += 1
-    count_add = count
 
 
     count = 0
@@ -808,7 +805,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 count += 1 #кол-во записей
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
-                    if list_members[j]=="full bibliographic title":
+                    if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_ident[i],'full_bibliographic_title'):
                             s = ''
                             if "origin_author" in list_members:
@@ -836,7 +833,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
-                    if list_members[j]=="full bibliographic title":
+                    if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_ident[i],'full_bibliographic_title'):
                             s = ''
                             if "origin_author" in list_members:
@@ -863,7 +860,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             #меняем текущее название для дальнейшего бордера
             title = title_temp
             temp_row += 1
-    count_ident = count
 
 
     count = 0
@@ -909,7 +905,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 count += 1 #кол-во записей
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
-                    if list_members[j]=="full bibliographic title":
+                    if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_remove[i],'full_bibliographic_title'):
                             s = ''
                             if "origin_author" in list_members:
@@ -937,7 +933,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             else:
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
-                    if list_members[j]=="full bibliographic title":
+                    if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_remove[i],'full_bibliographic_title'):
                             s = ''
                             if "origin_author" in list_members:
@@ -966,7 +962,6 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
             #меняем текущее название для дальнейшего бордера
             title = title_temp
             temp_row += 1
-    count_remove = count
 
     #изменяем высоту ячейки
     for i in range(1, ws.max_row + 1):
