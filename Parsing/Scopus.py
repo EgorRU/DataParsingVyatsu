@@ -37,16 +37,16 @@ def Scopus(path):
     # кол-во ФИО авторов
     count_all_author = 0
 
-    try:
-        # ПАРСИНГ КАЖДОЙ СТРОКИ
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            count_temp = count_all_author
-            s = row[0]  # текущая строка
-            i = 0  # индекс  - бежим по строке
+    # ПАРСИНГ КАЖДОЙ СТРОКИ
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        count_temp = count_all_author
+        s = row[0]  # текущая строка
+        i = 0  # индекс  - бежим по строке
 
-            # кол-во авторов статьи в одной строке
-            count_author_row = 0
-            
+        # кол-во авторов статьи в одной строке
+        count_author_row = 0
+         
+        try:
             #ПАРСИНГ ФИО
             while s[i] != '"':
                 # обнуляем строку имени писателя
@@ -58,7 +58,7 @@ def Scopus(path):
                 # создание экземпляра класса - статья scopus
                 new_author = Scopus_Library()
                 count_author_row += 1
-                
+                new_author.original_author = author.strip()
                 # заполянем ФИО автора
                 try:
                     new_author.author = clear_author(author.strip())
@@ -321,8 +321,8 @@ def Scopus(path):
                     for j in range(count_temp, count_temp + count_author_row):
                         all_scopus_list_library[j].link = link.strip()
             i += 1
-    except:
-        return None
+        except:
+            pass
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())

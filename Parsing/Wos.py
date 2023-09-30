@@ -14,21 +14,21 @@ def Wos(path):
             x2x = XLS2XLSX(path)
             path = path + "x"
             x2x.to_xlsx(path)
-        
         #открываем файл
         wb = load_workbook(path)
         ws = wb.active
     except:
         return None
 
-    try:
         # ПАРСИНГ КАЖДОЙ СТРОКИ
-        for row_index in range(2, ws.max_row + 1):
+    for row_index in range(2, ws.max_row + 1):
+        try:    
             str_author = ws[f"F{row_index}"].value #строка с авторами 
             str_author = str_author.replace(",","") #убираем запятые
             list_author = str_author.split(";") #список авторов
             for i in range (len(list_author)):
                 new_author = WOS_Library()
+                new_author.original_author = list_author[i].strip()
                 try:
                     new_author.author = clear_author(list_author[i].strip())
                 except:
@@ -93,8 +93,8 @@ def Wos(path):
                     new_author.citations = ws[f"AF{row_index}"].value
                 
                 all_wos_list_library.append(new_author)
-    except:
-        return None
+        except:
+            pass
 
     for i in range(len(all_wos_list_library)):
         all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())

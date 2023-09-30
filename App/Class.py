@@ -1,6 +1,7 @@
 class Base_Library:
     def __init__(self):
         self.author = ""
+        self.original_author = ""
         self.title = ""
         self.year = ""
         self.clear_author = ""
@@ -50,7 +51,6 @@ class WOS_Library(Base_Library):
 class eLibrary_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.origin_author = ""
         self.link = ""
         self.doi = ""
         self.id = ""
@@ -70,7 +70,6 @@ class eLibrary_Library(Base_Library):
 class IPublishing_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.origin_author = ""
         self.article = ""
         self.link = ""
         self.doi = ""

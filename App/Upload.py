@@ -6,7 +6,8 @@ import json
 def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
     return not alphabet.isdisjoint(text.lower())
 
-def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", right=""):
+
+def Upload(path, list_new, list_ident, list_remove):
     # создание нового файла
     wb = Workbook()
     ws = wb.active
@@ -45,15 +46,12 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     new_list_members.remove("author")
     new_list_members.remove("title")
     new_list_members.remove("year")
+    new_list_members.remove("original_author")
+    
+    list_members = ["author", "original_author", "title", "year", "full_bibliographic_description"]
     
     if "full_bibliographic_description" in new_list_members:
         new_list_members.remove("full_bibliographic_description")
-        
-    if "origin_author" in new_list_members:
-        list_members = ["author", "origin_author", "title", "year", "full_bibliographic_description"]
-        new_list_members.remove("origin_author")
-    else:
-        list_members = ["author", "title", "year", "full_bibliographic_description"]
     
     #если есть поля, то добавляем в нужной очерёдности
     if "doi" in new_list_members:
@@ -118,7 +116,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
         ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 60
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
-    if "origin_author" in list_members:
+    if "original_author" in list_members:
         ws.column_dimensions["C"].width = 20
         ws.column_dimensions["D"].width = 20
         ws.column_dimensions["E"].width = 90
@@ -147,9 +145,13 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
     dict_ident_citated = dict()
     dict_remove_citated = dict()
     
-    #словарь с сотрудниками
-    file = open('employee.json', 'r', encoding="utf-8")
-    list_data = json.load(file)
+    list_data = []
+    try:
+        #словарь с сотрудниками
+        file = open('employee.json', 'r', encoding="utf-8")
+        list_data = json.load(file)
+    except:
+        pass
     
     count = 0
     #добавляем новые элементы
@@ -198,8 +200,8 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 if list_members[j]=="full_bibliographic_description":
                     if not hasattr(list_new[i],'full_bibliographic_description'):
                         s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        if "original_author" in list_members:
+                            s = f"{list_new[i].original_author}, {list_new[i].title} - {list_new[i].year}."
                         else:
                             s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                         if "volume" in list_members and list_new[i].volume != None:
@@ -237,10 +239,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full_bibliographic_description":
-                    if not hasattr(list_new[i],'full_bibliographic_title'):
+                    if not hasattr(list_new[i],'full_bibliographic_description'):
                         s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                        if "original_author" in list_members:
+                            s = f"{list_new[i].original_author}, {list_new[i].title} - {list_new[i].year}."
                         else:
                             s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                         if "volume" in list_members and list_new[i].volume != None:
@@ -311,10 +313,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             employe = True
                             break
                 if list_members[j]=="full_bibliographic_description":
-                    if not hasattr(list_ident[i],'full_bibliographic_title'):
+                    if not hasattr(list_ident[i],'full_bibliographic_description'):
                         s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if "original_author" in list_members:
+                            s = f"{list_ident[i].original_author}, {list_ident[i].title} - {list_ident[i].year}."
                         else:
                             s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                         if "volume" in list_members and list_ident[i].volume != None:
@@ -351,10 +353,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full_bibliographic_description":
-                    if not hasattr(list_ident[i],'full_bibliographic_title'):
+                    if not hasattr(list_ident[i],'full_bibliographic_description'):
                         s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                        if "original_author" in list_members:
+                            s = f"{list_ident[i].original_author}, {list_ident[i].title} - {list_ident[i].year}."
                         else:
                             s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                         if "volume" in list_members and list_ident[i].volume != None:
@@ -424,10 +426,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             employe = True
                             break
                 if list_members[j]=="full_bibliographic_description":
-                    if not hasattr(list_remove[i],'full_bibliographic_title'):
+                    if not hasattr(list_remove[i],'full_bibliographic_description'):
                         s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if "original_author" in list_members:
+                            s = f"{list_remove[i].original_author}, {list_remove[i].title} - {list_remove[i].year}."
                         else:
                             s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                         if "volume" in list_members and list_remove[i].volume != None:
@@ -465,10 +467,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                             ws.cell(row=i+temp_row, column=j+3).border = Border(top = Side(border_style='thick', color='8B0000'),right = Side(border_style='thick', color='8B0000'),bottom = Side(border_style='thick', color='8B0000'),left = Side(border_style='thick', color='8B0000'))
                             break
                 if list_members[j]=="full_bibliographic_description":
-                    if not hasattr(list_remove[i],'full_bibliographic_title'):
+                    if not hasattr(list_remove[i],'full_bibliographic_description'):
                         s = ''
-                        if "origin_author" in list_members:
-                            s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                        if "original_author" in list_members:
+                            s = f"{list_remove[i].original_author}, {list_remove[i].title} - {list_remove[i].year}."
                         else:
                             s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                         if "volume" in list_members and list_remove[i].volume != None:
@@ -632,7 +634,7 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
         ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 60
     ws.column_dimensions["A"].width = 15
     ws.column_dimensions["B"].width = 15
-    if "origin_author" in list_members:
+    if "original_author" in list_members:
         ws.column_dimensions["C"].width = 20
         ws.column_dimensions["D"].width = 20
         ws.column_dimensions["E"].width = 90
@@ -705,10 +707,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
-                        if not hasattr(list_new[i],'full_bibliographic_title'):
+                        if not hasattr(list_new[i],'full_bibliographic_description'):
                             s = ''
-                            if "origin_author" in list_members:
-                                s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                            if "original_author" in list_members:
+                                s = f"{list_new[i].original_author}, {list_new[i].title} - {list_new[i].year}."
                             else:
                                 s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                             if "volume" in list_members and list_new[i].volume != None:
@@ -734,10 +736,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full_bibliographic_description":
-                        if not hasattr(list_new[i],'full_bibliographic_title'):
+                        if not hasattr(list_new[i],'full_bibliographic_description'):
                             s = ''
-                            if "origin_author" in list_members:
-                                s = f"{list_new[i].origin_author}, {list_new[i].title} - {list_new[i].year}."
+                            if "original_author" in list_members:
+                                s = f"{list_new[i].original_author}, {list_new[i].title} - {list_new[i].year}."
                             else:
                                 s = f"{list_new[i].author}, {list_new[i].title} - {list_new[i].year}."
                             if "volume" in list_members and list_new[i].volume != None:
@@ -806,10 +808,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
-                        if not hasattr(list_ident[i],'full_bibliographic_title'):
+                        if not hasattr(list_ident[i],'full_bibliographic_description'):
                             s = ''
-                            if "origin_author" in list_members:
-                                s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                            if "original_author" in list_members:
+                                s = f"{list_ident[i].original_author}, {list_ident[i].title} - {list_ident[i].year}."
                             else:
                                 s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                             if "volume" in list_members and list_ident[i].volume != None:
@@ -834,10 +836,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full_bibliographic_description":
-                        if not hasattr(list_ident[i],'full_bibliographic_title'):
+                        if not hasattr(list_ident[i],'full_bibliographic_description'):
                             s = ''
-                            if "origin_author" in list_members:
-                                s = f"{list_ident[i].origin_author}, {list_ident[i].title} - {list_ident[i].year}."
+                            if "original_author" in list_members:
+                                s = f"{list_ident[i].original_author}, {list_ident[i].title} - {list_ident[i].year}."
                             else:
                                 s = f"{list_ident[i].author}, {list_ident[i].title} - {list_ident[i].year}."
                             if "volume" in list_members and list_ident[i].volume != None:
@@ -906,10 +908,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #Бежим по списку атрибутов класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
-                        if not hasattr(list_remove[i],'full_bibliographic_title'):
+                        if not hasattr(list_remove[i],'full_bibliographic_description'):
                             s = ''
-                            if "origin_author" in list_members:
-                                s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                            if "original_author" in list_members:
+                                s = f"{list_remove[i].original_author}, {list_remove[i].title} - {list_remove[i].year}."
                             else:
                                 s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                             if "volume" in list_members and list_remove[i].volume != None:
@@ -934,10 +936,10 @@ def Upload(path, list_new = [], list_ident = [], list_remove = [], left="", righ
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
-                        if not hasattr(list_remove[i],'full_bibliographic_title'):
+                        if not hasattr(list_remove[i],'full_bibliographic_description'):
                             s = ''
-                            if "origin_author" in list_members:
-                                s = f"{list_remove[i].origin_author}, {list_remove[i].title} - {list_remove[i].year}."
+                            if "original_author" in list_members:
+                                s = f"{list_remove[i].original_author}, {list_remove[i].title} - {list_remove[i].year}."
                             else:
                                 s = f"{list_remove[i].author}, {list_remove[i].title} - {list_remove[i].year}."
                             if "volume" in list_members and list_remove[i].volume != None:

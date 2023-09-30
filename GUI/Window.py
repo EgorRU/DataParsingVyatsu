@@ -1,4 +1,3 @@
-from ast import Global
 from tkinter import *
 from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
@@ -720,9 +719,6 @@ def help_guide():
 
 
 def upload():
-    global right_table_site
-    global left_table_site
-    
     global add_new_list
     global remove_new_list
     global identical_new_list
@@ -730,9 +726,9 @@ def upload():
     if len(path) > 0:
         check = True
         try:
-            Upload(path, add_new_list, identical_new_list, remove_new_list, left_table_site, right_table_site)
+            Upload(path, add_new_list, identical_new_list, remove_new_list)
         except:
-            tkinter.messagebox.showwarning(title="Оповещение", message="Возможно Вы пытаетесь перезаписать файл, который открыт. Необходимо:\n1)Закрыть файл и нажать занова кнопку 'Выгрузить в xlsx'\nИЛИ\n2)Выбрать другое название файла при новом нажатии на кнопку 'Выгрузить в xlsx'")
+            tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка!! Возможно, Вы пытаетесь перезаписать файл, который открыт. Необходимо:\n1)Закрыть файл и нажать занова кнопку 'Выгрузить в xlsx'\nИЛИ\n2)Выбрать другое название файла при новом нажатии на кнопку 'Выгрузить в xlsx'.\nЕсли не помогает, обратитесь к разработчику:\nstud144241@vyatsu.ru")
             check = False
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")

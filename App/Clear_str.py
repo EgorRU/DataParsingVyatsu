@@ -59,6 +59,12 @@
                     new_str = f"{new[0]} {new_str_1}.{new_str_2}."
                 else:
                     new_str = f"{new[0]} {new_str_1}."
+            elif counter==0:
+                #фамилия
+                new[0] = new[0][0].upper() + new[0][1:]
+                new_str_1 = f"{new[1][0].upper()}"
+                new_str_2 = f"{new[1][1].upper()}"
+                new_str = f"{new[0]} {new_str_1}.{new_str_2}."
             #иначе фул имя, и у него берём первую букву
             else:
                 new[0] = new[0][0].upper() + new[0][1:]

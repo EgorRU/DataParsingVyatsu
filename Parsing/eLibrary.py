@@ -45,9 +45,9 @@ def eLibrary(path):
     count_all_author = 0
     list_library = dict_data["items"]["item"]
     
-    try:
-        #по каждой записи
-        for e in list_library:
+    #по каждой записи
+    for e in list_library:
+        try:    
             count_author_temp = 0
             #список авторов
             list_author = e["authors"]["author"]
@@ -59,14 +59,12 @@ def eLibrary(path):
                     new_article.author = str(list_author["lastname"])
                 if "initials" in list_author:
                     new_article.author = new_article.author + " " + str(list_author["initials"])
+                if new_article.author != None:
+                    new_article.original_author = new_article.author.strip()
                 try:
-                    new_article.origin_author = clear_author(new_article.author.strip())
+                    new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
                 except:
-                    new_article.origin_author = new_article.author.strip()
-                try:
-                    new_article.author = clear_author(Translite(new_article.origin_author))
-                except:
-                    new_article.author = new_article.origin_author
+                    new_article.author = new_article.original_author
                 count_author_temp += 1
                 all_elibrary_list_library.append(new_article)
             #если авторов много
@@ -81,14 +79,12 @@ def eLibrary(path):
                             new_article.author = str(auth["lastname"])
                         if "initials" in auth:
                             new_article.author = new_article.author + " " + str(auth["initials"])
+                        if new_article.author != None:
+                            new_article.original_author = new_article.author.strip()
                         try:
-                            new_article.origin_author = clear_author(new_article.author.strip())
+                            new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
                         except:
-                            new_article.origin_author = new_article.author.strip()
-                        try:
-                            new_article.author = clear_author(Translite(new_article.origin_author))
-                        except:
-                            new_article.author = new_article.origin_author
+                            new_article.author = new_article.original_author
                         #если запись не повторяется
                         if old_article=="":
                             all_elibrary_list_library.append(new_article)
@@ -196,8 +192,8 @@ def eLibrary(path):
                     all_elibrary_list_library[i].GRNTI_code = e["grnti"]
                             
             count_all_author += count_author_temp
-    except:
-        return None
+        except:
+            pass
         
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_title = "".join(e for e in all_elibrary_list_library[i].title.lower() if e.isalpha())
