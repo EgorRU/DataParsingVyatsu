@@ -1,6 +1,6 @@
 from tkinter import *
-from tkinter.constants import NORMAL
 from tkinter import messagebox, ttk
+from tkinter.constants import NORMAL
 from tkinter.filedialog import asksaveasfilename
 import tkinter, os
 import tkinter.filedialog
