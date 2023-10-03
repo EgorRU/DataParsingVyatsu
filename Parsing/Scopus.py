@@ -188,19 +188,19 @@ def Scopus(path):
                 if s[i] == '"':
                     i += 1
                     is_apostrophes = True
-                article = ""
+                number_article = ""
                 if is_apostrophes:
                     while s[i] != '"':
-                        article += s[i]
+                        number_article += s[i]
                         i += 1
                     i += 1
                 else:
                     while s[i].isdigit():
-                        article += s[i]
+                        number_article += s[i]
                         i += 1
-                if article != "":
+                if number_article != "":
                     for j in range(count_temp, count_temp + count_author_row):
-                        all_scopus_list_library[j].article = article.strip()
+                        all_scopus_list_library[j].number_article = number_article.strip()
             else:
                 i += 1
 

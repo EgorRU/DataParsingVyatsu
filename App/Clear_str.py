@@ -77,7 +77,15 @@ def clear_IPublishing_title(string):
     index = string.find("/")
     if index == -1:
         return string
-    new_str = string[:index:-1]
+    #обрезаем всё до //
+    new_str = string[:index].strip()
+    #инвертируем
+    new_str = new_str[::-1].strip()
+    #находим первую точку
     index = new_str.find(".")
-    new_str = new_str[:index:-1].strip()
-    return new_str.replace("/", "").strip()
+    #если она вначале или после неё идёт скобка - то игнорим
+    while index<28 or (index>0 and new_str[index-1]==")") or index==0:
+        index = string.find(".", index, len(new_str))
+        new_str = new_str[:index]
+    new_str = new_str[::-1].strip()
+    return new_str

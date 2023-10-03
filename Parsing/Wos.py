@@ -39,7 +39,10 @@ def Wos(path):
                     new_author.title = new_author.title[0].upper() + new_author.title[1:]
                     
                 if ws[f"J{row_index}"].value != None:
-                    new_author.article = ws[f"J{row_index}"].value
+                    new_author.title_article = ws[f"J{row_index}"].value
+                    
+                if ws[f"BD{row_index}"].value != None:
+                    new_author.number_article = ws[f"BD{row_index}"].value
                 
                 if ws[f"O{row_index}"].value != None:
                     new_author.conference_title = ws[f"O{row_index}"].value
@@ -78,10 +81,10 @@ def Wos(path):
                     new_author.ORCIDs = ws[f"AB{row_index}"].value
                 
                 if ws[f"AO{row_index}"].value != None:
-                    new_author.ISSN = ws[f"AO{row_index}"].value
+                    new_author.issn = ws[f"AO{row_index}"].value
                 
                 if ws[f"AP{row_index}"].value != None:
-                    new_author.eISSN = ws[f"AP{row_index}"].value
+                    new_author.eissn = ws[f"AP{row_index}"].value
                 
                 if ws[f"BS{row_index}"].value != None:
                     new_author.unique_wos_id = ws[f"BS{row_index}"].value

@@ -81,10 +81,6 @@ def Upload(path, list_new, list_ident, list_remove):
     if "number_of_pages" in new_list_members:
         list_members.append("number_of_pages")
         new_list_members.remove("number_of_pages")
-    
-    if "article" in new_list_members:
-        list_members.append("article")
-        new_list_members.remove("article")
         
     if "citation" in new_list_members:
         list_members.append("citation")

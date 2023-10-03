@@ -30,7 +30,7 @@ def identical_sources_equals(source1, source2):
                 and source2[i].title == source1[j].title
             ):
                 copy = True
-                identical_new_list.append(source1[j])
+                identical_new_list.append(source2[i])
                 break
         if copy == False:
             add_new_list.append(source2[i])
@@ -80,7 +80,7 @@ def different_source_equals(source1, source2):
                 and source2[i].clear_title == source1[j].clear_title
             ):
                 copy = True
-                identical_new_list.append(source1[j])
+                identical_new_list.append(source2[i])
                 break
         if copy == False:
             add_new_list.append(source2[i])
