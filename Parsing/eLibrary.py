@@ -47,7 +47,7 @@ def eLibrary(path):
     
     #по каждой записи
     for e in list_library:
-        #try:    
+        try:    
             count_author_temp = 0
             #список авторов
             list_author = e["authors"]["author"]
@@ -192,8 +192,8 @@ def eLibrary(path):
                     all_elibrary_list_library[i].GRNTI_code = e["grnti"]
                             
             count_all_author += count_author_temp
-        # except:
-        #     pass
+        except:
+            pass
         
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_title = "".join(e for e in all_elibrary_list_library[i].title.lower() if e.isalpha())
