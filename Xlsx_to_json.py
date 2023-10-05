@@ -4,6 +4,17 @@ from xls2xlsx import XLS2XLSX
 import json
 
 
+def Translite(s_input):
+    s_output = ""
+    if s_input!=None and len(s_input)>0:
+        for i in range(len(s_input)):
+            if s_input[i] in translate_dictionary:
+                s_output += translate_dictionary[s_input[i]]
+            else:
+                s_output += s_input[i]
+    return s_output
+
+
 translate_dictionary = {
   "а": "a",
   "б": "b",
@@ -27,7 +38,7 @@ translate_dictionary = {
   "т": "t",
   "у": "u",
   "ф": "f",
-  "х": "h",
+  "х": "kh",
   "ц": "c",
   "ч": "ch",
   "ш": "sh",
@@ -38,7 +49,6 @@ translate_dictionary = {
   "э": "e",
   "ю": "yu",
   "я": "ya",
-
   "А": "A",
   "Б": "B",
   "В": "V",
@@ -61,7 +71,7 @@ translate_dictionary = {
   "Т": "T",
   "У": "U",
   "Ф": "F",
-  "Х": "H",
+  "Х": "Kh",
   "Ц": "C",
   "Ч": "Ch",
   "Ш": "Sh",
@@ -73,21 +83,8 @@ translate_dictionary = {
 }
 
 
-def Translite(s_input):
-    s_output = ""
-    if s_input!=None and len(s_input)>0:
-        for i in range(len(s_input)):
-            if s_input[i] in translate_dictionary:
-                s_output += translate_dictionary[s_input[i]]
-            else:
-                s_output += s_input[i]
-    return s_output
-
-
-
 filename = askopenfilename(filetypes = [("xlsx, xls", "*.xls?"), ('All files', '*')])
 print(f"Расположение файла: {filename}\n")
-
 
 try:
     if filename[-1]=="s":
@@ -124,11 +121,9 @@ try:
     with open("employee.json", 'w', encoding="utf-8") as file:
         json.dump(json_dict, file, ensure_ascii=False, indent=4)
     print(json_string)
-
 except:
-    print("Возможно, Вы пытались загрузить файл с другим расширением, отличным от .xls или .xlsx")
-    print("Программа закончилась аварийно")
+    print("[!]Возможно, Вы пытались загрузить файл с другим расширением, отличным от .xls или .xlsx или Вы закрыли окно выбора файла")
+    print("[!]Программа завершилась аварийно")
     
-
-print("\nЭто окно можно закрыть")
+print("\n[!]Это окно можно закрыть")
 input()

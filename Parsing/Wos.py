@@ -7,7 +7,6 @@ from App import clear_author
 def Wos(path):
     # список статей Wos
     all_wos_list_library = []
-    
     # открытие исходного файла c проверкой
     try:
         if path[-1]=="s":
@@ -20,7 +19,7 @@ def Wos(path):
     except:
         return None
 
-        # ПАРСИНГ КАЖДОЙ СТРОКИ
+    #ПАРСИНГ КАЖДОЙ СТРОКИ
     for row_index in range(2, ws.max_row + 1):
         try:    
             str_author = ws[f"F{row_index}"].value #строка с авторами 
@@ -33,7 +32,7 @@ def Wos(path):
                     new_author.author = clear_author(list_author[i].strip())
                 except:
                     new_author.author = list_author[i].strip()
-                    
+            
                 if ws[f"I{row_index}"].value != None:
                     new_author.title = ws[f"I{row_index}"].value.lower()
                     new_author.title = new_author.title[0].upper() + new_author.title[1:]

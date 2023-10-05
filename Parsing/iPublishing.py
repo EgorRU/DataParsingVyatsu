@@ -8,8 +8,7 @@ from App import clear_IPublishing_title
 def IPublishing(path):
     # список статей IPublishing
     all_IPublishing_list_library = []
-
-    # открытие исходного файла с проверкой 
+    #открытие исходного файла с проверкой 
     try:
         wb = load_workbook(path)
     except:

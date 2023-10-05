@@ -630,8 +630,6 @@ def open_file_Ipublishing_right():
 
 # кнопка сравнения
 comparewin_is_open = False
-
-
 def open_compare_window():
     global comparewin_is_open
     global comparewin
@@ -698,8 +696,6 @@ def open_compare_window():
 
 photo = "global"
 help_is_open = False
-
-
 def help_guide():
     global help_is_open
     global helpwin

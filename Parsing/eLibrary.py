@@ -51,7 +51,6 @@ def eLibrary(path):
             count_author_temp = 0
             #список авторов
             list_author = e["authors"]["author"]
-        
             #если автор один
             if type(list_author)==dict:
                 new_article = eLibrary_Library()

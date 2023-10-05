@@ -45,7 +45,6 @@ def Scopus(path):
 
         # кол-во авторов статьи в одной строке
         count_author_row = 0
-         
         try:
             #ПАРСИНГ ФИО
             while s[i] != '"':
@@ -83,9 +82,7 @@ def Scopus(path):
                     id_author += s[i]
                     i += 1
                 if id_author != "":
-                    all_scopus_list_library[count_temp_id].id_author = int(
-                        id_author.strip()
-                    )
+                    all_scopus_list_library[count_temp_id].id_author = id_author.strip()
                     count_temp_id += 1
                 else:
                     break
@@ -399,7 +396,6 @@ def Scopus(path):
                 for j in range(count_temp, count_temp + count_author_row):
                     if len(lang)<20:
                         all_scopus_list_library[j].lang = lang[::-1].strip()
-            
         except:
             pass
 

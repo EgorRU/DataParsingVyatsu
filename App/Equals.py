@@ -11,7 +11,6 @@ def sort(add_new_list, identical_new_list, remove_new_list):
         remove_new_list = sorted(remove_new_list, key=lambda x: x.year, reverse=True)
     except:
         pass
-    
     return add_new_list, identical_new_list, remove_new_list
 
 
