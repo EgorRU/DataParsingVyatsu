@@ -1,5 +1,6 @@
 import json
 import xmltodict
+import re
 from App import Translite
 from App import eLibrary_Library
 from App import clear_author
@@ -104,7 +105,7 @@ def eLibrary(path):
                         #если одно название:
                         if type(e["titles"]["title"])==dict:    
                             if "#text" in e["titles"]["title"]:
-                                    all_elibrary_list_library[i].title = e["titles"]["title"]["#text"]
+                                    all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", e["titles"]["title"]["#text"])
                         #если несколько названий
                         else:
                             if type(e["titles"]["title"])==list:

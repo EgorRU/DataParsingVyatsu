@@ -82,9 +82,21 @@ def Upload(path, list_new, list_ident, list_remove):
         list_members.append("number_of_pages")
         new_list_members.remove("number_of_pages")
         
-    if "citation" in new_list_members:
-        list_members.append("citation")
-        new_list_members.remove("citation")
+    if "number_article" in new_list_members:
+        list_members.append("number_article")
+        new_list_members.remove("number_article")
+        
+    if "title_article" in new_list_members:
+        list_members.append("title_article")
+        new_list_members.remove("title_article")
+        
+    if "issn" in new_list_members:
+        list_members.append("issn")
+        new_list_members.remove("issn")
+
+    if "eissn" in new_list_members:
+        list_members.append("eissn")
+        new_list_members.remove("eissn")
         
     #добавляем остальные поля
     new_list_members.sort()
