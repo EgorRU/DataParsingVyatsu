@@ -84,10 +84,12 @@ def clear_IPublishing_title(string):
     #находим первую точку
     index = new_str.find(".")
     #если она вначале или после неё идёт скобка - то игнорим
-    if index<25 or (index>0 and new_str[index-1]==")") or index==0:
-        index = string.find(".", index)
-    if index<25 or (index>0 and new_str[index-1]==")") or index==0:
-        index = string.find(".", index)
+    if index<30 or (index>0 and new_str[index-1]==")") or index==0:
+        index = string.find(".", index+1)
+    if index<30 or (index>0 and new_str[index-1]==")") or index==0:
+        index = string.find(".", index+1)
+    if index<30 or (index>0 and new_str[index-1]==")") or index==0:
+        index = string.find(".", index+1)
     new_str = new_str[:index]
     new_str = new_str[::-1].strip()
     return new_str

@@ -22,6 +22,11 @@ class Scopus_Library(Base_Library):
         self.citation = 0
         self.doi = ""
         self.link = ""
+        self.eid = ""
+        self.access = ""
+        self.publication_stage = ""
+        self.type_document = ""
+        self.lang = ""
         self.source = "Scopus"
 
 
@@ -61,7 +66,7 @@ class eLibrary_Library(Base_Library):
         self.volume = ""
         self.issn = ""
         self.eissn = ""
-        self.title_journal = ""
+        self.title_article = ""
         self.publisher = ""
         self.country = ""
         self.GRNTI_code = ""
@@ -71,7 +76,7 @@ class eLibrary_Library(Base_Library):
 class IPublishing_Library(Base_Library):
     def __init__(self):
         Base_Library.__init__(self)
-        self.article = ""
+        self.title_article = ""
         self.link = ""
         self.doi = ""
         self.institute = ""

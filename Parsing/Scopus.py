@@ -321,6 +321,85 @@ def Scopus(path):
                     for j in range(count_temp, count_temp + count_author_row):
                         all_scopus_list_library[j].link = link.strip()
             i += 1
+            
+            #парсинг EID
+            new_s = s[::-1]
+            eid = ""
+            index = 0
+            while(new_s[index]!=","):
+                eid += new_s[index]
+                index +=1
+            if eid != "":
+                for j in range(count_temp, count_temp + count_author_row):
+                    all_scopus_list_library[j].eid = eid[::-1].strip()
+            index += 1
+            
+            #парсинг источника
+            source = ""
+            while(new_s[index]!=","):
+                source += new_s[index]
+                index +=1
+            if source != "":
+                for j in range(count_temp, count_temp + count_author_row):
+                    all_scopus_list_library[j].source = source[::-1].strip()
+            index += 1
+            
+            #парсинг доступа книги
+            access = ""
+            #если попались кавычки - то есть поле
+            if new_s[index]=="\"":
+                index += 1
+                #если поле не пустое
+                if new_s[index]!="\"":
+                    while(new_s[index]!="\""):
+                        access += new_s[index]
+                        index +=1
+                if access != "":
+                    for j in range(count_temp, count_temp + count_author_row):
+                        all_scopus_list_library[j].access = access[::-1].strip()
+                    index += 1
+                else:
+                    index += 1
+                
+            #парсинг publication_stage
+            publication_stage = ""
+            index += 1
+            #если попались кавычки - то есть поле 
+            if new_s[index]=="\"":
+                index += 1
+                #если поле не пустое
+                if new_s[index]!="\"":
+                    while(new_s[index]!="\""):
+                        publication_stage += new_s[index]
+                        index +=1
+                if publication_stage != "":
+                    for j in range(count_temp, count_temp + count_author_row):
+                        all_scopus_list_library[j].publication_stage = publication_stage[::-1].strip()
+                    index += 1
+                else:
+                    index += 1
+            index += 1
+                
+            #парсинг type_document
+            type_document = ""
+            while(new_s[index]!=","):
+                type_document += new_s[index]
+                index +=1
+            if type_document != "":
+                for j in range(count_temp, count_temp + count_author_row):
+                    all_scopus_list_library[j].type_document = type_document[::-1].strip()
+            index += 2
+            
+            #парсинг языка
+            lang = ""
+            while(new_s[index]!="\""):
+                lang += new_s[index]
+                index +=1
+            if lang != "":
+                for j in range(count_temp, count_temp + count_author_row):
+                    if len(lang)<20:
+                        all_scopus_list_library[j].lang = lang[::-1].strip()
+            
         except:
             pass
 

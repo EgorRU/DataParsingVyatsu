@@ -100,12 +100,8 @@ def Upload(path, list_new, list_ident, list_remove):
     ws.cell(row=1, column=1).value = "№№"
     ws.cell(row=1, column=2).value = "№"
     for index, val in enumerate(list_members):
-        if val!="article":
-            ws.cell(row=1, column=index+3).value = val
-            ws.cell(row=1, column=index+3).font = Font(size=16)
-        else:
-            ws.cell(row=1, column=index+3).value = "№ article"
-            ws.cell(row=1, column=index+3).font = Font(size=16)
+        ws.cell(row=1, column=index+3).value = val
+        ws.cell(row=1, column=index+3).font = Font(size=16)
     
     #меняем ширину ячеек
     for i in range(len(list_members)):
@@ -618,13 +614,9 @@ def Upload(path, list_new, list_ident, list_remove):
     ws.cell(row=1, column=2).value = "№"
     #меняем заголовки столбиков
     for index, val in enumerate(list_members):
-        if val!="article":
-            ws.cell(row=1, column=index+3).value = val
-            ws.cell(row=1, column=index+3).font = Font(size=16)
-        else:
-            ws.cell(row=1, column=index+3).value = "№ article"
-            ws.cell(row=1, column=index+3).font = Font(size=16)
-    
+        ws.cell(row=1, column=index+3).value = val
+        ws.cell(row=1, column=index+3).font = Font(size=16)
+
     #меняем ширину ячеек
     for i in range(len(list_members)):
         ws.column_dimensions[ws.cell(row=1, column=i+3).column_letter].width = 60

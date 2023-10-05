@@ -34,7 +34,7 @@ def IPublishing(path):
                         new_author.year = ws[f"E{row_index}"].value
             
                     if ws[f"I{row_index}"].value != None:
-                        new_author.article = ws[f"I{row_index}"].value
+                        new_author.title_article = ws[f"I{row_index}"].value
             
                     if ws[f"AF{row_index}"].value != None:
                         new_author.link = ws[f"AF{row_index}"].value
@@ -113,7 +113,7 @@ def IPublishing(path):
                         new_author.year = ws[f"E{row_index}"].value
             
                     if ws[f"H{row_index}"].value != None:
-                        new_author.article = ws[f"H{row_index}"].value
+                        new_author.title_article = ws[f"H{row_index}"].value
             
                     if ws[f"R{row_index}"].value != None:
                         new_author.link = ws[f"R{row_index}"].value

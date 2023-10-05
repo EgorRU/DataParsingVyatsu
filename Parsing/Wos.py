@@ -87,7 +87,7 @@ def Wos(path):
                     new_author.eissn = ws[f"AP{row_index}"].value
                 
                 if ws[f"BS{row_index}"].value != None:
-                    new_author.unique_wos_id = ws[f"BS{row_index}"].value
+                    new_author.unique_wos_id = ws[f"BS{row_index}"].value[4:]
                     
                 if ws[f"N{row_index}"].value != None:
                     new_author.document_type = ws[f"N{row_index}"].value

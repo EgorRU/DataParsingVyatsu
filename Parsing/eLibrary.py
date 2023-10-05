@@ -173,7 +173,7 @@ def eLibrary(path):
                 if "source" in e:
                     if "journal" in e["source"]:
                         if "title" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].title_journal = e["source"]["journal"]["title"]
+                            all_elibrary_list_library[i].title_article = e["source"]["journal"]["title"]
                         
                 #publisher
                 if "source" in e:
