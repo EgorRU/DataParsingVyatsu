@@ -110,9 +110,14 @@ def eLibrary(path):
                         else:
                             if type(e["titles"]["title"])==list:
                                 for t in e["titles"]["title"]:
-                                    if t["@lang"]=="EN":
-                                        all_elibrary_list_library[i].title = t["#text"]
+                                    if t["@lang"]=="RU":
+                                        all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", t["#text"])
                                         break
+                                else:
+                                    for t in e["titles"]["title"]:
+                                        if t["@lang"]=="EN":
+                                            all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", t["#text"])
+                                            break
                 all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.lower()
                 all_elibrary_list_library[i].title = all_elibrary_list_library[i].title[0].upper() + all_elibrary_list_library[i].title[1:]
                                     
