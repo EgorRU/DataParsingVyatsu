@@ -196,6 +196,7 @@ def IPublishing(path):
             all_IPublishing_list_library[i].author = clear_author(Translite(clear_author(all_IPublishing_list_library[i].original_author)))
         except:
             all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].original_author
+        all_IPublishing_list_library[i].author.replace("Bajkova", "Baykova")
 
     for i in range(len(all_IPublishing_list_library)):
         all_IPublishing_list_library[i].clear_title = "".join(e for e in all_IPublishing_list_library[i].title.lower() if e.isalpha())

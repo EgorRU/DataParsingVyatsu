@@ -25,8 +25,8 @@ def identical_sources_equals(source1, source2):
         copy = False
         for j in range(len(source1)):
             if (
-                source2[i].author == source1[j].author
-                and (source2[i].title == source1[j].title or (source2[i].title in source1[j].title) or (source1[j].title in source2[i].title))
+                (source2[i].author == source1[j].author or (source2[i].author in source1[j].author) or (source1[j].author in source2[i].author))
+                and source2[i].title == source1[j].title
             ):
                 copy = True
                 identical_new_list.append(source2[i])
@@ -39,8 +39,8 @@ def identical_sources_equals(source1, source2):
         copy = False
         for j in range(len(source2)):
             if (
-                source1[i].author == source2[j].author
-                and (source1[i].title == source2[j].title or (source1[i].title in source2[j].title) or (source2[j].title in source1[i].title))
+                (source1[i].author == source2[j].author or (source1[i].author in source2[j].author) or (source2[j].author in source1[i].author))
+                and source1[i].title == source2[j].title
             ):
                 copy = True
                 break
@@ -75,8 +75,8 @@ def different_source_equals(source1, source2):
         copy = False
         for j in range(len(source1)):
             if (
-                source2[i].clear_author == source1[j].clear_author
-                and (source2[i].clear_title == source1[j].clear_title or (source2[i].clear_title in source1[j].clear_title) or (source1[j].clear_title in source2[i].clear_title))
+                (source2[i].clear_author == source1[j].clear_author or (source2[i].clear_author in source1[j].clear_author) or (source1[j].clear_author in source2[i].clear_author))
+                and source2[i].clear_title == source1[j].clear_title
             ):
                 copy = True
                 identical_new_list.append(source2[i])
@@ -89,8 +89,8 @@ def different_source_equals(source1, source2):
         copy = False
         for j in range(len(source2)):
             if (
-                source1[i].clear_author == source2[j].clear_author
-                and (source1[i].clear_title == source2[j].clear_title or (source1[i].clear_title in source2[j].clear_title) or (source2[j].clear_title in source1[i].clear_title))
+                (source1[i].clear_author == source2[j].clear_author or (source1[i].clear_author in source2[j].clear_author) or (source2[j].clear_author in source1[i].clear_author))
+                and source1[i].clear_title == source2[j].clear_title
             ):
                 copy = True
                 break
