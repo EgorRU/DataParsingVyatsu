@@ -1,6 +1,10 @@
 from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
 from openpyxl import Workbook
 import json
+import psycopg2
+from psycopg2 import Error
+from Database import create_db
+from Database import update_db
 
 
 def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
@@ -611,6 +615,18 @@ def Upload(path, list_new, list_ident, list_remove):
             
     wb.save(path)
     
+    #запись в базу данных
+    #пытаемся подключится к базе данных Scopus и изменить какие-то строки
+    try:
+        update_db(list_new, list_ident, list_remove)
+    except (Exception, UnicodeDecodeError):
+        create_db()
+        update_db(list_new, list_ident, list_remove)
+    except (Exception, Error):
+        print("[!] Ошибка при работе с базой данных")
+    finally:
+        print("[!] Соединение с PostgreSQL закрыто после всех действий")
+
 
     #выгружаем только сотрудников вуза
     wb = Workbook()
