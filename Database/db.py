@@ -66,7 +66,7 @@ def create_db():
         journal_name text,
         foreign key (journal_name)
         references project_schema.journal(journal_name) 
-        on delete cascade on update cascade);
+        on delete set null on update cascade);
 
         '''
         cursor.execute(create)
@@ -91,7 +91,7 @@ def create_db():
         school_name text,
         foreign key (school_name)
         references project_schema.school(school_name) 
-        on delete cascade on update cascade);
+        on delete set null on update cascade);
 
         '''
         cursor.execute(create)
@@ -239,9 +239,59 @@ def create_db():
 
         '''
         cursor.execute(create)
-        print("TRIGGER trigger_insert_scopus успешно создана")
+        print("TRIGGER trigger_insert_scopus успешно создан")
 
 
+        create = '''
+        CREATE OR REPLACE function project_schema.update_view_scopus() returns trigger as $$
+        begin
+        raise exception 'Lines cannot be updated';
+        return old;
+        end;
+        $$ language plpgsql;
+        '''
+        cursor.execute(create)
+        print("FUNCTION update_view_scopus успешно создана")
+        
+         
+        create = '''
+        CREATE OR REPLACE TRIGGER trigger_update_scopus
+        instead of update on project_schema.scopus
+        for each row
+        execute function project_schema.update_view_scopus();
+        '''
+        cursor.execute(create)
+        print("TRIGGER trigger_update_scopus успешно создан")
+        
+
+        create = '''
+        CREATE OR REPLACE function project_schema.delete_view_scopus() returns trigger as $$
+        begin
+        if (select count(a.journal_name) from project_schema.article a where a.journal_name in (select a.journal_name from project_schema.article a where a.eid=old.eid))=1 then
+        delete from project_schema.journal j where j.journal_name in (select a.journal_name from project_schema.article a where a.eid=old.eid);
+        end if;
+        if (select count(a_au.id_author) from project_schema.article_authors a_au where a_au.id_author=old.id_author)=1 then
+        delete from project_schema.authors a where a.id_author=old.id_author;
+        end if;
+        if (select count(*) from project_schema.article a where a.eid=old.eid)>0 then
+        DELETE from project_schema.article a where a.eid=old.eid;
+        end if;
+        return old;
+        end;
+        $$ language plpgsql;
+        '''
+        cursor.execute(create)
+        print("FUNCTION update_view_scopus успешно создана")
+        
+         
+        create = '''
+        CREATE OR REPLACE TRIGGER trigger_delete_scopus
+        instead of delete on project_schema.scopus
+        for each row
+        execute function project_schema.delete_view_scopus();
+        '''
+        cursor.execute(create)
+        print("TRIGGER trigger_update_scopus успешно создан")
     except (Exception, Error) as error:
         print("[!] Ошибка при создании объектов базы данных scopus", error)
     finally:
@@ -249,6 +299,7 @@ def create_db():
             cursor.close()
             connection.close()
         
+
             
 def update_db(list_new, list_ident, list_remove):
     #поключаемся к базу данных
@@ -279,7 +330,7 @@ def update_db(list_new, list_ident, list_remove):
             list_new[i].source_name,
             list_new[i].type_document
             )      
-        cursor.execute(f'INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
+        cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
             
     #добавляем одинаковые
     for i in range(len(list_ident)):
@@ -304,6 +355,12 @@ def update_db(list_new, list_ident, list_remove):
             list_ident[i].source_name,
             list_ident[i].type_document
             )      
-        cursor.execute(f'INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
+        cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
         
     #удаляем старые
+    for i in range(len(list_remove)):
+        article_tuple = (
+            list_remove[i].eid,
+            list_remove[i].id_author
+            )
+        cursor.execute('DELETE from project_schema.scopus where eid=%s and id_author=%s', article_tuple)
