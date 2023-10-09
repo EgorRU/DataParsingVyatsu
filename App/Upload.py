@@ -114,6 +114,11 @@ def Upload(path, list_new, list_ident, list_remove):
     for index, val in enumerate(list_members):
         ws.cell(row=1, column=index+3).value = val
         ws.cell(row=1, column=index+3).font = Font(size=16)
+    ws.cell(row=1, column=5).value = "title_article"
+    for i in range(6, 20):
+        if  ws.cell(row=1, column=i).value == "title_article":
+            ws.cell(row=1, column=i).value = "title"
+            break
     
     #меняем ширину ячеек
     for i in range(len(list_members)):
@@ -622,12 +627,17 @@ def Upload(path, list_new, list_ident, list_remove):
     #название листа 
     ws.title = "Сравнение данных"
     
+    #меняем заголовки столбиков
     ws.cell(row=1, column=1).value = "№№"
     ws.cell(row=1, column=2).value = "№"
-    #меняем заголовки столбиков
     for index, val in enumerate(list_members):
         ws.cell(row=1, column=index+3).value = val
         ws.cell(row=1, column=index+3).font = Font(size=16)
+    ws.cell(row=1, column=5).value = "title_article"
+    for i in range(6, 20):
+        if  ws.cell(row=1, column=i).value == "title_article":
+            ws.cell(row=1, column=i).value = "title"
+            break
 
     #меняем ширину ячеек
     for i in range(len(list_members)):

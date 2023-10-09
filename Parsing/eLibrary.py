@@ -65,7 +65,7 @@ def eLibrary(path):
                     new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
                 except:
                     new_article.author = new_article.original_author
-                new_article.author.replace("Bajkova", "Baykova")
+                new_article.author = new_article.author.replace("Bajkova", "Baykova")
                 count_author_temp += 1
                 all_elibrary_list_library.append(new_article)
             #если авторов много
@@ -86,7 +86,7 @@ def eLibrary(path):
                             new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
                         except:
                             new_article.author = new_article.original_author
-                        new_article.author.replace("Bajkova", "Baykova")
+                        new_article.author = new_article.author.replace("Bajkova", "Baykova")
                         #если запись не повторяется
                         if old_article=="":
                             all_elibrary_list_library.append(new_article)
