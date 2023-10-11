@@ -238,6 +238,28 @@ def Upload(path, list_new, list_ident, list_remove):
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
         #иначе если текущее название сходится с прошлым, то бордер делать не надо
         else:
+            repetition = True
+            if hasattr(list_new[i],'eid') and i>0 and list_new[i].eid!=list_new[i-1].eid:
+                repetition = False
+                #заполяем словари
+                #кол-во статей по годам
+                if list_new[i].year in dict_add_count:
+                    dict_add_count[list_new[i].year] += 1
+                else:
+                    dict_add_count[list_new[i].year] = 1  
+                #если есть столбец с цитированием
+                if "citation" in list_members:
+                    #кол-во цитирований по годам
+                    if list_new[i].year in dict_add_citated:
+                        dict_add_citated[list_new[i].year] += int(list_new[i].citation)
+                    else:
+                        dict_add_citated[list_new[i].year] = int(list_new[i].citation)
+                #ставим линию в 1 и 2 колонке
+                ws.cell(row=i+temp_row, column=1).border = border
+                ws.cell(row=i+temp_row, column=2).border = border
+                count_article += 1 #кол-во записей
+                count += 1 #кол-во записей
+
             #по всем атрибутам класса
             for j in range(len(list_members)):
                 if list_members[j]=="author":
@@ -268,6 +290,9 @@ def Upload(path, list_new, list_ident, list_remove):
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
+                #если статья другая, то ставим бордер
+                if repetition==False:
+                    ws.cell(row=i+temp_row, column=j+3).border = border
                 #красим ячейку в зелёный
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
         #нумеруем 1 и 2 колонку
@@ -352,6 +377,27 @@ def Upload(path, list_new, list_ident, list_remove):
                     ws.cell(row=i+temp_row, column=j+3).border = border
         #иначе если текущщее название свходится с прошлым, то бордер делать не надо
         else:
+            repetition = True
+            if hasattr(list_ident[i],'eid') and i>0 and list_ident[i].eid!=list_ident[i-1].eid:
+                repetition = False
+                #заполяем словари
+                #кол-во статей по годам
+                if list_ident[i].year in dict_add_count:
+                    dict_add_count[list_ident[i].year] += 1
+                else:
+                    dict_add_count[list_ident[i].year] = 1  
+                #если есть столбец с цитированием
+                if "citation" in list_members:
+                    #кол-во цитирований по годам
+                    if list_ident[i].year in dict_add_citated:
+                        dict_add_citated[list_ident[i].year] += int(list_ident[i].citation)
+                    else:
+                        dict_add_citated[list_ident[i].year] = int(list_ident[i].citation)
+                #ставим линию в 1 и 2 колонке
+                ws.cell(row=i+temp_row, column=1).border = border
+                ws.cell(row=i+temp_row, column=2).border = border
+                count_article += 1 #кол-во записей
+                count += 1 #кол-во записей
             #по всем атрибутам класса
             for j in range(len(list_members)):
                 if list_members[j]=="author":
@@ -382,6 +428,9 @@ def Upload(path, list_new, list_ident, list_remove):
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
+                #если статья другая, то ставим бордер
+                if repetition==False:
+                    ws.cell(row=i+temp_row, column=j+3).border = border
         #нумеруем 1 и 2 колонку
         ws.cell(row=i+temp_row, column=1).value = count_article
         ws.cell(row=i+temp_row, column=2).value = count
@@ -466,6 +515,27 @@ def Upload(path, list_new, list_ident, list_remove):
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
         #иначе если текущщее название свходится с прошлым, то бордер делать не надо
         else:
+            repetition = True
+            if hasattr(list_remove[i],'eid') and i>0 and list_remove[i].eid!=list_remove[i-1].eid:
+                repetition = False
+                #заполяем словари
+                #кол-во статей по годам
+                if list_remove[i].year in dict_add_count:
+                    dict_add_count[list_remove[i].year] += 1
+                else:
+                    dict_add_count[list_remove[i].year] = 1  
+                #если есть столбец с цитированием
+                if "citation" in list_members:
+                    #кол-во цитирований по годам
+                    if list_remove[i].year in dict_add_citated:
+                        dict_add_citated[list_remove[i].year] += int(list_remove[i].citation)
+                    else:
+                        dict_add_citated[list_remove[i].year] = int(list_remove[i].citation)
+                #ставим линию в 1 и 2 колонке
+                ws.cell(row=i+temp_row, column=1).border = border
+                ws.cell(row=i+temp_row, column=2).border = border
+                count_article += 1 #кол-во записей
+                count += 1 #кол-во записей
             #по всем атрибутам класса
             for j in range(len(list_members)):
                 if list_members[j]=="author":
@@ -496,6 +566,9 @@ def Upload(path, list_new, list_ident, list_remove):
                 #иначе обычное поле заполняем
                 else:
                     ws.cell(row=i+temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
+                #если статья другая, то ставим бордер
+                if repetition==False:
+                    ws.cell(row=i+temp_row, column=j+3).border = border
                 #красим ячейку в красный
                 ws.cell(row=i+temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
         #нумеруем 1 и 2 колонку
@@ -742,6 +815,27 @@ def Upload(path, list_new, list_ident, list_remove):
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
             #иначе если текущее название сходится с прошлым, то бордер делать не надо
             else:
+                repetition = True
+                if hasattr(list_new[i],'eid') and i>0 and list_new[i].eid!=list_new[i-1].eid:
+                    repetition = False
+                    #заполяем словари
+                    #кол-во статей по годам
+                    if list_new[i].year in dict_add_count:
+                        dict_add_count[list_new[i].year] += 1
+                    else:
+                        dict_add_count[list_new[i].year] = 1  
+                    #если есть столбец с цитированием
+                    if "citation" in list_members:
+                        #кол-во цитирований по годам
+                        if list_new[i].year in dict_add_citated:
+                            dict_add_citated[list_new[i].year] += int(list_new[i].citation)
+                        else:
+                            dict_add_citated[list_new[i].year] = int(list_new[i].citation)
+                    #ставим линию в 1 и 2 колонке
+                    ws.cell(row=i+temp_row, column=1).border = border
+                    ws.cell(row=i+temp_row, column=2).border = border
+                    count_article += 1 #кол-во записей
+                    count += 1 #кол-во записей
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
@@ -766,6 +860,9 @@ def Upload(path, list_new, list_ident, list_remove):
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_new[i], list_members[j])
+                    #если статья другая, то ставим бордер
+                    if repetition==False:
+                        ws.cell(row=i+temp_row, column=j+3).border = border
                     #красим ячейку в зелёный
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='CCFFCC', end_color='CCFFCC')
             #нумеруем 1 и 2 колонку
@@ -842,6 +939,27 @@ def Upload(path, list_new, list_ident, list_remove):
                     ws.cell(row=temp_row, column=j+3).border = border
             #иначе если текущщее название свходится с прошлым, то бордер делать не надо
             else:
+                repetition = True
+                if hasattr(list_ident[i],'eid') and i>0 and list_ident[i].eid!=list_ident[i-1].eid:
+                    repetition = False
+                    #заполяем словари
+                    #кол-во статей по годам
+                    if list_ident[i].year in dict_add_count:
+                        dict_add_count[list_ident[i].year] += 1
+                    else:
+                        dict_add_count[list_ident[i].year] = 1  
+                    #если есть столбец с цитированием
+                    if "citation" in list_members:
+                        #кол-во цитирований по годам
+                        if list_ident[i].year in dict_add_citated:
+                            dict_add_citated[list_ident[i].year] += int(list_ident[i].citation)
+                        else:
+                            dict_add_citated[list_ident[i].year] = int(list_ident[i].citation)
+                    #ставим линию в 1 и 2 колонке
+                    ws.cell(row=i+temp_row, column=1).border = border
+                    ws.cell(row=i+temp_row, column=2).border = border
+                    count_article += 1 #кол-во записей
+                    count += 1 #кол-во записей
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     #если библиографический список, то делаем его
@@ -866,6 +984,9 @@ def Upload(path, list_new, list_ident, list_remove):
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_ident[i], list_members[j])
+                    #если статья другая, то ставим бордер
+                    if repetition==False:
+                        ws.cell(row=i+temp_row, column=j+3).border = border
             #нумеруем 1 и 2 колонку
             ws.cell(row=temp_row, column=1).value = count_article
             ws.cell(row=temp_row, column=2).value = count
@@ -943,6 +1064,27 @@ def Upload(path, list_new, list_ident, list_remove):
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
             #иначе если текущщее название свходится с прошлым, то бордер делать не надо
             else:
+                repetition = True
+                if hasattr(list_remove[i],'eid') and i>0 and list_remove[i].eid!=list_remove[i-1].eid:
+                    repetition = False
+                    #заполяем словари
+                    #кол-во статей по годам
+                    if list_remove[i].year in dict_add_count:
+                        dict_add_count[list_remove[i].year] += 1
+                    else:
+                        dict_add_count[list_remove[i].year] = 1  
+                    #если есть столбец с цитированием
+                    if "citation" in list_members:
+                        #кол-во цитирований по годам
+                        if list_remove[i].year in dict_add_citated:
+                            dict_add_citated[list_remove[i].year] += int(list_remove[i].citation)
+                        else:
+                            dict_add_citated[list_remove[i].year] = int(list_remove[i].citation)
+                    #ставим линию в 1 и 2 колонке
+                    ws.cell(row=i+temp_row, column=1).border = border
+                    ws.cell(row=i+temp_row, column=2).border = border
+                    count_article += 1 #кол-во записей
+                    count += 1 #кол-во записей
                 #по всем атрибутам класса
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
@@ -966,6 +1108,9 @@ def Upload(path, list_new, list_ident, list_remove):
                     #иначе обычное поле заполняем
                     else:
                         ws.cell(row=temp_row, column=j+3).value = getattr(list_remove[i], list_members[j])
+                    #если статья другая, то ставим бордер
+                    if repetition==False:
+                        ws.cell(row=i+temp_row, column=j+3).border = border
                     #красим ячейку в красный
                     ws.cell(row=temp_row, column=j+3).fill = PatternFill(fill_type='solid', start_color='FFCCCC', end_color='FFCCCC')
             #нумеруем 1 и 2 колонку
