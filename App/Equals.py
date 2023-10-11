@@ -24,13 +24,22 @@ def identical_sources_equals(source1, source2):
     for i in range(len(source2)):
         copy = False
         for j in range(len(source1)):
-            if (
-                (source2[i].author == source1[j].author or (source2[i].author in source1[j].author) or (source1[j].author in source2[i].author))
-                and source2[i].title == source1[j].title
-            ):
-                copy = True
-                identical_new_list.append(source2[i])
-                break
+            if hasattr(source2[i], 'eid') and hasattr(source1[j], 'eid'):
+                if (
+                    (source2[i].author == source1[j].author or (source2[i].author in source1[j].author) or (source1[j].author in source2[i].author))
+                    and source2[i].title == source1[j].title and source2[i].eid != source1[j].eid
+                ):
+                    copy = True
+                    identical_new_list.append(source2[i])
+                    break
+            else:
+                if (
+                    (source2[i].author == source1[j].author or (source2[i].author in source1[j].author) or (source1[j].author in source2[i].author))
+                    and source2[i].title == source1[j].title
+                ):
+                    copy = True
+                    identical_new_list.append(source2[i])
+                    break
         if copy == False:
             add_new_list.append(source2[i])
 
@@ -38,12 +47,20 @@ def identical_sources_equals(source1, source2):
     for i in range(len(source1)):
         copy = False
         for j in range(len(source2)):
-            if (
-                (source1[i].author == source2[j].author or (source1[i].author in source2[j].author) or (source2[j].author in source1[i].author))
-                and source1[i].title == source2[j].title
-            ):
-                copy = True
-                break
+            if hasattr(source1[i], 'eid') and hasattr(source2[j], 'eid'):
+                if (
+                    (source1[i].author == source2[j].author or (source1[i].author in source2[j].author) or (source2[j].author in source1[i].author))
+                    and source1[i].title == source2[j].title and source1[i].eid != source2[j].eid
+                ):
+                    copy = True
+                    break
+            else:
+                if (
+                    (source1[i].author == source2[j].author or (source1[i].author in source2[j].author) or (source2[j].author in source1[i].author))
+                    and source1[i].title == source2[j].title
+                ):
+                    copy = True
+                    break
         if copy == False:
             remove_new_list.append(source1[i])
             

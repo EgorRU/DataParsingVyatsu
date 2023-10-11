@@ -100,8 +100,7 @@ def Wos(path):
 
     for i in range(len(all_wos_list_library)):
         all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())
-        
-    for i in range(len(all_wos_list_library)):
         all_wos_list_library[i].clear_author = "".join(e for e in all_wos_list_library[i].author if e.isupper())
+        all_wos_list_library[i].title = all_wos_list_library[i].title.replace('ё', 'e')
         
     return all_wos_list_library

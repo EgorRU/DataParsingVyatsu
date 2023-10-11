@@ -94,17 +94,28 @@ def Scopus(path):
             while s[i] != '"':
                 title += s[i]
                 i += 1
+                if s[i] == '"' and s[i+1]=='"':
+                    i+=2
             title = title.strip()
             #чистим название
-            s_temp = ""
-            for j in range(len(title)):
-                if title[j]!="(" and title[j]!="[":
-                    s_temp += title[j]
-                else:
-                    if title[-1]==")" or title[-1]=="]":
-                        break
+            #если в конце скобки, то убираем их
+            if title[-1]==")" or title[-1]=="]":
+                #инвертируем строку
+                s_temp = title[::-1]
+                i_temp = 0
+                if s_temp[i_temp]==")":
+                    i_temp += 1
+                    while s_temp[i_temp]!="(":
+                        i_temp += 1
+                elif s_temp[i_temp]=="]":
+                    i_temp += 1
+                    while s_temp[i_temp]!="[":
+                        i_temp += 1
+                i_temp += 1
+                s_temp = s_temp[i_temp:]
+                title = s_temp[::-1]
             for j in range(count_temp, count_temp + count_author_row):
-                all_scopus_list_library[j].title = s_temp
+                all_scopus_list_library[j].title = title
 
             #ПАРСИНГ ГОДА
             while s[i].isdigit() == False:
@@ -401,8 +412,7 @@ def Scopus(path):
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())
-        
-    for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_author = "".join(e for e in all_scopus_list_library[i].author if e.isupper())
+        all_scopus_list_library[i].title = all_scopus_list_library[i].title.replace('ё', 'e')
     
     return all_scopus_list_library
