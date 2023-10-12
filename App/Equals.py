@@ -27,7 +27,7 @@ def identical_sources_equals(source1, source2):
             if hasattr(source2[i], 'eid') and hasattr(source1[j], 'eid'):
                 if (
                     (source2[i].author == source1[j].author or (source2[i].author in source1[j].author) or (source1[j].author in source2[i].author))
-                    and source2[i].title == source1[j].title and source2[i].eid != source1[j].eid
+                    and source2[i].title == source1[j].title and source2[i].eid == source1[j].eid
                 ):
                     copy = True
                     identical_new_list.append(source2[i])
@@ -50,7 +50,7 @@ def identical_sources_equals(source1, source2):
             if hasattr(source1[i], 'eid') and hasattr(source2[j], 'eid'):
                 if (
                     (source1[i].author == source2[j].author or (source1[i].author in source2[j].author) or (source2[j].author in source1[i].author))
-                    and source1[i].title == source2[j].title and source1[i].eid != source2[j].eid
+                    and source1[i].title == source2[j].title and source1[i].eid == source2[j].eid
                 ):
                     copy = True
                     break

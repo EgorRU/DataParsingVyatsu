@@ -75,6 +75,10 @@
 
 def clear_IPublishing_title(string):
     index = string.find("/")
+    if len(string)>index and string[index+1]!='/':
+        index += 1
+        while len(string)>index and string[index]!='/':
+            index += 1
     if index == -1:
         return string
     #обрезаем всё до //
@@ -83,13 +87,12 @@ def clear_IPublishing_title(string):
     new_str = new_str[::-1].strip()
     #находим первую точку
     index = new_str.find(".")
-    #если она вначале или после неё идёт скобка - то игнорим
-    if index<30 or (index>0 and new_str[index-1]==")") or index==0:
-        index = string.find(".", index+1)
-    if index<30 or (index>0 and new_str[index-1]==")") or index==0:
-        index = string.find(".", index+1)
-    if index<30 or (index>0 and new_str[index-1]==")") or index==0:
-        index = string.find(".", index+1)
+    while ((new_str[index]=='.' and new_str[index+3]=='.' and new_str[index+2]==' ')==False) or index<25:
+        index += 1
     new_str = new_str[:index]
     new_str = new_str[::-1].strip()
-    return new_str
+    if new_str[0]==",":
+        new_str.replace(',','',1)
+    if new_str[0]==".":
+        new_str.replace('.','',1)
+    return new_str.strip()
