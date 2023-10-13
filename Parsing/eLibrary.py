@@ -120,6 +120,12 @@ def eLibrary(path):
                                         if t["@lang"]=="EN":
                                             all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", t["#text"])
                                             break
+                if all_elibrary_list_library[i].title==" " or all_elibrary_list_library[i].title==None:
+                    if "source" in e:
+                        if "titleaddinfo" in e["source"]:
+                            all_elibrary_list_library[i].title = e["source"]["titleaddinfo"]
+                        if "confname" in e["source"]:
+                            all_elibrary_list_library[i].title += e["source"]["confname"] 
                 all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.lower()
                 all_elibrary_list_library[i].title = all_elibrary_list_library[i].title[0].upper() + all_elibrary_list_library[i].title[1:]
                                     
@@ -128,6 +134,8 @@ def eLibrary(path):
                     if "issue" in e["source"]:
                         if "year" in e["source"]["issue"]:
                             all_elibrary_list_library[i].year = e["source"]["issue"]["year"]
+                        if "number" in e["source"]["issue"]:
+                            all_elibrary_list_library[i].number = e["source"]["issue"]["number"] 
                 if all_elibrary_list_library[i].year == None or all_elibrary_list_library[i].year == "":
                     if "yearpubl" in e:
                         all_elibrary_list_library[i].year = e["yearpubl"]

@@ -79,20 +79,26 @@ def clear_IPublishing_title(string):
         index += 1
         while len(string)>index and string[index]!='/':
             index += 1
-    if index == -1:
+    if index == -1 or len(string)<=index:
         return string
     #обрезаем всё до //
     new_str = string[:index].strip()
     #инвертируем
     new_str = new_str[::-1].strip()
     #находим первую точку
-    index = new_str.find(".")
-    while ((new_str[index]=='.' and new_str[index+3]=='.' and new_str[index+2]==' ')==False) or index<25:
+    index = 30
+    while  (new_str[index]=='.' and new_str[index+1].isupper() and new_str[index+2]==' ' and new_str[index+3]=='.' and new_str[index+4].isupper() and (new_str[index+5]!="." and new_str[index+6]!="."))==False and \
+           (new_str[index]==' ' and new_str[index+1].isupper() and new_str[index+2]==' ' and new_str[index+3]=='.' and new_str[index+4].isupper() and (new_str[index+5]!="." and new_str[index+6]!="."))==False and \
+           (new_str[index]=='.' and new_str[index+1].isupper() and new_str[index+2]=='.' and new_str[index+3].isupper() and (new_str[index+4]!="." and new_str[index+5]!="."))==False and \
+           (new_str[index]==' ' and new_str[index+1].isupper() and new_str[index+2]=='.' and new_str[index+3].isupper() and (new_str[index+4]!="." and new_str[index+5]!="."))==False and \
+           (new_str[index]=='.' and new_str[index+1].isupper() and new_str[index+2]==' ' and new_str[index+3]==' ' and new_str[index+4]=='.' and new_str[index+5].isupper() (new_str[index+6]!="." and new_str[index+7]!="."))==False:
         index += 1
+        if index>=len(new_str):
+            break
     new_str = new_str[:index]
     new_str = new_str[::-1].strip()
-    if new_str[0]==",":
-        new_str.replace(',','',1)
-    if new_str[0]==".":
-        new_str.replace('.','',1)
-    return new_str.strip()
+    if new_str[0]=="," or new_str[0]==".":
+        new_str = new_str[1:].strip()
+    if new_str[0]=="," or new_str[0]==".":
+        new_str = new_str[1:].strip()
+    return new_str

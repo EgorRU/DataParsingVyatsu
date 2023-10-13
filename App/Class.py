@@ -70,6 +70,7 @@ class eLibrary_Library(Base_Library):
         self.publisher = ""
         self.country = ""
         self.GRNTI_code = ""
+        self.number = ""
         self.source = "eLibrary"
     
 

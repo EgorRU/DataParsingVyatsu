@@ -11,6 +11,12 @@ from Parsing import eLibrary
 from Parsing import IPublishing
 from App import identical_sources_equals, different_source_equals
 from App import Upload
+import logging
+import sys
+import traceback
+
+LOG_FILENAME = 'log.out'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
 
 win = Tk()
 
@@ -723,9 +729,10 @@ def upload():
         check = True
         try:
             Upload(path, add_new_list, identical_new_list, remove_new_list)
-        except:
+        except Exception as e: 
             tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка!! Возможно, Вы пытаетесь перезаписать файл, который открыт. Необходимо:\n1)Закрыть файл и нажать занова кнопку 'Выгрузить в xlsx'\nИЛИ\n2)Выбрать другое название файла при новом нажатии на кнопку 'Выгрузить в xlsx'.\nЕсли не помогает, обратитесь к разработчику:\nstud144241@vyatsu.ru")
             check = False
+            logging.exception(str(e))
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
 
