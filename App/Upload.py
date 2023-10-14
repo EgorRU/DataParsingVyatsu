@@ -4,7 +4,7 @@ import json
 import logging
 
 LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
@@ -189,7 +189,7 @@ def Upload(path, list_new, list_ident, list_remove):
         file = open('employee.json', 'r', encoding="utf-8")
         list_data = json.load(file)
     except:
-        logging.exception("Файл 'employee.json' не найден")
+        logging.exception("Файл 'employee.json' не найден\n")
     
     count = 0
     #добавляем новые элементы
