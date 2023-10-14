@@ -1,7 +1,12 @@
 from openpyxl import load_workbook
 from xls2xlsx import XLS2XLSX
+import logging
 from App import WOS_Library
 from App import clear_author
+
+
+LOG_FILENAME = 'log.out'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 def Wos(path):
@@ -16,7 +21,8 @@ def Wos(path):
         #открываем файл
         wb = load_workbook(path)
         ws = wb.active
-    except:
+    except Exception as e: 
+        logging.exception(str(e))
         return None
 
     #ПАРСИНГ КАЖДОЙ СТРОКИ
@@ -30,7 +36,9 @@ def Wos(path):
                 new_author.original_author = list_author[i].strip()
                 try:
                     new_author.author = clear_author(list_author[i].strip())
-                except:
+                except Exception as e: 
+                    logging.exception(str(e))
+                    logging.info(f"Сломанный автор в восе: {list_author[i]}")
                     new_author.author = list_author[i].strip()
             
                 if ws[f"I{row_index}"].value != None:
@@ -95,8 +103,9 @@ def Wos(path):
                     new_author.citations = ws[f"AF{row_index}"].value
                 
                 all_wos_list_library.append(new_author)
-        except:
-            pass
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанная строка в восе: {row_index}")
 
     for i in range(len(all_wos_list_library)):
         all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())

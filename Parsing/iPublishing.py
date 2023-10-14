@@ -1,8 +1,13 @@
 from openpyxl import load_workbook
+import logging
 from App import IPublishing_Library
 from App import Translite
 from App import clear_author
 from App import clear_IPublishing_title
+
+
+LOG_FILENAME = 'log.out'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 def IPublishing(path):
@@ -11,7 +16,8 @@ def IPublishing(path):
     #открытие исходного файла с проверкой 
     try:
         wb = load_workbook(path)
-    except:
+    except Exception as e: 
+        logging.exception(str(e))
         return None
 
     #парсим 1-й лист
@@ -84,8 +90,9 @@ def IPublishing(path):
                         new_author.impact_factor_elibrary_2_year = ws[f"AE{row_index}"].value
                     new_author.source = "Статьи в журналах"
                     all_IPublishing_list_library.append(new_author)
-        except:
-            pass
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанная строка в публи 'Статьи в журналах': {row_index}")
 
 
     #парсим 2-й лист
@@ -140,8 +147,9 @@ def IPublishing(path):
                 
                     new_author.source = "Публ. в научн. сборниках"
                     all_IPublishing_list_library.append(new_author)
-        except:
-            pass
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанная строка в публи 'Публ. в научн. сборниках': {row_index}")
     
 
     #парсим 3-й лист
@@ -188,13 +196,17 @@ def IPublishing(path):
                 
                     new_author.source = "Монографии"
                     all_IPublishing_list_library.append(new_author)
-        except:
-            pass
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанная строка в публи 'Монографии': {row_index}")
+
 
     for i in range(len(all_IPublishing_list_library)):
         try:
             all_IPublishing_list_library[i].author = clear_author(Translite(clear_author(all_IPublishing_list_library[i].original_author)))
-        except:
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанный автор в публи: {all_IPublishing_list_library[i].original_author}")
             all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].original_author
         all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].author.replace("Bajkova", "Baykova")
         all_IPublishing_list_library[i].clear_title = "".join(e for e in all_IPublishing_list_library[i].title.lower() if e.isalpha())

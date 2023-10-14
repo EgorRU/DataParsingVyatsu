@@ -1,6 +1,10 @@
 from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
 from openpyxl import Workbook
 import json
+import logging
+
+LOG_FILENAME = 'log.out'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
@@ -185,7 +189,7 @@ def Upload(path, list_new, list_ident, list_remove):
         file = open('employee.json', 'r', encoding="utf-8")
         list_data = json.load(file)
     except:
-        pass
+        logging.exception("Файл 'employee.json' не найден")
     
     count = 0
     #добавляем новые элементы
@@ -738,7 +742,7 @@ def Upload(path, list_new, list_ident, list_remove):
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_new[i],'full_bibliographic_description'):
-                            ws.cell(row=i+temp_row, column=j+3).value = full_description(list_new[i])
+                            ws.cell(row=temp_row, column=j+3).value = full_description(list_new[i])
                         else:
                             ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_description
                     #иначе обычное поле заполняем
@@ -775,7 +779,7 @@ def Upload(path, list_new, list_ident, list_remove):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_new[i],'full_bibliographic_description'):
-                            ws.cell(row=i+temp_row, column=j+3).value = full_description(list_new[i])
+                            ws.cell(row=temp_row, column=j+3).value = full_description(list_new[i])
                         else:
                             ws.cell(row=temp_row, column=j+3).value = list_new[i].full_bibliographic_description
                     #иначе обычное поле заполняем
@@ -837,7 +841,7 @@ def Upload(path, list_new, list_ident, list_remove):
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_ident[i],'full_bibliographic_description'):
-                            ws.cell(row=i+temp_row, column=j+3).value = full_description(list_ident[i])
+                            ws.cell(row=temp_row, column=j+3).value = full_description(list_ident[i])
                         else:
                              ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_description
                     #иначе обычное поле заполняем
@@ -873,7 +877,7 @@ def Upload(path, list_new, list_ident, list_remove):
                     #если библиографический список, то делаем его
                     if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_ident[i],'full_bibliographic_description'):
-                            ws.cell(row=i+temp_row, column=j+3).value = full_description(list_ident[i])
+                            ws.cell(row=temp_row, column=j+3).value = full_description(list_ident[i])
                         else:
                              ws.cell(row=temp_row, column=j+3).value = list_ident[i].full_bibliographic_description
                     #иначе обычное поле заполняем
@@ -935,7 +939,7 @@ def Upload(path, list_new, list_ident, list_remove):
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_remove[i],'full_bibliographic_description'):
-                            ws.cell(row=i+temp_row, column=j+3).value = full_description(list_remove[i])
+                            ws.cell(row=temp_row, column=j+3).value = full_description(list_remove[i])
                         else:
                             ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_description
                     #иначе обычное поле заполняем
@@ -971,7 +975,7 @@ def Upload(path, list_new, list_ident, list_remove):
                 for j in range(len(list_members)):
                     if list_members[j]=="full_bibliographic_description":
                         if not hasattr(list_remove[i],'full_bibliographic_description'):
-                           ws.cell(row=i+temp_row, column=j+3).value = full_description(list_remove[i])
+                           ws.cell(row=temp_row, column=j+3).value = full_description(list_remove[i])
                         else:
                             ws.cell(row=temp_row, column=j+3).value = list_remove[i].full_bibliographic_description
                     #иначе обычное поле заполняем

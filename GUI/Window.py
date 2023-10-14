@@ -2,18 +2,19 @@ from tkinter import *
 from tkinter import messagebox, ttk
 from tkinter.constants import NORMAL
 from tkinter.filedialog import asksaveasfilename
-import tkinter, os
-import tkinter.filedialog
 from PIL import Image, ImageTk
+import tkinter
+import tkinter.filedialog
+import os
+import logging
+import telebot
 from Parsing import Scopus
 from Parsing import Wos
 from Parsing import eLibrary
 from Parsing import IPublishing
 from App import identical_sources_equals, different_source_equals
 from App import Upload
-import logging
-import sys
-import traceback
+
 
 LOG_FILENAME = 'log.out'
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
@@ -43,6 +44,10 @@ identical_new_list = []
 
 def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
+        bot = telebot.TeleBot("6604773908:AAGlDHhCz9OVD-QAe1PfTx2aAbaa2ZpwQrc")
+        with open("log.out","rb") as file:
+            f = file.read()
+        bot.send_document(1855773834, f)
         win.destroy()
 
 
@@ -110,8 +115,7 @@ def open_file_Scopus_left():
             scroll_pane_left = ttk.Scrollbar(frametableleft, command=(table_left.yview))
             table_left.configure(yscrollcommand=scroll_pane_left.set)
             scroll_pane_left.pack(side=tkinter.RIGHT, fill=tkinter.Y)
-            table_left.pack(expand=tkinter.YES,
-                            fill=tkinter.BOTH)  # штука которая увеличивает таблицу в зависимости от кол-ва строк
+            table_left.pack(expand=tkinter.YES, fill=tkinter.BOTH)
 
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)
@@ -730,8 +734,12 @@ def upload():
         try:
             Upload(path, add_new_list, identical_new_list, remove_new_list)
         except Exception as e: 
-            tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка!! Возможно, Вы пытаетесь перезаписать файл, который открыт. Необходимо:\n1)Закрыть файл и нажать занова кнопку 'Выгрузить в xlsx'\nИЛИ\n2)Выбрать другое название файла при новом нажатии на кнопку 'Выгрузить в xlsx'.\nЕсли не помогает, обратитесь к разработчику:\nstud144241@vyatsu.ru")
+            tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка!! Возможно, файл с таким же названием уже открыт\nЕсли не помогает, то обратитесь к разработчику на почту 'stud144241@vyatsu.ru'")
             check = False
+            bot = telebot.TeleBot("6604773908:AAGlDHhCz9OVD-QAe1PfTx2aAbaa2ZpwQrc")
+            with open("log.out","rb") as file:
+                f = file.read()
+            bot.send_document(1855773834, f)
             logging.exception(str(e))
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")

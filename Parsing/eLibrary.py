@@ -1,9 +1,14 @@
 import json
 import xmltodict
 import re
+import logging
 from App import Translite
 from App import eLibrary_Library
 from App import clear_author
+
+
+LOG_FILENAME = 'log.out'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 def eLibrary(path):
@@ -47,11 +52,11 @@ def eLibrary(path):
     list_library = dict_data["items"]["item"]
     
     #по каждой записи
-    for e in list_library:
+    for lib in list_library:
         try:    
             count_author_temp = 0
             #список авторов
-            list_author = e["authors"]["author"]
+            list_author = lib["authors"]["author"]
             #если автор один
             if type(list_author)==dict:
                 new_article = eLibrary_Library()
@@ -63,7 +68,9 @@ def eLibrary(path):
                     new_article.original_author = new_article.author.strip()
                 try:
                     new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
-                except:
+                except Exception as e: 
+                    logging.exception(str(e))
+                    logging.info(f"Сломанный автор в ели: {new_article.original_author}")
                     new_article.author = new_article.original_author
                 new_article.author = new_article.author.replace("Bajkova", "Baykova")
                 count_author_temp += 1
@@ -84,7 +91,9 @@ def eLibrary(path):
                             new_article.original_author = new_article.author.strip()
                         try:
                             new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
-                        except:
+                        except Exception as e: 
+                            logging.exception(str(e))
+                            logging.info(f"Сломанный автор в ели: {new_article.original_author}")
                             new_article.author = new_article.original_author
                         new_article.author = new_article.author.replace("Bajkova", "Baykova")
                         #если запись не повторяется
@@ -102,117 +111,118 @@ def eLibrary(path):
             #по всем новым авторам добавляем новые поля
             for i in range(count_all_author, count_all_author + count_author_temp):
                 #название
-                if "titles" in e:
-                    if "title" in e["titles"]:
+                if "titles" in lib:
+                    if "title" in lib["titles"]:
                         #если одно название:
-                        if type(e["titles"]["title"])==dict:    
-                            if "#text" in e["titles"]["title"]:
-                                    all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", e["titles"]["title"]["#text"])
+                        if type(lib["titles"]["title"])==dict:    
+                            if "#text" in lib["titles"]["title"]:
+                                    all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", lib["titles"]["title"]["#text"])
                         #если несколько названий
                         else:
-                            if type(e["titles"]["title"])==list:
-                                for t in e["titles"]["title"]:
+                            if type(lib["titles"]["title"])==list:
+                                for t in lib["titles"]["title"]:
                                     if t["@lang"]=="RU":
                                         all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", t["#text"])
                                         break
                                 else:
-                                    for t in e["titles"]["title"]:
+                                    for t in lib["titles"]["title"]:
                                         if t["@lang"]=="EN":
                                             all_elibrary_list_library[i].title = re.sub(r'\<[^>]*\>', "", t["#text"])
                                             break
-                if all_elibrary_list_library[i].title==" " or all_elibrary_list_library[i].title==None:
-                    if "source" in e:
-                        if "titleaddinfo" in e["source"]:
-                            all_elibrary_list_library[i].title = e["source"]["titleaddinfo"]
-                        if "confname" in e["source"]:
-                            all_elibrary_list_library[i].title += e["source"]["confname"] 
                 all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.lower()
                 all_elibrary_list_library[i].title = all_elibrary_list_library[i].title[0].upper() + all_elibrary_list_library[i].title[1:]
                                     
                 #год
-                if "source" in e:
-                    if "issue" in e["source"]:
-                        if "year" in e["source"]["issue"]:
-                            all_elibrary_list_library[i].year = e["source"]["issue"]["year"]
-                        if "number" in e["source"]["issue"]:
-                            all_elibrary_list_library[i].number = e["source"]["issue"]["number"] 
+                if "source" in lib:
+                    if "issue" in lib["source"]:
+                        if "year" in lib["source"]["issue"]:
+                            all_elibrary_list_library[i].year = lib["source"]["issue"]["year"]
+                        if "number" in lib["source"]["issue"]:
+                            all_elibrary_list_library[i].number = lib["source"]["issue"]["number"] 
                 if all_elibrary_list_library[i].year == None or all_elibrary_list_library[i].year == "":
-                    if "yearpubl" in e:
-                        all_elibrary_list_library[i].year = e["yearpubl"]
+                    if "yearpubl" in lib:
+                        all_elibrary_list_library[i].year = lib["yearpubl"]
                 if all_elibrary_list_library[i].year == None:
                     all_elibrary_list_library[i].year = ""
                     
                 #ссылка
-                if "linkurl" in e:
-                    all_elibrary_list_library[i].link = e["linkurl"]
+                if "linkurl" in lib:
+                    all_elibrary_list_library[i].link = lib["linkurl"]
                 
                 #doi
-                if "doi" in e:
-                    all_elibrary_list_library[i].doi = e["doi"]
+                if "doi" in lib:
+                    all_elibrary_list_library[i].doi = lib["doi"]
                     
                 #id
-                if "@id" in e:
-                    all_elibrary_list_library[i].id = e["@id"]
+                if "@id" in lib:
+                    all_elibrary_list_library[i].id = lib["@id"]
                 
                 #type
-                if "type" in e:
-                    all_elibrary_list_library[i].type = e["type"]
+                if "type" in lib:
+                    all_elibrary_list_library[i].type = lib["type"]
                 
                 #citation
-                if "cited" in e:
-                    all_elibrary_list_library[i].citation = e["cited"]
+                if "cited" in lib:
+                    all_elibrary_list_library[i].citation = lib["cited"]
             
                 #pages
-                if "pages" in e:
-                    all_elibrary_list_library[i].pages = e["pages"]
+                if "pages" in lib:
+                    all_elibrary_list_library[i].pages = lib["pages"]
                 
                 #volume
-                if "source" in e:
-                    if "issue" in e["source"]:
-                        if "volume" in e["source"]["issue"]:
-                            all_elibrary_list_library[i].volume = e["source"]["issue"]["volume"]
+                if "source" in lib:
+                    if "issue" in lib["source"]:
+                        if "volume" in lib["source"]["issue"]:
+                            all_elibrary_list_library[i].volume = lib["source"]["issue"]["volume"]
                         
                 #issn
-                if "source" in e:
-                    if "journal" in e["source"]:
-                        if "issn" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].issn = e["source"]["journal"]["issn"]
+                if "source" in lib:
+                    if "journal" in lib["source"]:
+                        if "issn" in lib["source"]["journal"]:
+                            all_elibrary_list_library[i].issn = lib["source"]["journal"]["issn"]
                         
                 #eissn
-                if "source" in e:
-                    if "journal" in e["source"]:
-                        if "eissn" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].eissn = e["source"]["journal"]["eissn"]
+                if "source" in lib:
+                    if "journal" in lib["source"]:
+                        if "eissn" in lib["source"]["journal"]:
+                            all_elibrary_list_library[i].eissn = lib["source"]["journal"]["eissn"]
                         
                 #title_journal
-                if "source" in e:
-                    if "journal" in e["source"]:
-                        if "title" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].title_article = e["source"]["journal"]["title"]
+                if "source" in lib:
+                    if "journal" in lib["source"]:
+                        if "title" in lib["source"]["journal"]:
+                            all_elibrary_list_library[i].title_article = lib["source"]["journal"]["title"]
+                if all_elibrary_list_library[i].title_article=="" or all_elibrary_list_library[i].title_article==None:
+                    if "source" in lib:
+                        if "titleaddinfo" in lib["source"]:
+                            all_elibrary_list_library[i].title_article = lib["source"]["titleaddinfo"]
+                        if "confname" in lib["source"]:
+                            all_elibrary_list_library[i].title_article += f"//{lib['source']['confname']}" 
                         
                 #publisher
-                if "source" in e:
-                    if "journal" in e["source"]:
-                        if "publisher" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].publisher = e["source"]["journal"]["publisher"]
+                if "source" in lib:
+                    if "journal" in lib["source"]:
+                        if "publisher" in lib["source"]["journal"]:
+                            all_elibrary_list_library[i].publisher = lib["source"]["journal"]["publisher"]
                         
                 #country
-                if "source" in e:
-                    if "journal" in e["source"]:
-                        if "country" in e["source"]["journal"]:
-                            all_elibrary_list_library[i].country = e["source"]["journal"]["country"]
+                if "source" in lib:
+                    if "journal" in lib["source"]:
+                        if "country" in lib["source"]["journal"]:
+                            all_elibrary_list_library[i].country = lib["source"]["journal"]["country"]
                         
                 #GRNTI_code
-                if "grnti" in e:
-                    all_elibrary_list_library[i].GRNTI_code = e["grnti"]
+                if "grnti" in lib:
+                    all_elibrary_list_library[i].GRNTI_code = lib["grnti"]
                             
             count_all_author += count_author_temp
-        except:
-            pass
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанная строка в ели: {json.dump(lib, indent = 4)}")
         
     for i in range(len(all_elibrary_list_library)):
-        all_elibrary_list_library[i].clear_title = "".join(e for e in all_elibrary_list_library[i].title.lower() if e.isalpha())
-        all_elibrary_list_library[i].clear_author = "".join(e for e in all_elibrary_list_library[i].author if e.isupper())
-        all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.replace('ё', 'e')
+        all_elibrary_list_library[i].clear_title = "".join(lib for lib in all_elibrary_list_library[i].title.lower() if lib.isalpha())
+        all_elibrary_list_library[i].clear_author = "".join(lib for lib in all_elibrary_list_library[i].author if lib.isupper())
+        all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.replace('ё', 'lib')
         
     return all_elibrary_list_library

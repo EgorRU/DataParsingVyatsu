@@ -1,6 +1,11 @@
 from openpyxl import Workbook, load_workbook
+import logging
 from App import Scopus_Library
 from App import clear_author
+
+
+LOG_FILENAME = 'log.out'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 def Scopus(path):
@@ -11,7 +16,8 @@ def Scopus(path):
     try:
         wb = load_workbook(path)
         ws = wb.active
-    except:
+    except Exception as e: 
+        logging.exception(str(e))
         return None
 
     # создание нового файла
@@ -61,7 +67,9 @@ def Scopus(path):
                 # заполянем ФИО автора
                 try:
                     new_author.author = clear_author(author.strip())
-                except:
+                except Exception as e: 
+                    logging.exception(str(e))
+                    logging.info(f"Сломанный автор в скопусе: {author}")
                     new_author.author = author.strip()
                 
                 # добавляем экземпляр класса
@@ -407,8 +415,9 @@ def Scopus(path):
                 for j in range(count_temp, count_temp + count_author_row):
                     if len(lang)<20:
                         all_scopus_list_library[j].lang = lang[::-1].strip()
-        except:
-            pass
+        except Exception as e: 
+            logging.exception(str(e))
+            logging.info(f"Сломанная строка в скопусе: {s}")
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())
