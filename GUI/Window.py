@@ -7,7 +7,6 @@ import tkinter
 import tkinter.filedialog
 import os
 import logging
-import telebot
 from Parsing import Scopus
 from Parsing import Wos
 from Parsing import eLibrary
@@ -44,10 +43,6 @@ identical_new_list = []
 
 def on_closing():
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
-        bot = telebot.TeleBot("6604773908:AAGlDHhCz9OVD-QAe1PfTx2aAbaa2ZpwQrc")
-        with open("log.out","rb") as file:
-            f = file.read()
-        bot.send_document(1855773834, f)
         win.destroy()
 
 
@@ -734,16 +729,12 @@ def upload():
         try:
             Upload(path, add_new_list, identical_new_list, remove_new_list)
         except Exception as e: 
-            tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка!! Возможно, файл с таким же названием уже открыт\nЕсли не помогает, то обратитесь к разработчику на почту 'stud144241@vyatsu.ru'")
+            tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка! Возможно, файл с таким же названием уже открыт\nЕсли не помогает, то отправьте на почту 'stud144241@vyatsu.ru' файл log.out")
             check = False
-            bot = telebot.TeleBot("6604773908:AAGlDHhCz9OVD-QAe1PfTx2aAbaa2ZpwQrc")
-            with open("log.out","rb") as file:
-                f = file.read()
-            bot.send_document(1855773834, f)
             logging.exception(str(e))
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
-            
+
 
 def nameleft():
     global left_table_site
