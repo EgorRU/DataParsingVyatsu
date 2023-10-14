@@ -743,7 +743,7 @@ def upload():
             logging.exception(str(e))
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
-
+            
 
 def nameleft():
     global left_table_site
