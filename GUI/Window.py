@@ -1,9 +1,8 @@
-from tkinter import *
 from tkinter import messagebox, ttk
 from tkinter.constants import NORMAL
 from tkinter.filedialog import asksaveasfilename
 from PIL import Image, ImageTk
-import tkinter
+import tkinter as tk
 import tkinter.filedialog
 import os
 import logging
@@ -16,9 +15,9 @@ from App import Upload
 
 
 LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
 
-win = Tk()
+win = tk.Tk()
 
 # списки со статьями
 list_scopus = []
@@ -79,7 +78,7 @@ def open_file_Scopus_left():
         global left_table_create
         global table_left
         global scroll_pane_left
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         left_table_site = 's'
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
@@ -115,11 +114,11 @@ def open_file_Scopus_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)
 
-            table_left.column("author", minwidth=100, width=100, stretch=NO)
-            table_left.column("title", minwidth=330, width=330, stretch=YES)
-            table_left.column("year", minwidth=40, width=40, stretch=NO)
-            table_left.column("link", minwidth=180, width=180, stretch=NO)
-            table_left.column("citation", minwidth=60, width=60, stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_left.column("title", minwidth=330, width=330, stretch=tk.YES)
+            table_left.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_left.column("link", minwidth=180, width=180, stretch=tk.NO)
+            table_left.column("citation", minwidth=60, width=60, stretch=tk.NO)
 
             table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
@@ -152,7 +151,7 @@ def open_file_Scopus_right():
         global right_table_create
         global table_right
         global scroll_pane_right
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         right_table_site = 's'
         if ((left_table_site == 's' and right_table_site == 's') or
                 (left_table_site == 'i' and right_table_site == 's') or
@@ -188,11 +187,11 @@ def open_file_Scopus_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)
 
-            table_right.column("author", minwidth=100, width=100, stretch=NO)
-            table_right.column("title", minwidth=330, width=330, stretch=YES)
-            table_right.column("year", minwidth=40, width=40, stretch=NO)
-            table_right.column("link", minwidth=180, width=180, stretch=NO)
-            table_right.column("citation", minwidth=60, width=60, stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_right.column("title", minwidth=330, width=330, stretch=tk.YES)
+            table_right.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_right.column("link", minwidth=180, width=180, stretch=tk.NO)
+            table_right.column("citation", minwidth=60, width=60, stretch=tk.NO)
 
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
@@ -225,7 +224,7 @@ def open_file_WoS_left():
         global left_table_create
         global table_left
         global scroll_pane_left
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         left_table_site = 'w'
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
@@ -261,10 +260,10 @@ def open_file_WoS_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)
 
-            table_left.column("author", minwidth=100, width=100, stretch=NO)
-            table_left.column("title", minwidth=330, width=330, stretch=YES)
-            table_left.column("year", minwidth=40, width=40, stretch=NO)
-            table_left.column("link", minwidth=180, width=180, stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_left.column("title", minwidth=330, width=330, stretch=tk.YES)
+            table_left.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_left.column("link", minwidth=180, width=180, stretch=tk.NO)
 
             table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
@@ -296,7 +295,7 @@ def open_file_WoS_right():
         global right_table_create
         global table_right
         global scroll_pane_right
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         right_table_site = 'w'
         if ((left_table_site == 'w' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 'w') or
@@ -332,10 +331,10 @@ def open_file_WoS_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)
 
-            table_right.column("author", minwidth=100, width=100, stretch=NO)
-            table_right.column("title", minwidth=330, width=330, stretch=YES)
-            table_right.column("year", minwidth=40, width=40, stretch=NO)
-            table_right.column("link", minwidth=180, width=180, stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_right.column("title", minwidth=330, width=330, stretch=tk.YES)
+            table_right.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_right.column("link", minwidth=180, width=180, stretch=tk.NO)
 
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
@@ -367,7 +366,7 @@ def open_file_Elibrary_left():
         global left_table_create
         global table_left
         global scroll_pane_left
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         left_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
@@ -403,10 +402,10 @@ def open_file_Elibrary_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)
 
-            table_left.column("author", minwidth=100, width=100, stretch=NO)
-            table_left.column("title", minwidth=370, width=370, stretch=YES)
-            table_left.column("year", minwidth=40, width=40, stretch=NO)
-            table_left.column("link", minwidth=210, width=210, stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_left.column("title", minwidth=370, width=370, stretch=tk.YES)
+            table_left.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_left.column("link", minwidth=210, width=210, stretch=tk.NO)
 
             table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
@@ -438,7 +437,7 @@ def open_file_Elibrary_right():
         global right_table_create
         global table_right
         global scroll_pane_right
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         right_table_site = 'e'
         if ((left_table_site == 'e' and right_table_site == 'e') or
                 (left_table_site == 'i' and right_table_site == 'e') or
@@ -475,10 +474,10 @@ def open_file_Elibrary_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)
 
-            table_right.column("author", minwidth=100, width=100, stretch=NO)
-            table_right.column("title", minwidth=370, width=370, stretch=YES)
-            table_right.column("year", minwidth=40, width=40, stretch=NO)
-            table_right.column("link", minwidth=210, width=210, stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_right.column("title", minwidth=370, width=370, stretch=tk.YES)
+            table_right.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_right.column("link", minwidth=210, width=210, stretch=tk.NO)
 
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
@@ -510,7 +509,7 @@ def open_file_Ipublishing_left():
         global left_table_create
         global table_left
         global scroll_pane_left
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         left_table_site = 'i'
         if ((left_table_site == 'i' and right_table_site == 'w') or
                 (left_table_site == 'i' and right_table_site == 's') or
@@ -547,10 +546,10 @@ def open_file_Ipublishing_left():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_left.insert('', tkinter.END, values=row)
 
-            table_left.column("author", minwidth=100, width=100, stretch=NO)
-            table_left.column("title", minwidth=250, width=250, stretch=YES)
-            table_left.column("year", minwidth=40, width=40, stretch=NO)
-            table_left.column("link", minwidth=160, width=160, stretch=NO)
+            table_left.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_left.column("title", minwidth=250, width=250, stretch=tk.YES)
+            table_left.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_left.column("link", minwidth=160, width=160, stretch=tk.NO)
 
             table_left.heading("author", text="author", command=lambda: sort(table_left, 0, False))
             table_left.heading("title", text="title", command=lambda: sort(table_left, 1, False))
@@ -582,7 +581,7 @@ def open_file_Ipublishing_right():
         global right_table_create
         global table_right
         global scroll_pane_right
-        mainmenu.entryconfigure(2, state=DISABLED)
+        mainmenu.entryconfigure(2, state=tk.DISABLED)
         right_table_site = 'i'
         if ((right_table_site == 'i' and left_table_site == 'w') or
                 (right_table_site == 'i' and left_table_site == 's') or
@@ -619,10 +618,10 @@ def open_file_Ipublishing_right():
             for row in lst:  # для каждой строки указываем что нет родителя (обязательная тема чтоб было красиво)
                 table_right.insert('', tkinter.END, values=row)
 
-            table_right.column("author", minwidth=100, width=100, stretch=NO)
-            table_right.column("title", minwidth=250, width=250, stretch=YES)
-            table_right.column("year", minwidth=40, width=40, stretch=NO)
-            table_right.column("link", minwidth=160, width=160, stretch=NO)
+            table_right.column("author", minwidth=100, width=100, stretch=tk.NO)
+            table_right.column("title", minwidth=250, width=250, stretch=tk.YES)
+            table_right.column("year", minwidth=40, width=40, stretch=tk.NO)
+            table_right.column("link", minwidth=160, width=160, stretch=tk.NO)
 
             table_right.heading("author", text="author", command=lambda: sort(table_right, 0, False))
             table_right.heading("title", text="title", command=lambda: sort(table_right, 1, False))
@@ -644,12 +643,12 @@ def open_compare_window():
     if comparewin_is_open == True:
         comparewin.destroy()
     comparewin_is_open = True
-    comparewin = Toplevel(win)  # инициализация
+    comparewin = tk.Toplevel(win)  # инициализация
     comparewin.geometry('750x700')  # размер
     comparewin.minsize(750, 700)
     comparewin.title("Результат сравнения")  # название
-    frame_compare_button = Frame(comparewin)  # задаем поле
-    frame_compare_table = Frame(comparewin)  # задаем поле
+    frame_compare_button = tk.Frame(comparewin)  # задаем поле
+    frame_compare_table = tk.Frame(comparewin)  # задаем поле
     frame_compare_button.place(relx=0, rely=0, relwidth=1, relheight=0.1)  # размещаем его на весь размер окна
     frame_compare_table.place(relx=0, rely=0.1, relwidth=1, relheight=0.9)  # размещаем его на весь размер окна
 
@@ -674,7 +673,7 @@ def open_compare_window():
         list_new_tuple, list_ident_tuple, list_remove_tuple, add_new_list, identical_new_list, remove_new_list = different_source_equals(
             list1, list2)
 
-    unload_to_xlsx = Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=upload)
+    unload_to_xlsx = tk.Button(frame_compare_button, text="Выгрузить в таблицу xlsx", command=upload)
     unload_to_xlsx.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.5)
 
     for row in list_new_tuple:
@@ -688,10 +687,10 @@ def open_compare_window():
     table_compare.tag_configure('deleted', background='#F08080')
     table_compare.tag_configure('edited', background='white')
 
-    table_compare.column("author", minwidth=100, width=100, stretch=NO)
-    table_compare.column("title", minwidth=370, width=370, stretch=YES)
-    table_compare.column("year", minwidth=40, width=40, stretch=NO)
-    table_compare.column("link", minwidth=210, width=210, stretch=NO)
+    table_compare.column("author", minwidth=100, width=100, stretch=tk.NO)
+    table_compare.column("title", minwidth=370, width=370, stretch=tk.YES)
+    table_compare.column("year", minwidth=40, width=40, stretch=tk.NO)
+    table_compare.column("link", minwidth=210, width=210, stretch=tk.NO)
 
     table_compare.heading("author", text="author", command=lambda: sort(table_compare, 0, False))
     table_compare.heading("title", text="title", command=lambda: sort(table_compare, 1, False))
@@ -708,11 +707,11 @@ def help_guide():
     if help_is_open == True:
         helpwin.destroy()
     help_is_open = True
-    helpwin = Toplevel(win)  # инициализация
+    helpwin = tk.Toplevel(win)  # инициализация
     helpwin.geometry('800x800')  # размер
     helpwin.resizable(False, False)
     helpwin.title("Окно помощи")  # название
-    frame_help = Frame(helpwin)  # задаем поле
+    frame_help = tk.Frame(helpwin)  # задаем поле
     frame_help.place(relx=0, rely=0, relwidth=1, relheight=1)  # размещаем его на весь размер окна
     photo = ImageTk.PhotoImage(Image.open("help.jpg"))
     label_help = tkinter.Label(frame_help, image=photo)  # задаем поле
@@ -731,7 +730,7 @@ def upload():
         except Exception as e: 
             tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка! Возможно, файл с таким же названием уже открыт\nЕсли не помогает, то отправьте на почту 'stud144241@vyatsu.ru' файл log.out")
             check = False
-            logging.exception(str(e))
+            logging.exception(f"{str(e)}\n")
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
 
@@ -760,11 +759,11 @@ win.protocol("WM_DELETE_WINDOW", on_closing)  # событие при закры
 win.minsize(1500, 700)
 
 # блоки основного окна
-framenameleft = Frame(win, bg='#FFFFFF')
-framenameright = Frame(win, bg='#FFFFFF')
+framenameleft = tk.Frame(win, bg='#FFFFFF')
+framenameright = tk.Frame(win, bg='#FFFFFF')
 
-frametableleft = Frame(win, bg='#FFFFFF')
-frametableright = Frame(win, bg='#FFFFFF')
+frametableleft = tk.Frame(win, bg='#FFFFFF')
+frametableright = tk.Frame(win, bg='#FFFFFF')
 
 # расположение блоков, чтоб можно было менять размер окна
 framenameleft.place(relx=0, rely=0, relwidth=0.5, relheight=0.04)
@@ -773,43 +772,40 @@ framenameright.place(relx=0.5, rely=0, relwidth=0.5, relheight=0.04)
 frametableleft.place(relx=0, rely=0.04, relwidth=0.5, relheight=1)
 frametableright.place(relx=0.5, rely=0.04, relwidth=0.5, relheight=1)
 
-name_left = tkinter.Label(framenameleft, text=nameleft(), background='#FFFFFF')
-name_right = tkinter.Label(framenameright, text=nameright(), background='#FFFFFF')
+name_left = tk.Label(framenameleft, text=nameleft(), background='#FFFFFF')
+name_right = tk.Label(framenameright, text=nameright(), background='#FFFFFF')
 
 name_left.place(relx=0.25, rely=0, relwidth=0.5, relheight=1)
 name_right.place(relx=0.25, rely=0, relwidth=0.5, relheight=1)
 
 # меню
-mainmenu = Menu(win)
+mainmenu = tk.Menu(win)
 win.config(menu=mainmenu)
 
-# создание самого меню
-filemenu = Menu(mainmenu, tearoff=0)
-
 # создание поля загрузка файлов
-filemenu_load = Menu(filemenu, tearoff=0)
+filemenu_load = tk.Menu(mainmenu, tearoff=0)
 
-filemenu_load_WoF = Menu(filemenu_load, tearoff=0)
+filemenu_load_WoF = tk.Menu(filemenu_load, tearoff=0)
 filemenu_load_WoF.add_command(label="Загрузить в левую таблицу", command=(open_file_WoS_left))
 filemenu_load_WoF.add_command(label="Загрузить в правую таблицу", command=(open_file_WoS_right))
 filemenu_load.add_cascade(label="Загрузить Web of Science", menu=filemenu_load_WoF)
 
-filemenu_load_Scopus = Menu(filemenu_load, tearoff=0)
+filemenu_load_Scopus = tk.Menu(filemenu_load, tearoff=0)
 filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу", command=(open_file_Scopus_left))
 filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу", command=(open_file_Scopus_right))
 filemenu_load.add_cascade(label="Загрузить Scopus", menu=filemenu_load_Scopus)
 
-filemenu_load_Elibrary = Menu(filemenu_load, tearoff=0)
+filemenu_load_Elibrary = tk.Menu(filemenu_load, tearoff=0)
 filemenu_load_Elibrary.add_command(label="Загрузить в левую таблицу", command=(open_file_Elibrary_left))
 filemenu_load_Elibrary.add_command(label="Загрузить в правую таблицу", command=(open_file_Elibrary_right))
 filemenu_load.add_cascade(label="Загрузить Elibrary", menu=filemenu_load_Elibrary)
 
-filemenu_load_Ipublishing = Menu(filemenu_load, tearoff=0)
+filemenu_load_Ipublishing = tk.Menu(filemenu_load, tearoff=0)
 filemenu_load_Ipublishing.add_command(label="Загрузить в левую таблицу", command=(open_file_Ipublishing_left))
 filemenu_load_Ipublishing.add_command(label="Загрузить в правую таблицу", command=(open_file_Ipublishing_right))
 filemenu_load.add_cascade(label="Загрузить Ipublishing", menu=filemenu_load_Ipublishing)
 
 # создание главных полей
 mainmenu.add_cascade(label="Загрузить файл", menu=filemenu_load)
-mainmenu.add_cascade(label="Сравнить данные", command=(open_compare_window), state=DISABLED)
+mainmenu.add_cascade(label="Сравнить данные", command=(open_compare_window), state=tk.DISABLED)
 mainmenu.add_cascade(label="Помощь", command=(help_guide))

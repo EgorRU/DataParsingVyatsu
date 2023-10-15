@@ -43,6 +43,7 @@
         if len(new)==2:
             #если склеены инициалы
             counter = new[1].count('.')
+            #если есть две точки
             if counter==2:
                 #фамилия
                 new[0] = new[0][0].upper() + new[0][1:]
@@ -59,13 +60,18 @@
                     new_str = f"{new[0]} {new_str_1}.{new_str_2}."
                 else:
                     new_str = f"{new[0]} {new_str_1}."
+            #если точек нет, то смотрим сколько букв
             elif counter==0:
-                #фамилия
-                new[0] = new[0][0].upper() + new[0][1:]
-                new_str_1 = f"{new[1][0].upper()}"
-                new_str_2 = f"{new[1][1].upper()}"
-                new_str = f"{new[0]} {new_str_1}.{new_str_2}."
-            #иначе фул имя, и у него берём первую букву
+                if len(new[1])==1:
+                    new[0] = new[0][0].upper() + new[0][1:]
+                    new_str = f"{new[1][0].upper()}"
+                    new_str = f"{new[0]} {new_str}."
+                else:
+                    new[0] = new[0][0].upper() + new[0][1:]
+                    new_str_1 = f"{new[1][0].upper()}"
+                    new_str_2 = f"{new[1][1].upper()}"
+                    new_str = f"{new[0]} {new_str_1}.{new_str_2}."
+            #если одна точки - одна буква с инициалами
             else:
                 new[0] = new[0][0].upper() + new[0][1:]
                 new_str = f"{new[0]} {new[1][0].upper()}."
@@ -91,7 +97,7 @@ def clear_IPublishing_title(string):
            (new_str[index]==' ' and new_str[index+1].isupper() and new_str[index+2]==' ' and new_str[index+3]=='.' and new_str[index+4].isupper() and (new_str[index+5]!="." and new_str[index+6]!="."))==False and \
            (new_str[index]=='.' and new_str[index+1].isupper() and new_str[index+2]=='.' and new_str[index+3].isupper() and (new_str[index+4]!="." and new_str[index+5]!="."))==False and \
            (new_str[index]==' ' and new_str[index+1].isupper() and new_str[index+2]=='.' and new_str[index+3].isupper() and (new_str[index+4]!="." and new_str[index+5]!="."))==False and \
-           (new_str[index]=='.' and new_str[index+1].isupper() and new_str[index+2]==' ' and new_str[index+3]==' ' and new_str[index+4]=='.' and new_str[index+5].isupper() (new_str[index+6]!="." and new_str[index+7]!="."))==False:
+           (new_str[index]=='.' and new_str[index+1].isupper() and new_str[index+2]==' ' and new_str[index+3]==' ' and new_str[index+4]=='.' and new_str[index+5].isupper() and (new_str[index+6]!="." and new_str[index+7]!="."))==False:
         index += 1
         if index>=len(new_str):
             break
