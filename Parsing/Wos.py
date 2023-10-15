@@ -6,7 +6,7 @@ from App import clear_author
 
 
 LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def Wos(path):
@@ -22,7 +22,7 @@ def Wos(path):
         wb = load_workbook(path)
         ws = wb.active
     except Exception as e: 
-        logging.exception(str(e))
+        logging.exception(f"{str(e)}\n")
         return None
 
     #ПАРСИНГ КАЖДОЙ СТРОКИ
@@ -37,8 +37,8 @@ def Wos(path):
                 try:
                     new_author.author = clear_author(list_author[i].strip())
                 except Exception as e: 
-                    logging.exception(str(e))
-                    logging.info(f"Сломанный автор в восе: {list_author[i]}")
+                    logging.exception(f"{str(e)}\n")
+                    logging.info(f"Сломанный автор в восе: {list_author[i]}\n")
                     new_author.author = list_author[i].strip()
             
                 if ws[f"I{row_index}"].value != None:
@@ -104,8 +104,8 @@ def Wos(path):
                 
                 all_wos_list_library.append(new_author)
         except Exception as e: 
-            logging.exception(str(e))
-            logging.info(f"Сломанная строка в восе: {row_index}")
+            logging.exception(f"{str(e)}\n")
+            logging.info(f"Сломанная строка в восе: {row_index}\n")
 
     for i in range(len(all_wos_list_library)):
         all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())

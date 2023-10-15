@@ -1,23 +1,22 @@
 import logging
 
-
 LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def sort(add_new_list, identical_new_list, remove_new_list):
     try:
         add_new_list = sorted(add_new_list, key=lambda x: x.year, reverse=True)
     except Exception as e: 
-        logging.exception(str(e))
+        logging.exception(f"{str(e)}\n")
     try:
         identical_new_list = sorted(identical_new_list, key=lambda x: x.year, reverse=True)
     except Exception as e: 
-        logging.exception(str(e))
+        logging.exception(f"{str(e)}\n")
     try:
         remove_new_list = sorted(remove_new_list, key=lambda x: x.year, reverse=True)
     except Exception as e: 
-        logging.exception(str(e))
+        logging.exception(f"{str(e)}\n")
     return add_new_list, identical_new_list, remove_new_list
 
 

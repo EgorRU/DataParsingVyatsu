@@ -7,7 +7,7 @@ from App import clear_IPublishing_title
 
 
 LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,  encoding='utf-8', format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def IPublishing(path):
@@ -17,7 +17,7 @@ def IPublishing(path):
     try:
         wb = load_workbook(path)
     except Exception as e: 
-        logging.exception(str(e))
+        logging.exception(f"{str(e)}\n")
         return None
 
     #парсим 1-й лист
@@ -91,8 +91,8 @@ def IPublishing(path):
                     new_author.source = "Статьи в журналах"
                     all_IPublishing_list_library.append(new_author)
         except Exception as e: 
-            logging.exception(str(e))
-            logging.info(f"Сломанная строка в публи 'Статьи в журналах': {row_index}")
+            logging.exception(f"{str(e)}\n")
+            logging.info(f"Сломанная строка в публи 'Статьи в журналах': {row_index}\n")
 
 
     #парсим 2-й лист
@@ -112,7 +112,11 @@ def IPublishing(path):
                         new_author.original_author = new_author.original_author[:index].strip()
                 
                     if ws[f"G{row_index}"].value != None:
-                        new_author.title = clear_IPublishing_title(ws[f"G{row_index}"].value)
+                        try:
+                            new_author.title = clear_IPublishing_title(ws[f"G{row_index}"].value)
+                        except Exception as e: 
+                            logging.exception(f"{str(e)}\n")
+                            logging.info(f"Сломанный автор в публи 'Публ. в научн. сборниках': {ws[f'G{row_index}'].value}\n")
                         new_author.full_bibliographic_description = ws[f"G{row_index}"].value                
                     
                     if ws[f"E{row_index}"].value != None:
@@ -148,8 +152,8 @@ def IPublishing(path):
                     new_author.source = "Публ. в научн. сборниках"
                     all_IPublishing_list_library.append(new_author)
         except Exception as e: 
-            logging.exception(str(e))
-            logging.info(f"Сломанная строка в публи 'Публ. в научн. сборниках': {row_index}")
+            logging.exception(f"{str(e)}\n")
+            logging.info(f"Сломанная строка в публи 'Публ. в научн. сборниках': {row_index}\n")
     
 
     #парсим 3-й лист
@@ -197,16 +201,16 @@ def IPublishing(path):
                     new_author.source = "Монографии"
                     all_IPublishing_list_library.append(new_author)
         except Exception as e: 
-            logging.exception(str(e))
-            logging.info(f"Сломанная строка в публи 'Монографии': {row_index}")
+            logging.exception(f"{str(e)}\n")
+            logging.info(f"Сломанная строка в публи 'Монографии': {row_index}\n")
 
 
     for i in range(len(all_IPublishing_list_library)):
         try:
             all_IPublishing_list_library[i].author = clear_author(Translite(clear_author(all_IPublishing_list_library[i].original_author)))
         except Exception as e: 
-            logging.exception(str(e))
-            logging.info(f"Сломанный автор в публи: {all_IPublishing_list_library[i].original_author}")
+            logging.exception(f"{str(e)}\n")
+            logging.info(f"Сломанный автор в публи: {all_IPublishing_list_library[i].original_author}\n")
             all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].original_author
         all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].author.replace("Bajkova", "Baykova")
         all_IPublishing_list_library[i].clear_title = "".join(e for e in all_IPublishing_list_library[i].title.lower() if e.isalpha())
