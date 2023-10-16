@@ -75,7 +75,8 @@
             else:
                 new[0] = new[0][0].upper() + new[0][1:]
                 new_str = f"{new[0]} {new[1][0].upper()}."
-                
+        if len(new)==1:
+            return string
     return new_str.replace("é","e").replace("É","E")
 
 

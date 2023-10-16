@@ -60,17 +60,36 @@ def Scopus(path):
                 while s[i] != ",":
                     author += s[i]
                     i += 1
+                # заполянем ФИО автора
+                try:
+                    author = clear_author(author.strip())
+                except Exception as e: 
+                    logging.exception(f"{str(e)}\n")
+                    logging.info(f"Сломанный автор в скопусе: {author}\n")
+                    author = author.strip()
+                new_auth = " "
+                #если только фамилия, а инициалы идут после запятой, то собираем инициалы
+                if len(author.split())==1:
+                    i += 1
+                    while s[i] != ",":
+                        new_auth += s[i]
+                        i += 1
+                #если собранные инициалы слишком длинные, то это новая фамилия
+                if len(new_auth)<=7:
+                    author +=new_auth
+                else:
+                    author = new_auth
+                try:
+                    author = clear_author(author.strip())
+                except Exception as e: 
+                    logging.exception(f"{str(e)}\n")
+                    logging.info(f"Сломанный автор в скопусе: {author}\n")
+                    author = author.strip()
                 # создание экземпляра класса - статья scopus
                 new_author = Scopus_Library()
                 count_author_row += 1
                 new_author.original_author = author.strip()
-                # заполянем ФИО автора
-                try:
-                    new_author.author = clear_author(author.strip())
-                except Exception as e: 
-                    logging.exception(f"{str(e)}\n")
-                    logging.info(f"Сломанный автор в скопусе: {author}\n")
-                    new_author.author = author.strip()
+                new_author.author = author.strip()
                 
                 # добавляем экземпляр класса
                 all_scopus_list_library.append(new_author)
@@ -418,6 +437,8 @@ def Scopus(path):
         except Exception as e: 
             logging.exception(f"{str(e)}\n")
             logging.info(f"Сломанная строка в скопусе: {s}\n")
+            logging.info(f"Индекс: {count_temp_id}\n")
+            logging.info(f"Всего  элементов: {len(all_scopus_list_library)}\n")
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())
