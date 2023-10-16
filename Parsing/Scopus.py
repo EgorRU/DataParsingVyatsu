@@ -78,7 +78,13 @@ def Scopus(path):
                 if len(new_auth)<=7:
                     author +=new_auth
                 else:
-                    author = new_auth
+                    # создание экземпляра класса - статья scopus
+                    new_author = Scopus_Library()
+                    count_author_row += 1
+                    new_author.original_author = new_auth.strip()
+                    new_author.author = new_auth.strip()
+                    # добавляем экземпляр класса
+                    all_scopus_list_library.append(new_author)
                 try:
                     author = clear_author(author.strip())
                 except Exception as e: 
@@ -132,15 +138,16 @@ def Scopus(path):
                 i_temp = 0
                 if s_temp[i_temp]==")":
                     i_temp += 1
-                    while s_temp[i_temp]!="(":
+                    while i_temp<len(s_temp) and s_temp[i_temp]!="(":
                         i_temp += 1
                 elif s_temp[i_temp]=="]":
                     i_temp += 1
-                    while s_temp[i_temp]!="[":
+                    while i_temp<len(s_temp) and s_temp[i_temp]!="[":
                         i_temp += 1
                 i_temp += 1
-                s_temp = s_temp[i_temp:]
-                title = s_temp[::-1]
+                if i_temp==len(s_temp):
+                    s_temp = s_temp[i_temp:]
+                    title = s_temp[::-1]
             for j in range(count_temp, count_temp + count_author_row):
                 all_scopus_list_library[j].title = title
 
@@ -437,8 +444,6 @@ def Scopus(path):
         except Exception as e: 
             logging.exception(f"{str(e)}\n")
             logging.info(f"Сломанная строка в скопусе: {s}\n")
-            logging.info(f"Индекс: {count_temp_id}\n")
-            logging.info(f"Всего  элементов: {len(all_scopus_list_library)}\n")
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())
