@@ -60,17 +60,42 @@ def Scopus(path):
                 while s[i] != ",":
                     author += s[i]
                     i += 1
+                # заполянем ФИО автора
+                try:
+                    author = clear_author(author.strip())
+                except Exception as e: 
+                    logging.exception(f"{str(e)}\n")
+                    logging.info(f"Сломанный автор в скопусе: {author}\n")
+                    author = author.strip()
+                new_auth = " "
+                #если только фамилия, а инициалы идут после запятой, то собираем инициалы
+                if len(author.split())==1:
+                    i += 1
+                    while s[i] != ",":
+                        new_auth += s[i]
+                        i += 1
+                #если собранные инициалы слишком длинные, то это новая фамилия
+                if len(new_auth)<=7:
+                    author +=new_auth
+                else:
+                    # создание экземпляра класса - статья scopus
+                    new_author = Scopus_Library()
+                    count_author_row += 1
+                    new_author.original_author = new_auth.strip()
+                    new_author.author = new_auth.strip()
+                    # добавляем экземпляр класса
+                    all_scopus_list_library.append(new_author)
+                try:
+                    author = clear_author(author.strip())
+                except Exception as e: 
+                    logging.exception(f"{str(e)}\n")
+                    logging.info(f"Сломанный автор в скопусе: {author}\n")
+                    author = author.strip()
                 # создание экземпляра класса - статья scopus
                 new_author = Scopus_Library()
                 count_author_row += 1
                 new_author.original_author = author.strip()
-                # заполянем ФИО автора
-                try:
-                    new_author.author = clear_author(author.strip())
-                except Exception as e: 
-                    logging.exception(f"{str(e)}\n")
-                    logging.info(f"Сломанный автор в скопусе: {author}\n")
-                    new_author.author = author.strip()
+                new_author.author = author.strip()
                 
                 # добавляем экземпляр класса
                 all_scopus_list_library.append(new_author)
@@ -113,15 +138,16 @@ def Scopus(path):
                 i_temp = 0
                 if s_temp[i_temp]==")":
                     i_temp += 1
-                    while s_temp[i_temp]!="(":
+                    while i_temp<len(s_temp) and s_temp[i_temp]!="(":
                         i_temp += 1
                 elif s_temp[i_temp]=="]":
                     i_temp += 1
-                    while s_temp[i_temp]!="[":
+                    while i_temp<len(s_temp) and s_temp[i_temp]!="[":
                         i_temp += 1
                 i_temp += 1
-                s_temp = s_temp[i_temp:]
-                title = s_temp[::-1]
+                if i_temp==len(s_temp):
+                    s_temp = s_temp[i_temp:]
+                    title = s_temp[::-1]
             for j in range(count_temp, count_temp + count_author_row):
                 all_scopus_list_library[j].title = title
 
