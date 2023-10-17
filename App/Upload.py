@@ -1,6 +1,5 @@
 from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
 from openpyxl import Workbook
-from psycopg2 import Error
 import json
 import logging
 
@@ -14,23 +13,23 @@ def match(text, alphabet=set('абвгдеёжзийклмнопрстуфхцч
 
 
 def full_description(obj):
-    s = f"{obj.original_author}, {obj.title} - {obj.year}."
+    s = f"{obj.original_author}, {obj.title} - {obj.year}. "
     if hasattr(obj, "volume") and obj.volume != None and obj.volume!="":
-        s += f" - Vol. {obj.volume}."
+        s += f" - Vol. {obj.volume}. "
     if hasattr(obj, "issue") and obj.issue != None and obj.issue != "":
-        s += f" - №{obj.issue}."
+        s += f" - №{obj.issue}. "
     if hasattr(obj, "start_page") and obj.start_page != None and obj.start_page!="":
-        s += f" - pp. {obj.start_page}-"
+        s += f" - pp. {obj.start_page}- "
     if hasattr(obj, "end_page") and obj.end_page != None and obj.end_page!="":
-        s += f"{obj.end_page}."
+        s += f"{obj.end_page}. "
     else:
         s += "  "
     if hasattr(obj, "number") and obj.number != None and obj.number != "":
-        s += f" - Vol. {obj.number}."
+        s += f" - Vol. {obj.number}. "
     if hasattr(obj, "source_name") and obj.source_name != None and obj.source_name != "":
         s += f"source_name: {obj.source_name} "
     if hasattr(obj, "title_article") and obj.title_article != None and obj.title_article != "":
-        s += f"title_article: {obj.title_article} "
+        s += f"title: {obj.title_article} "
     if hasattr(obj, "pages") and obj.pages != None and obj.pages != "":
         s += f"pages: {obj.pages} "
     if hasattr(obj, "publisher") and obj.publisher != None and obj.publisher != "":

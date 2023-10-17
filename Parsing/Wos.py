@@ -96,8 +96,8 @@ def Wos(path):
                 if ws[f"BS{row_index}"].value != None:
                     new_author.unique_wos_id = ws[f"BS{row_index}"].value[4:]
                     
-                if ws[f"N{row_index}"].value != None:
-                    new_author.document_type = ws[f"N{row_index}"].value
+                if ws[f"A{row_index}"].value != None:
+                    new_author.document_type = ws[f"A{row_index}"].value
                     
                 if ws[f"AF{row_index}"].value != None:
                     new_author.citations = ws[f"AF{row_index}"].value
@@ -111,5 +111,9 @@ def Wos(path):
         all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())
         all_wos_list_library[i].clear_author = "".join(e for e in all_wos_list_library[i].author if e.isupper())
         all_wos_list_library[i].title = all_wos_list_library[i].title.replace('ё', 'e')
-        
+        if len(all_wos_list_library[i].researcher_ids)>0 and all_wos_list_library[i].researcher_ids[0]==';':
+            all_wos_list_library[i].researcher_ids = all_wos_list_library[i].researcher_ids[1:].strip()
+        if len(all_wos_list_library[i].researcher_ids)>0 and all_wos_list_library[i].researcher_ids[0]==',':
+            all_wos_list_library[i].researcher_ids = all_wos_list_library[i].researcher_ids[1:].strip()
+            
     return all_wos_list_library

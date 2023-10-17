@@ -25,7 +25,6 @@ def identical_sources_equals(source1, source2):
     add_new_list = []
     remove_new_list = []
     identical_new_list = []
-
     #проверяем данные на факт добавления (+ на повторки)
     for i in range(len(source2)):
         copy = False
@@ -48,7 +47,6 @@ def identical_sources_equals(source1, source2):
                     break
         if copy == False:
             add_new_list.append(source2[i])
-
     #проверяем данные на факт удаления
     for i in range(len(source1)):
         copy = False
@@ -92,7 +90,6 @@ def different_source_equals(source1, source2):
     add_new_list = []
     remove_new_list = []
     identical_new_list = []
-
     #проверяем данные на факт добавления (+ на повторки)
     for i in range(len(source2)):
         copy = False
@@ -106,7 +103,6 @@ def different_source_equals(source1, source2):
                 break
         if copy == False:
             add_new_list.append(source2[i])
-
     #проверяем данные на факт удаления
     for i in range(len(source1)):
         copy = False

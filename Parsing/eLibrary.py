@@ -223,6 +223,6 @@ def eLibrary(path):
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_title = "".join(lib for lib in all_elibrary_list_library[i].title.lower() if lib.isalpha())
         all_elibrary_list_library[i].clear_author = "".join(lib for lib in all_elibrary_list_library[i].author if lib.isupper())
-        all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.replace('ё', 'lib')
+        all_elibrary_list_library[i].title = all_elibrary_list_library[i].title.replace('ё', 'е')
         
     return all_elibrary_list_library
