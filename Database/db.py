@@ -54,7 +54,7 @@ def create_db():
         CREATE TABLE if not exists project_schema.article(
         eid text primary key not null,
         title text not null,
-        year integer not null check(year>0 and year<date_part('year', now())::integer+1),
+        year decimal(4,0) not null check(year>0 and year::integer<date_part('year', now())::integer+1),
         doi text,
         link text,
         volume text,
@@ -134,7 +134,7 @@ def create_db():
         
 
         create = '''
-        CREATE OR REPLACE FUNCTION project_schema.count_article_for_year(in year integer, out count bigint)
+        CREATE OR REPLACE FUNCTION project_schema.count_article_for_year(in year decimal(4,0), out count bigint)
         as $$
         select count(*) from project_schema.article a where $1 = a.year;
         $$ language sql;
@@ -145,7 +145,7 @@ def create_db():
         
 
         create = '''
-        CREATE OR REPLACE FUNCTION project_schema.citation_for_year(in year integer, out count bigint)
+        CREATE OR REPLACE FUNCTION project_schema.citation_for_year(in year decimal(4,0), out count bigint)
         as $$
         select sum(a.citation) as sum_of_citation from project_schema.article a where $1 = a. year;
         $$ language sql;
