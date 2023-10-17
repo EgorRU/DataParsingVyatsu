@@ -2,6 +2,8 @@ from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
 from openpyxl import Workbook
 import json
 import logging
+from Database import create_db
+from Database import update_db
 
 
 LOG_FILENAME = 'log.out'
@@ -640,6 +642,19 @@ def Upload(path, list_new, list_ident, list_remove):
             cell.font = Font(size=16)
             
     wb.save(path)
+
+
+    #запись в базу данных
+    #пытаемся подключится к базе данных Scopus и изменить какие-то строки
+    try:
+        update_db(list_new, list_ident, list_remove)
+    except (Exception, UnicodeDecodeError) as e:
+        create_db()
+        update_db(list_new, list_ident, list_remove)
+        logging.exception(str(e))
+    except (Exception, Error) as e:
+        logging.exception(str(e))
+        
 
     #выгружаем только сотрудников вуза
     wb = Workbook()
