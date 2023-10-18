@@ -5,17 +5,14 @@ from PIL import Image, ImageTk
 import tkinter as tk
 import tkinter.filedialog
 import os
-import logging
 from Parsing import Scopus
 from Parsing import Wos
 from Parsing import eLibrary
 from Parsing import IPublishing
 from App import identical_sources_equals, different_source_equals
 from App import Upload
+from Logging import writeFile
 
-
-LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
 
 win = tk.Tk()
 
@@ -730,7 +727,7 @@ def upload():
         except Exception as e: 
             tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка! Возможно, файл с таким же названием уже открыт\nЕсли не помогает, то отправьте на почту 'stud144241@vyatsu.ru' файл log.out")
             check = False
-            logging.exception(f"{str(e)}\n")
+            writeFile("exception", f"{str(e)}\n")
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
 

@@ -1,11 +1,7 @@
 from openpyxl import Workbook, load_workbook
-import logging
 from App import Scopus_Library
 from App import clear_author
-
-
-LOG_FILENAME = 'log.out'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,  encoding='utf-8', format='%(asctime)s - %(levelname)s - %(message)s')
+from Logging import writeFile
 
 
 def Scopus(path):
@@ -17,7 +13,7 @@ def Scopus(path):
         wb = load_workbook(path)
         ws = wb.active
     except Exception as e: 
-        logging.exception(f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}\n")
         return None
 
     # создание нового файла
@@ -64,8 +60,8 @@ def Scopus(path):
                 try:
                     author = clear_author(author.strip())
                 except Exception as e: 
-                    logging.exception(f"{str(e)}\n")
-                    logging.info(f"Сломанный автор в скопусе: {author}\n")
+                    writeFile("exception", f"{str(e)}\n")
+                    writeFile("info", f"Сломанный автор в скопусе: {author}\n")
                     author = author.strip()
                 new_auth = " "
                 #если только фамилия, а инициалы идут после запятой, то собираем инициалы
@@ -88,8 +84,8 @@ def Scopus(path):
                 try:
                     author = clear_author(author.strip())
                 except Exception as e: 
-                    logging.exception(f"{str(e)}\n")
-                    logging.info(f"Сломанный автор в скопусе: {author}\n")
+                    writeFile("exception", f"{str(e)}\n")
+                    writeFile("info", f"Сломанный автор в скопусе: {author}\n")
                     author = author.strip()
                 # создание экземпляра класса - статья scopus
                 new_author = Scopus_Library()
@@ -442,8 +438,8 @@ def Scopus(path):
                     if len(lang)<20:
                         all_scopus_list_library[j].lang = lang[::-1].strip()
         except Exception as e: 
-            logging.exception(f"{str(e)}\n")
-            logging.info(f"Сломанная строка в скопусе: {s}\n")
+            writeFile("exception", f"{str(e)}\n")
+            writeFile("info", f"Сломанная строка в скопусе: {s}\n")
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())
