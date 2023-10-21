@@ -13,10 +13,6 @@ def create_db():
         connection = psycopg2.connect(user="postgres",password=f"{PASSWD}",host="127.0.0.1",port="5432")
         connection.autocommit = True
         cursor = connection.cursor()
-        if not os.path.exists("C:/sql"): 
-            os.mkdir("C:/sql")
-        cursor.execute("create tablespace project_tablespace location 'C:/sql';")
-        print("Табличное пространство успешно создано")
         cursor.execute("create database wos tablespace project_tablespace;")
         print("Базы данных успешно создана")
     except (Exception, Error) as e:
@@ -37,7 +33,7 @@ def create_db():
 
         create = '''
         CREATE TABLE if not exists project_schema.journal(
-        journal_name text PRIMARY KEY NOT NULL,
+        journal_name text PRIMARY KEY,
         ISSN text,
         eISSN text,
         ISBN text);
@@ -46,12 +42,6 @@ def create_db():
         cursor.execute(create)
         print("Таблица journal успешно создана")
 
-        create = '''
-                CREATE TYPE project_schema.state AS ENUM ('new', 'ok', 'old');
-
-                '''
-        cursor.execute(create)
-        print("Enum state успешно создан")
 
         create = '''
         CREATE TABLE if not exists project_schema.article(
@@ -66,14 +56,13 @@ def create_db():
         source_DOI text,
         include_RINC boolean,
         include_core_RINC boolean,
-        statement state,
         journal_name text,
         title_article text,
-        article_name text,
+        number_article text,
         foreign key (journal_name)
         references project_schema.journal(journal_name) 
         on delete set null on update cascade);
-
+        
         '''
         cursor.execute(create)
         print("Таблица article успешно создана")
@@ -92,8 +81,8 @@ def create_db():
 
         create = '''
         CREATE TABLE if not exists project_schema.authors(
-        ORCID text primary key not null,
-        fio text not null,
+        fio text primary key not null,
+        ORCIDs text not null,
         school_name text,
         foreign key (school_name)
         references project_schema.school(school_name) 
@@ -107,12 +96,12 @@ def create_db():
         create = '''
         CREATE TABLE if not exists project_schema.article_authors(
         wos_ID text,
-        ORCID text,
+        fio text,
         foreign key (wos_ID) 
         references project_schema.article(wos_ID) on delete cascade on update cascade,
-        foreign key (ORCID)
-        references project_schema.authors(ORCID) on delete cascade on update cascade,
-        primary key (ORCID, wos_ID));
+        foreign key (fio)
+        references project_schema.authors(fio) on delete cascade on update cascade,
+        primary key (fio, wos_ID));
 
         '''
         cursor.execute(create)
@@ -162,7 +151,7 @@ def create_db():
         as $$
         select count(*) from project_schema.article a join project_schema.journal j on a.journal_name = j.journal_name 
         join project_schema.article_authors aru on a.wos_ID = aru.wos_ID 
-        join project_schema.authors au on aru.ORCID = au.ORCID
+        join project_schema.authors au on aru.fio = au.fio
         where $1 = au.fio
         and $2 = a.journal_name;
         $$ language sql;
@@ -174,24 +163,26 @@ def create_db():
 
         create = '''
         CREATE OR REPLACE VIEW project_schema.wos AS
-        SELECT  
-        au.fio,
+        SELECT
+        a.wos_ID,
         a.article_name, 
         a.publication_year, 
-        a.doi, 
-        a.source_DOI, 
-        a.volume, 
+        a.volume,
         a.issue,
         a.start_page,
         a.end_page,
-        a.number_article,
-        a.number_article,
-        au.ORCID,
+        a.doi, 
+        a.source_DOI, 
         j.journal_name,
+        a.title_article,
+        a.number_article,
+        au.fio,
+        au.ORCIDs
+        
         FROM project_schema.article a
         JOIN project_schema.journal j on a.journal_name = j.journal_name
-        JOIN project_schema.article_authors aru on a.wos_ID = aru.wos_ID
-        join project_schema.authors au on aru.ORCID = au.ORCID;
+        JOIN project_schema.article_authors aru on a.WOS_ID = aru.WOS_ID
+        join project_schema.authors au on aru.fio = au.fio;
 
         '''
         cursor.execute(create)
@@ -204,25 +195,25 @@ def create_db():
         if (select count(*) from 
         project_schema.article a 
         join project_schema.article_authors aru on a.wos_ID=aru.wos_ID 
-        join project_schema.authors au on aru.ORCID=au.ORCID
-        where a.title=new.title and au.fio=new.fio)=0
+        join project_schema.authors au on aru.fio=au.fio
+        where a.article_name=new.article_name and au.fio=new.fio)=0
         then 
         if (select count(*) from project_schema.journal j where j.journal_name=new.journal_name)=0 then
         insert into project_schema.journal (journal_name) values(new.journal_name);
         end if;
-        if (select count(*) from project_schema.authors a where a.ORCID=new.ORCID)=0 then
-        insert into project_schema.authors (ORCID, fio) values(new.ORCID, new.fio);
+        if (select count(*) from project_schema.authors a where a.fio=new.fio)=0 then
+        insert into project_schema.authors (fio, ORCIDs) values(new.fio, new.ORCIDs);
         end if;
         if (select count(*) from project_schema.article a where a.wos_ID=new.wos_ID)=0 then
-        insert into project_schema.article (title, year, doi, link,
-        volume, issue, start_page, end_page, number_of_pages, number_article, 
-        access, citation, wos_ID, lang, publication_stage, journal_name, type_document) 
-        values(new.title, new.year, new.doi, new.link,
-        new.volume, new.issue, new.start_page, new.end_page, new.number_of_pages, new.number_article, 
-        new.access, new.citation, new.wos_ID, new.lang, new.publication_stage, new.journal_name, new.type_document);
+        insert into project_schema.article (wos_ID, article_name, publication_year, volume, issue,
+        start_page, end_page, DOI, source_DOI, journal_name, title_article, 
+        number_article) 
+        values(new.wos_ID, new.article_name, new.publication_year, new.volume, new.issue, 
+        new.start_page, new.end_page, new.doi, new.source_DOI, new.journal_name, new.title_article,
+        new.number_article);
         end if;
-        if (select count(*) from project_schema.article_authors aa where aa.ORCID=new.ORCID and aa.wos_ID=new.wos_ID)=0 then
-        insert into project_schema.article_authors (ORCID, wos_ID) values(new.ORCID, new.wos_ID);
+        if (select count(*) from project_schema.article_authors aa where aa.fio=new.fio and aa.wos_ID=new.wos_ID)=0 then
+        insert into project_schema.article_authors (fio, wos_ID) values(new.fio, new.wos_ID);
         end if;
         end if;
         return new;
@@ -275,8 +266,8 @@ def create_db():
         if (select count(a.journal_name) from project_schema.article a where a.journal_name in (select a.journal_name from project_schema.article a where a.wos_ID=old.wos_ID))=1 then
         delete from project_schema.journal j where j.journal_name in (select a.journal_name from project_schema.article a where a.wos_ID=old.wos_ID);
         end if;
-        if (select count(aru.ORCID) from project_schema.article_authors aru where aru.ORCID=old.ORCID)=1 then
-        delete from project_schema.authors a where a.ORCID=old.ORCID;
+        if (select count(aru.fio) from project_schema.article_authors aru where aru.fio=old.fio)=1 then
+        delete from project_schema.authors a where a.fio=old.fio;
         end if;
         if (select count(*) from project_schema.article a where a.wos_ID=old.wos_ID)>0 then
         DELETE from project_schema.article a where a.wos_ID=old.wos_ID;
@@ -320,21 +311,22 @@ def update_db(list_new, list_ident, list_remove):
         #заносим новые данные в бд
         for i in range(len(list_new)):
             article_tuple = (
-                list_new[i].author,
+                list_new[i].unique_wos_id,
                 list_new[i].title,
-                int(list_new[i].year) if list_new[i].year!="" else 0,
-                list_new[i].doi,
-                list_new[i].link,
+                int(list_new[i].year) if list_new[i].year != "" else 0,
                 list_new[i].volume,
                 list_new[i].issue,
                 list_new[i].start_page,
                 list_new[i].end_page,
+                list_new[i].doi,
+                list_new[i].link,
+                list_new[i].title_article,
                 list_new[i].number_article,
-                list_new[i].ORCIDs,
-                list_new[i].title_article
+                list_new[i].author,
+                list_new[i].ORCIDs
                 )
             try:
-                cursor.execute('INSERT INTO project_schema.wos values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
+                cursor.execute('INSERT INTO project_schema.wos values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
             except Exception as e:
                 writeFile("info", "При добавлении новых данных возникла ошибка")
                 writeFile("exception", f"{str(e)}", traceback.format_exc())
@@ -342,21 +334,22 @@ def update_db(list_new, list_ident, list_remove):
         #добавляем одинаковые
         for i in range(len(list_ident)):
             article_tuple = (
-                list_ident[i].author,
+                list_ident[i].unique_wos_id,
                 list_ident[i].title,
                 int(list_ident[i].year) if list_ident[i].year != "" else 0,
-                list_ident[i].doi,
-                list_ident[i].link,
                 list_ident[i].volume,
                 list_ident[i].issue,
                 list_ident[i].start_page,
                 list_ident[i].end_page,
+                list_ident[i].doi,
+                list_ident[i].link,
+                list_ident[i].title_article,
                 list_ident[i].number_article,
-                list_ident[i].ORCIDs,
-                list_ident[i].title_article
+                list_ident[i].author,
+                list_ident[i].ORCIDs
                 )
             try:
-                cursor.execute('INSERT INTO project_schema.wos values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
+                cursor.execute('INSERT INTO project_schema.wos values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
             except Exception as e:
                 writeFile("info", "При добавлении одинаковых данных возникла ошибка")
                 writeFile("exception", f"{str(e)}", traceback.format_exc())
@@ -365,10 +358,10 @@ def update_db(list_new, list_ident, list_remove):
         for i in range(len(list_remove)):
             article_tuple = (
                 list_remove[i].wos_ID,
-                list_remove[i].ORCID
+                list_remove[i].ORCIDs
                 )
             try:
-                cursor.execute('DELETE from project_schema.wos where wos_ID=%s and ORCID=%s', article_tuple)
+                cursor.execute('DELETE from project_schema.wos where wos_ID=%s and ORCIDs=%s', article_tuple)
             except Exception as e:
                 writeFile("info", "При удалении одинаковых данных возникла ошибка")
                 writeFile("exception", f"{str(e)}", traceback.format_exc())
