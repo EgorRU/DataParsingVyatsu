@@ -1,3 +1,4 @@
+import traceback
 from Logging import writeFile
 
 
@@ -5,15 +6,15 @@ def sort(add_new_list, identical_new_list, remove_new_list):
     try:
         add_new_list = sorted(add_new_list, key=lambda x: x.year, reverse=True)
     except Exception as e: 
-        writeFile("exception", f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
     try:
         identical_new_list = sorted(identical_new_list, key=lambda x: x.year, reverse=True)
     except Exception as e: 
-        writeFile("exception", f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
     try:
         remove_new_list = sorted(remove_new_list, key=lambda x: x.year, reverse=True)
     except Exception as e: 
-        writeFile("exception", f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
     return add_new_list, identical_new_list, remove_new_list
 
 

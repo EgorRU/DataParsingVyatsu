@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 import tkinter.filedialog
 import os
+import traceback
 from Parsing import Scopus
 from Parsing import Wos
 from Parsing import eLibrary
@@ -727,7 +728,7 @@ def upload():
         except Exception as e: 
             tkinter.messagebox.showwarning(title="Оповещение", message="Возникла ошибка! Возможно, файл с таким же названием уже открыт\nЕсли не помогает, то отправьте на почту 'stud144241@vyatsu.ru' файл log.txt")
             check = False
-            writeFile("exception", f"{str(e)}\n")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
         if check:
             tkinter.messagebox.showwarning(title="Оповещение", message="Данные успешно выгружены в excel")
 
