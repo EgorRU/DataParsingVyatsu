@@ -1,3 +1,4 @@
+import traceback
 from openpyxl import Workbook, load_workbook
 from App import Scopus_Library
 from App import clear_author
@@ -13,7 +14,7 @@ def Scopus(path):
         wb = load_workbook(path)
         ws = wb.active
     except Exception as e: 
-        writeFile("exception", f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
         return None
 
     # создание нового файла
@@ -60,8 +61,8 @@ def Scopus(path):
                 try:
                     author = clear_author(author.strip())
                 except Exception as e: 
-                    writeFile("exception", f"{str(e)}\n")
-                    writeFile("info", f"Сломанный автор в скопусе: {author}\n")
+                    writeFile("info", f"Сломанный автор в скопусе: {author}")
+                    writeFile("exception", f"{str(e)}", traceback.format_exc())
                     author = author.strip()
                 new_auth = " "
                 #если только фамилия, а инициалы идут после запятой, то собираем инициалы
@@ -84,8 +85,8 @@ def Scopus(path):
                 try:
                     author = clear_author(author.strip())
                 except Exception as e: 
-                    writeFile("exception", f"{str(e)}\n")
-                    writeFile("info", f"Сломанный автор в скопусе: {author}\n")
+                    writeFile("info", f"Сломанный автор в скопусе: {author}")
+                    writeFile("exception", f"{str(e)}", traceback.format_exc())
                     author = author.strip()
                 # создание экземпляра класса - статья scopus
                 new_author = Scopus_Library()
@@ -438,8 +439,8 @@ def Scopus(path):
                     if len(lang)<20:
                         all_scopus_list_library[j].lang = lang[::-1].strip()
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанная строка в скопусе: {s}\n")
+            writeFile("info", f"Сломанная строка в скопусе: {s}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
 
     for i in range(len(all_scopus_list_library)):
         all_scopus_list_library[i].clear_title = "".join(e for e in all_scopus_list_library[i].title.lower() if e.isalpha())

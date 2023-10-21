@@ -1,6 +1,7 @@
 from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
 from openpyxl import Workbook
 import json
+import traceback
 from Database import create_db
 from Database import update_db
 from Logging import writeFile
@@ -188,7 +189,7 @@ def Upload(path, list_new, list_ident, list_remove):
         file = open('employee.json', 'r', encoding="utf-8")
         list_data = json.load(file)
     except:
-        writeFile("exception", "Файл 'employee.json' не найден\n")
+        writeFile("exception", "Файл 'employee.json' не найден", traceback.format_exc())
     
     count = 0
     #добавляем новые элементы

@@ -1,3 +1,4 @@
+import traceback
 from openpyxl import load_workbook
 from App import IPublishing_Library
 from App import Translite
@@ -13,7 +14,7 @@ def IPublishing(path):
     try:
         wb = load_workbook(path)
     except Exception as e: 
-        writeFile("exception", f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
         return None
 
     #парсим 1-й лист
@@ -87,8 +88,8 @@ def IPublishing(path):
                     new_author.source = "Статьи в журналах"
                     all_IPublishing_list_library.append(new_author)
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанная строка в публи 'Статьи в журналах': {row_index}\n")
+            writeFile("info", f"Сломанная строка в публи 'Статьи в журналах': {row_index}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
 
 
     #парсим 2-й лист
@@ -111,8 +112,8 @@ def IPublishing(path):
                         try:
                             new_author.title = clear_IPublishing_title(ws[f"G{row_index}"].value)
                         except Exception as e: 
-                            writeFile("exception", f"{str(e)}\n")
-                            writeFile("info", f"Сломанный автор в публи 'Публ. в научн. сборниках': {ws[f'G{row_index}'].value}\n")
+                            writeFile("info", f"Сломанный автор в публи 'Публ. в научн. сборниках': {ws[f'G{row_index}'].value}")
+                            writeFile("exception", f"{str(e)}", traceback.format_exc())
                         new_author.full_bibliographic_description = ws[f"G{row_index}"].value                
                     
                     if ws[f"E{row_index}"].value != None:
@@ -148,8 +149,8 @@ def IPublishing(path):
                     new_author.source = "Публ. в научн. сборниках"
                     all_IPublishing_list_library.append(new_author)
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанная строка в публи 'Публ. в научн. сборниках': {row_index}\n")
+            writeFile("info", f"Сломанная строка в публи 'Публ. в научн. сборниках': {row_index}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
     
 
     #парсим 3-й лист
@@ -197,16 +198,16 @@ def IPublishing(path):
                     new_author.source = "Монографии"
                     all_IPublishing_list_library.append(new_author)
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанная строка в публи 'Монографии': {row_index}\n")
+            writeFile("info", f"Сломанная строка в публи 'Монографии': {row_index}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
 
 
     for i in range(len(all_IPublishing_list_library)):
         try:
             all_IPublishing_list_library[i].author = clear_author(Translite(clear_author(all_IPublishing_list_library[i].original_author)))
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанный автор в публи: {all_IPublishing_list_library[i].original_author}\n")
+            writeFile("info", f"Сломанный автор в публи: {all_IPublishing_list_library[i].original_author}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
             all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].original_author
         all_IPublishing_list_library[i].author = all_IPublishing_list_library[i].author.replace("Bajkova", "Baykova")
         all_IPublishing_list_library[i].clear_title = "".join(e for e in all_IPublishing_list_library[i].title.lower() if e.isalpha())

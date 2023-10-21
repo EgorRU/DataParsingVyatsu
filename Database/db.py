@@ -1,9 +1,9 @@
 import os
 import psycopg2
+import traceback
 from psycopg2 import Error
 from Logging import writeFile
 from config import PASSWD
-import traceback
 
 def create_db():
     #подключаемся к базе данных postgres
@@ -19,6 +19,7 @@ def create_db():
         cursor.execute("create database scopus tablespace project_tablespace;")
         print("Базы данных успешно создана")
     except (Exception, Error) as e:
+        writeFile("info", "Проблема при создании табличного пространства")
         writeFile("exception", f'{str(e)}', traceback.format_exc())
     finally:
         if connection:
@@ -294,9 +295,11 @@ def create_db():
         cursor.execute(create)
         print("TRIGGER trigger_update_scopus успешно создан")
     except (Exception, Error) as e:
-        writeFile("exception", f"{str(e)}")
+        writeFile("info", "Проблема при создании таблиц, функций, тригеров, представлений")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
     finally:
         if connection:
+            print("[!] Соединение с базой данных закрыто")
             cursor.close()
             connection.close()
         
@@ -335,7 +338,8 @@ def update_db(list_new, list_ident, list_remove):
             try:
                 cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
             except Exception as e:
-                writeFile("exception", f"{str(e)}")
+                writeFile("info", "При добавлении новых данных возникла ошибка")
+                writeFile("exception", f"{str(e)}", traceback.format_exc())
             
         #добавляем одинаковые
         for i in range(len(list_ident)):
@@ -363,7 +367,8 @@ def update_db(list_new, list_ident, list_remove):
             try:
                 cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
             except Exception as e:
-                writeFile("exception", f"{str(e)}")
+                writeFile("info", "При добавлении одинаковых данных возникла ошибка")
+                writeFile("exception", f"{str(e)}", traceback.format_exc())
         
         #удаляем старые
         for i in range(len(list_remove)):
@@ -371,11 +376,17 @@ def update_db(list_new, list_ident, list_remove):
                 list_remove[i].eid,
                 list_remove[i].id_author
                 )
-            cursor.execute('DELETE from project_schema.scopus where eid=%s and id_author=%s', article_tuple)
+            try:
+                cursor.execute('DELETE from project_schema.scopus where eid=%s and id_author=%s', article_tuple)
+            except Exception as e:
+                writeFile("info", "При удалении одинаковых данных возникла ошибка")
+                writeFile("exception", f"{str(e)}", traceback.format_exc())
+                
     except (Exception, Error) as e:
-        writeFile("exception", f"{str(e)}")
+        writeFile("info", "При работе с базой данных возникла ошибка")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
     finally:
         if connection:
-            print("[!] Успешно отключились от базы данных")
+            print("[!] Соединение с базой данных закрыто")
             cursor.close()
             connection.close()

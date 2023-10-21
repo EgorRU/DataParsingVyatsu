@@ -1,6 +1,7 @@
 import json
 import xmltodict
 import re
+import traceback
 from App import Translite
 from App import eLibrary_Library
 from App import clear_author
@@ -65,8 +66,8 @@ def eLibrary(path):
                 try:
                     new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
                 except Exception as e: 
-                    writeFile("exception", f"{str(e)}\n")
-                    writeFile("info", f"Сломанный автор в ели: {new_article.original_author}\n")
+                    writeFile("info", f"Сломанный автор в ели: {new_article.original_author}")
+                    writeFile("exception", f"{str(e)}", traceback.format_exc())
                     new_article.author = new_article.original_author
                 new_article.author = new_article.author.replace("Bajkova", "Baykova")
                 count_author_temp += 1
@@ -88,8 +89,8 @@ def eLibrary(path):
                         try:
                             new_article.author = clear_author(Translite(clear_author(new_article.original_author)))
                         except Exception as e: 
-                            writeFile("exception", f"{str(e)}\n")
-                            writeFile("info", f"Сломанный автор в ели: {new_article.original_author}\n")
+                            writeFile("info", f"Сломанный автор в ели: {new_article.original_author}")
+                            writeFile("exception", f"{str(e)}", traceback.format_exc())
                             new_article.author = new_article.original_author
                         new_article.author = new_article.author.replace("Bajkova", "Baykova")
                         #если запись не повторяется
@@ -213,8 +214,8 @@ def eLibrary(path):
                             
             count_all_author += count_author_temp
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанная строка в ели: {json.dump(lib, indent = 4)}\n")
+            writeFile("info", f"Сломанная строка в ели: {json.dump(lib, indent = 4)}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
         
     for i in range(len(all_elibrary_list_library)):
         all_elibrary_list_library[i].clear_title = "".join(lib for lib in all_elibrary_list_library[i].title.lower() if lib.isalpha())

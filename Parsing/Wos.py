@@ -1,3 +1,4 @@
+import traceback
 from openpyxl import load_workbook
 from xls2xlsx import XLS2XLSX
 from App import WOS_Library
@@ -18,7 +19,7 @@ def Wos(path):
         wb = load_workbook(path)
         ws = wb.active
     except Exception as e: 
-        writeFile("exception", f"{str(e)}\n")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
         return None
 
     #ПАРСИНГ КАЖДОЙ СТРОКИ
@@ -33,8 +34,8 @@ def Wos(path):
                 try:
                     new_author.author = clear_author(list_author[i].strip())
                 except Exception as e: 
-                    writeFile("exception", f"{str(e)}\n")
-                    writeFile("info", f"Сломанный автор в восе: {list_author[i]}\n")
+                    writeFile("info", f"Сломанный автор в восе: {list_author[i]}")
+                    writeFile("exception", f"{str(e)}", traceback.format_exc())
                     new_author.author = list_author[i].strip()
             
                 if ws[f"I{row_index}"].value != None:
@@ -100,8 +101,8 @@ def Wos(path):
                 
                 all_wos_list_library.append(new_author)
         except Exception as e: 
-            writeFile("exception", f"{str(e)}\n")
-            writeFile("info", f"Сломанная строка в восе: {row_index}\n")
+            writeFile("info", f"Сломанная строка в восе: {row_index}")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
 
     for i in range(len(all_wos_list_library)):
         all_wos_list_library[i].clear_title = "".join(e for e in all_wos_list_library[i].title.lower() if e.isalpha())
