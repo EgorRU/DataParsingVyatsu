@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2 import Error
 from Logging import writeFile
 from config import PASSWD
-
+import traceback
 
 def create_db():
     #подключаемся к базе данных postgres
@@ -19,7 +19,7 @@ def create_db():
         cursor.execute("create database scopus tablespace project_tablespace;")
         print("Базы данных успешно создана")
     except (Exception, Error) as e:
-        writeFile("exception", f'{str(e)}')
+        writeFile("exception", f'{str(e)}', traceback.format_exc())
     finally:
         if connection:
             cursor.close()
