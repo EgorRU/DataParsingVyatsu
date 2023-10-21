@@ -107,9 +107,15 @@ try:
     #преобразуем ФИО к новому виду
     new_list_employee = []
     for i in range(len(list_employee)):
-        temp_list_employee = list_employee[i].split()
-        string = f"{Translite(temp_list_employee[0])} {Translite(temp_list_employee[1])[0]}.{Translite(temp_list_employee[2])[0]}."
-        new_list_employee.append(string)
+        try:
+            temp_list_employee = list_employee[i].split()
+            string = f"{Translite(temp_list_employee[0])} {Translite(temp_list_employee[1])[0]}."
+            if len(temp_list_employee)==3:
+                string += f"{Translite(temp_list_employee[2])[0]}."
+            new_list_employee.append(string)
+        except Exception as e:
+            print(str(e))
+            print(f"Сломанный автор: {list_employee[i]}")
         
     #убираем повторки
     list_employee = list(set(new_list_employee))
@@ -121,8 +127,8 @@ try:
     with open("employee.json", 'w', encoding="utf-8") as file:
         json.dump(json_dict, file, ensure_ascii=False, indent=4)
     print(json_string)
-except:
-    print("[!]Возможно, Вы пытались загрузить файл с другим расширением, отличным от .xls или .xlsx или Вы закрыли окно выбора файла")
+except Exception as e:
+    print(str(e))
     print("[!]Программа завершилась аварийно")
     
 print("\n[!]Это окно можно закрыть")
