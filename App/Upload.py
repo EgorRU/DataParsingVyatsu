@@ -136,7 +136,7 @@ def Upload(path, list_new, list_ident, list_remove):
         list_members.remove("source")
         list_members.append("source")
         new_list_members.remove("source")
-
+        
     #меняем заголовки столбиков
     ws.cell(row=1, column=1).value = "№№"
     ws.cell(row=1, column=2).value = "№"
@@ -645,12 +645,13 @@ def Upload(path, list_new, list_ident, list_remove):
     #пытаемся подключится к базе данных Scopus и изменить какие-то строки
     try:
         update_db(list_new, list_ident, list_remove)
-    except (Exception, UnicodeDecodeError) as e:
+    except UnicodeDecodeError as e:
         create_db()
         update_db(list_new, list_ident, list_remove)
-        writeFile("exception", f"{str(e)}")
+        writeFile("info", "Не было базы данных")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
     except Exception as e:
-        writeFile("exception", f"{str(e)}")
+        writeFile("exception", f"{str(e)}", traceback.format_exc())
         
 
     #выгружаем только сотрудников вуза

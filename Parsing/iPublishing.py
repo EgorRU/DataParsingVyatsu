@@ -57,7 +57,7 @@ def IPublishing(path):
                         new_author.full_bibliographic_description = ws[f"J{row_index}"].value
                 
                     if ws[f"V{row_index}"].value != None:
-                        new_author.cod_OECD = ws[f"V{row_index}"].value
+                        new_author.cod_oecd = ws[f"V{row_index}"].value
                 
                     if ws[f"W{row_index}"].value != None:
                         new_author.group_of_scientific_specialties = ws[f"W{row_index}"].value
@@ -138,7 +138,7 @@ def IPublishing(path):
                         new_author.cathedra = ws[f"D{row_index}"].value
                 
                     if ws[f"O{row_index}"].value != None:
-                        new_author.cod_OECD = ws[f"O{row_index}"].value
+                        new_author.cod_oecd = ws[f"O{row_index}"].value
                 
                     if ws[f"P{row_index}"].value != None:
                         new_author.group_of_scientific_specialties = ws[f"P{row_index}"].value
@@ -187,7 +187,7 @@ def IPublishing(path):
                         new_author.cathedra = ws[f"D{row_index}"].value
                 
                     if ws[f"O{row_index}"].value != None:
-                        new_author.cod_OECD = ws[f"O{row_index}"].value
+                        new_author.cod_oecd = ws[f"O{row_index}"].value
                 
                     if ws[f"P{row_index}"].value != None:
                         new_author.group_of_scientific_specialties = ws[f"P{row_index}"].value

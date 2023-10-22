@@ -1,4 +1,3 @@
-import os
 import psycopg2
 import traceback
 from psycopg2 import Error
@@ -6,6 +5,7 @@ from Logging import writeFile
 from config import PASSWD
 
 
+connection = ""
 def create_db():
     #подключаемся к базе данных postgres
     #создаём табличное простанство и базу данных в новом табличном пространстве
@@ -13,10 +13,6 @@ def create_db():
         connection = psycopg2.connect(user="postgres",password=f"{PASSWD}",host="127.0.0.1",port="5432")
         connection.autocommit = True
         cursor = connection.cursor()
-        if not os.path.exists("C:/sql"): 
-            os.mkdir("C:/sql")
-        cursor.execute("create tablespace project_tablespace location 'C:/sql';")
-        print("Табличное пространство успешно создано")
         cursor.execute("create database wos tablespace project_tablespace;")
         print("Базы данных успешно создана")
     except (Exception, Error) as e:
@@ -46,12 +42,14 @@ def create_db():
         cursor.execute(create)
         print("Таблица journal успешно создана")
 
-        create = '''
-                CREATE TYPE project_schema.state AS ENUM ('new', 'ok', 'old');
 
-                '''
+        create = '''
+        CREATE TYPE project_schema.state AS ENUM ('new', 'ok', 'old');
+
+        '''
         cursor.execute(create)
         print("Enum state успешно создан")
+
 
         create = '''
         CREATE TABLE if not exists project_schema.article(
@@ -308,7 +306,6 @@ def create_db():
             cursor.close()
             connection.close()
         
-
             
 def update_db(list_new, list_ident, list_remove):
     #поключаемся к базе данных
