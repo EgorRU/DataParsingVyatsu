@@ -82,7 +82,7 @@ def Wos(path):
                     new_author.researcher_ids = ws[f"AA{row_index}"].value
                 
                 if ws[f"AB{row_index}"].value != None:
-                    new_author.ORCIDs = ws[f"AB{row_index}"].value
+                    new_author.orcids = ws[f"AB{row_index}"].value
                 
                 if ws[f"AO{row_index}"].value != None:
                     new_author.issn = ws[f"AO{row_index}"].value

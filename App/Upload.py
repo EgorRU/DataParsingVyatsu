@@ -136,7 +136,7 @@ def Upload(path, list_new, list_ident, list_remove):
         list_members.remove("source")
         list_members.append("source")
         new_list_members.remove("source")
-
+        
     #меняем заголовки столбиков
     ws.cell(row=1, column=1).value = "№№"
     ws.cell(row=1, column=2).value = "№"

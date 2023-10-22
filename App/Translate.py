@@ -65,6 +65,7 @@ translate_dictionary = {
   "Я": "Ya"
 }
 
+
 def Translite(s_input):
     s_output = ""
     if s_input!=None and len(s_input)>0:

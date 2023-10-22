@@ -2,6 +2,7 @@ from tkinter.filedialog import askopenfilename
 from openpyxl import load_workbook
 from xls2xlsx import XLS2XLSX
 import json
+import traceback
 
 
 def Translite(s_input):
@@ -115,6 +116,7 @@ try:
             new_list_employee.append(string)
         except Exception as e:
             print(str(e))
+            print(traceback.format_exc())
             print(f"Сломанный автор: {list_employee[i]}")
         
     #убираем повторки
@@ -127,8 +129,10 @@ try:
     with open("employee.json", 'w', encoding="utf-8") as file:
         json.dump(json_dict, file, ensure_ascii=False, indent=4)
     print(json_string)
+    
 except Exception as e:
     print(str(e))
+    print(traceback.format_exc())
     print("[!]Программа завершилась аварийно")
     
 print("\n[!]Это окно можно закрыть")
