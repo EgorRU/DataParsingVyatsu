@@ -1,3 +1,4 @@
+from enum import global_enum
 import os
 import psycopg2
 import traceback
@@ -5,6 +6,8 @@ from psycopg2 import Error
 from Logging import writeFile
 from config import PASSWD
 
+
+connection = ""
 def create_db():
     #подключаемся к базе данных postgres
     #создаём табличное простанство и базу данных в новом табличном пространстве
