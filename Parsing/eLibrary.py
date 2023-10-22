@@ -1,6 +1,6 @@
-import json
 import xmltodict
 import re
+import json
 import traceback
 from App import Translite
 from App import eLibrary_Library
@@ -208,9 +208,9 @@ def eLibrary(path):
                         if "country" in lib["source"]["journal"]:
                             all_elibrary_list_library[i].country = lib["source"]["journal"]["country"]
                         
-                #GRNTI_code
+                #grnti_code
                 if "grnti" in lib:
-                    all_elibrary_list_library[i].GRNTI_code = lib["grnti"]
+                    all_elibrary_list_library[i].grnti_code = lib["grnti"]
                             
             count_all_author += count_author_temp
         except Exception as e: 
