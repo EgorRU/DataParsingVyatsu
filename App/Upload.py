@@ -645,12 +645,10 @@ def Upload(path, list_new, list_ident, list_remove):
     #пытаемся подключится к базе данных Scopus и изменить какие-то строки
     try:
         update_db(list_new, list_ident, list_remove)
-    except UnicodeDecodeError as e:
+    except Exception as e:
         create_db()
         update_db(list_new, list_ident, list_remove)
         writeFile("info", "Не было базы данных")
-        writeFile("exception", f"{str(e)}", traceback.format_exc())
-    except Exception as e:
         writeFile("exception", f"{str(e)}", traceback.format_exc())
         
 

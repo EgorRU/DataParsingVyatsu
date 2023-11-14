@@ -206,6 +206,8 @@ def open_file_WoS_left():
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
 
+    tmpl.destroy()
+
     global left_name_file
     temp = filename[::-1]
     temp2 = ""
@@ -276,6 +278,8 @@ def open_file_WoS_right():
     ftypes = [("xls", "*.xls?"), ('All files', '*')]  # допустимые типы
     dlg = tkinter.filedialog.Open(filetypes=ftypes, title='Выберите файл', initialdir=os.path.abspath(__file__))
     filename = dlg.show()  # получение имени файла для дальнейшей работы
+
+    tmpr.destroy()
 
     global right_name_file
     temp = filename[::-1]
@@ -763,6 +767,11 @@ framenameright = tk.Frame(win, bg='#FFFFFF')
 frametableleft = tk.Frame(win, bg='#FFFFFF')
 frametableright = tk.Frame(win, bg='#FFFFFF')
 
+tmpr = ttk.Treeview(frametableright, show='headings')  # инициализация таблицы
+tmpr.pack(expand=tkinter.YES, fill=tkinter.BOTH)
+tmpl = ttk.Treeview(frametableleft, show='headings')  # инициализация таблицы
+tmpl.pack(expand=tkinter.YES, fill=tkinter.BOTH)
+
 # расположение блоков, чтоб можно было менять размер окна
 framenameleft.place(relx=0, rely=0, relwidth=0.5, relheight=0.04)
 framenameright.place(relx=0.5, rely=0, relwidth=0.5, relheight=0.04)
@@ -788,10 +797,10 @@ filemenu_load_WoF.add_command(label="Загрузить в левую табли
 filemenu_load_WoF.add_command(label="Загрузить в правую таблицу", command=(open_file_WoS_right))
 filemenu_load.add_cascade(label="Загрузить Web of Science", menu=filemenu_load_WoF)
 
-filemenu_load_Scopus = tk.Menu(filemenu_load, tearoff=0)
-filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу", command=(open_file_Scopus_left))
-filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу", command=(open_file_Scopus_right))
-filemenu_load.add_cascade(label="Загрузить Scopus", menu=filemenu_load_Scopus)
+#filemenu_load_Scopus = tk.Menu(filemenu_load, tearoff=0)
+#filemenu_load_Scopus.add_command(label="Загрузить в левую таблицу", command=(open_file_Scopus_left))
+#filemenu_load_Scopus.add_command(label="Загрузить в правую таблицу", command=(open_file_Scopus_right))
+#filemenu_load.add_cascade(label="Загрузить Scopus", menu=filemenu_load_Scopus)
 
 filemenu_load_Elibrary = tk.Menu(filemenu_load, tearoff=0)
 filemenu_load_Elibrary.add_command(label="Загрузить в левую таблицу", command=(open_file_Elibrary_left))
