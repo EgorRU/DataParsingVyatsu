@@ -207,7 +207,7 @@ def create_db():
         insert into project_schema.journal (title) values(new.title);
         end if;
         if (select count(*) from project_schema.authors a where a.author=new.author)=0 then
-        insert into project_schema.authors (orcids, author) values(new.orcids, new.author);
+        insert into project_schema.authors (author, orcids) values(new.author, new.orcids);
         end if;
         if (select count(*) from project_schema.article a where a.unique_wos_id=new.unique_wos_id)=0 then
         insert into project_schema.article (unique_wos_id, title_article, year, volume, issue,
