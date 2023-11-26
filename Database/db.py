@@ -1,5 +1,3 @@
-from enum import global_enum
-import os
 import psycopg2
 import traceback
 from psycopg2 import Error
@@ -7,18 +5,13 @@ from Logging import writeFile
 from config import PASSWD
 
 
-connection = ""
 def create_db():
     #подключаемся к базе данных postgres
     #создаём табличное простанство и базу данных в новом табличном пространстве
     try:
-        connection = psycopg2.connect(user="postgres",password=f"{PASSWD}",host="127.0.0.1",port="5432")
+        connection = psycopg2.connect(user="test",password=f"{PASSWD}",host="127.0.0.1",port="5432")
         connection.autocommit = True
         cursor = connection.cursor()
-        if not os.path.exists("C:/sql"): 
-            os.mkdir("C:/sql")
-        cursor.execute("create tablespace project_tablespace location 'C:/sql';")
-        print("Табличное пространство успешно создано")
         cursor.execute("create database scopus tablespace project_tablespace;")
         print("Базы данных успешно создана")
     except (Exception, Error) as e:
@@ -33,7 +26,7 @@ def create_db():
     #подключаемся к новой базе данных scopus
     #создаём схему, таблицы, тригеры, функции и другие объекты бд
     try:
-        connection = psycopg2.connect(user="postgres",password=f"{PASSWD}",host="127.0.0.1",port="5432", database="scopus")
+        connection = psycopg2.connect(user="test",password=f"{PASSWD}",host="127.0.0.1",port="5432", database="scopus")
         connection.autocommit = True
         cursor = connection.cursor()
         cursor.execute("create schema project_schema;")
@@ -309,87 +302,76 @@ def create_db():
 
             
 def update_db(list_new, list_ident, list_remove):
-    #поключаемся к базе данных
-    try:
-        connection = psycopg2.connect(user="postgres",password=f"{PASSWD}",host="127.0.0.1",port="5432",database="scopus")
-        print("[!] Успешно подключились к базе данных Scopus")
-        connection.autocommit = True
-        cursor = connection.cursor()
-        #заносим новые данные в бд
-        for i in range(len(list_new)):
-            article_tuple = (
-                list_new[i].author,
-                list_new[i].title,
-                int(list_new[i].year) if list_new[i].year!="" else 0,
-                list_new[i].doi,
-                list_new[i].link,
-		        list_new[i].volume,
-                list_new[i].issue,
-                list_new[i].start_page,
-                list_new[i].end_page,
-                list_new[i].number_of_pages,
-                list_new[i].number_article, 
-		        list_new[i].access,
-                list_new[i].citation,
-                list_new[i].eid,
-		        list_new[i].id_author,
-                list_new[i].lang,
-                list_new[i].publication_stage,
-                list_new[i].source_name,
-                list_new[i].type_document
-                )
-            try:
-                cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
-            except Exception as e:
-                writeFile("info", "При добавлении новых данных возникла ошибка")
-                writeFile("exception", f"{str(e)}", traceback.format_exc())
+    connection = psycopg2.connect(user="test",password=f"{PASSWD}",host="127.0.0.1",port="5432",database="scopus")
+    print("[!] Успешно подключились к базе данных Scopus")
+    connection.autocommit = True
+    cursor = connection.cursor()
+    #заносим новые данные в бд
+    for i in range(len(list_new)):
+        article_tuple = (
+            list_new[i].author,
+            list_new[i].title,
+            int(list_new[i].year) if list_new[i].year!="" else 0,
+            list_new[i].doi,
+            list_new[i].link,
+		    list_new[i].volume,
+            list_new[i].issue,
+            list_new[i].start_page,
+            list_new[i].end_page,
+            list_new[i].number_of_pages,
+            list_new[i].number_article, 
+		    list_new[i].access,
+            list_new[i].citation,
+            list_new[i].eid,
+		    list_new[i].id_author,
+            list_new[i].lang,
+            list_new[i].publication_stage,
+            list_new[i].source_name,
+            list_new[i].type_document
+            )
+        try:
+            cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
+        except Exception as e:
+            writeFile("info", "При добавлении новых данных возникла ошибка")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
             
-        #добавляем одинаковые
-        for i in range(len(list_ident)):
-            article_tuple = (
-                list_ident[i].author,
-                list_ident[i].title,
-                int(list_ident[i].year) if list_ident[i].year!="" else 0,
-                list_ident[i].doi,
-                list_ident[i].link,
-		        list_ident[i].volume,
-                list_ident[i].issue,
-                list_ident[i].start_page,
-                list_ident[i].end_page,
-                list_ident[i].number_of_pages,
-                list_ident[i].number_article, 
-		        list_ident[i].access,
-                list_ident[i].citation,
-                list_ident[i].eid,
-		        list_ident[i].id_author,
-                list_ident[i].lang,
-                list_ident[i].publication_stage,
-                list_ident[i].source_name,
-                list_ident[i].type_document
-                )
-            try:
-                cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
-            except Exception as e:
-                writeFile("info", "При добавлении одинаковых данных возникла ошибка")
-                writeFile("exception", f"{str(e)}", traceback.format_exc())
+    #добавляем одинаковые
+    for i in range(len(list_ident)):
+        article_tuple = (
+            list_ident[i].author,
+            list_ident[i].title,
+            int(list_ident[i].year) if list_ident[i].year!="" else 0,
+            list_ident[i].doi,
+            list_ident[i].link,
+		    list_ident[i].volume,
+            list_ident[i].issue,
+            list_ident[i].start_page,
+            list_ident[i].end_page,
+            list_ident[i].number_of_pages,
+            list_ident[i].number_article, 
+		    list_ident[i].access,
+            list_ident[i].citation,
+            list_ident[i].eid,
+		    list_ident[i].id_author,
+            list_ident[i].lang,
+            list_ident[i].publication_stage,
+            list_ident[i].source_name,
+            list_ident[i].type_document
+            )
+        try:
+            cursor.execute('INSERT INTO project_schema.scopus values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', article_tuple)
+        except Exception as e:
+            writeFile("info", "При добавлении одинаковых данных возникла ошибка")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
         
-        #удаляем старые
-        for i in range(len(list_remove)):
-            article_tuple = (
-                list_remove[i].eid,
-                list_remove[i].id_author
-                )
-            try:
-                cursor.execute('DELETE from project_schema.scopus where eid=%s and id_author=%s', article_tuple)
-            except Exception as e:
-                writeFile("info", "При удалении одинаковых данных возникла ошибка")
-                writeFile("exception", f"{str(e)}", traceback.format_exc())
-                
-    except (Exception, Error) as e:
-        writeFile("info", "При работе с базой данных возникла ошибка")
-        writeFile("exception", f"{str(e)}", traceback.format_exc())
-    finally:
-        if connection:
-            print("[!] Соединение с базой данных закрыто")
-            cursor.close()
-            connection.close()
+    #удаляем старые
+    for i in range(len(list_remove)):
+        article_tuple = (
+            list_remove[i].eid,
+            list_remove[i].id_author
+            )
+        try:
+            cursor.execute('DELETE from project_schema.scopus where eid=%s and id_author=%s', article_tuple)
+        except Exception as e:
+            writeFile("info", "При удалении одинаковых данных возникла ошибка")
+            writeFile("exception", f"{str(e)}", traceback.format_exc())
